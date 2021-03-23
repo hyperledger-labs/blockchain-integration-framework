@@ -47,7 +47,7 @@ Once the last command has finished executing, open link printed on the console w
 ## Documentation
 
 * [Project Wiki](https://wiki.hyperledger.org/display/cactus): Schedule and logs of the maintainer meetings
-* [Whitepaper](./whitepaper/whitepaper.md): The official document on Cactus design specifications
+* [Whitepaper](./whitepaper/1_whitepaper-a.md): The official document on Cactus design specifications
 
 ## Contact
 * mailing list: [cactus@lists.hyperledger.org](mailto:cactus@lists.hyperledger.org)
