@@ -1,11 +1,13 @@
 PD_DEB_URL = https://github.com/jgm/pandoc/releases/download/2.9.2/pandoc-2.9.2-1-amd64.deb
 PD_DEB_FILE = pandoc-2.9.2-1-amd64.deb
 PD = pandoc
-PDFLAGS = --from=markdown_mmd+yaml_metadata_block+smart+grid_tables+pipe_tables --standalone --self-contained --to=html --metadata title="" whitepaper.md
+SECTIONS = $(sort $(wildcard ./*-a.md))
+PDFLAGS = --from=markdown_mmd+yaml_metadata_block+smart+grid_tables+pipe_tables --standalone --self-contained --to=html --metadata title="" ${SECTIONS}
 WK_DEB_FILE = wkhtmltox_0.12.5-1.bionic_amd64.deb
 WK_DEB_URL = https://downloads.wkhtmltopdf.org/0.12/0.12.5/wkhtmltox_0.12.5-1.bionic_amd64.deb
 WK = wkhtmltopdf
 WKFLAGS = --dpi 150 --disable-smart-shrinking hyperledger-cactus-whitepaper.html --allow $(pwd)
+
 
 
 .PHONY: pdf
