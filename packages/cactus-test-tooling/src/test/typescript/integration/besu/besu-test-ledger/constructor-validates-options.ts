@@ -1,4 +1,4 @@
-const tap = require("tap");
+import test, { Test } from "tape-promise/tape";
 import isPortReachable from "is-port-reachable";
 import { Container } from "dockerode";
 import {
@@ -7,27 +7,26 @@ import {
   isIKeyPair,
 } from "../../../../../main/typescript/public-api";
 
-tap.test("constructor throws if invalid input is provided", (assert: any) => {
+test("constructor throws if invalid input is provided", (assert: Test) => {
   assert.ok(BesuTestLedger);
   assert.throws(() => new BesuTestLedger({ containerImageVersion: "nope" }));
   assert.end();
 });
 
-tap.test(
-  "constructor does not throw if valid input is provided",
-  (assert: any) => {
-    assert.ok(BesuTestLedger);
-    assert.doesNotThrow(() => new BesuTestLedger());
-    assert.end();
-  },
-);
+test("constructor does not throw if valid input is provided", (assert: Test) => {
+  assert.ok(BesuTestLedger);
+  assert.doesNotThrow(() => new BesuTestLedger());
+  assert.end();
+});
 
-tap.test("starts/stops/destroys a docker container", async (assert: any) => {
+test("starts/stops/destroys a docker container", async (assert: Test) => {
   const besuTestLedger = new BesuTestLedger();
   assert.tearDown(async () => {
     await besuTestLedger.stop();
     await besuTestLedger.destroy();
   });
+  test.onFinish(() => besuTestLedger.stop());
+  test.onFinish(() => besuTestLedger.destroy());
 
   const container: Container = await besuTestLedger.start();
   assert.ok(container);
