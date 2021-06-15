@@ -17,6 +17,10 @@ import {
 } from "./generated/openapi/typescript-axios/index";
 
 import {
+  GetPastLogsV1Request,
+  GetPastLogsV1Response,
+} from "./generated/openapi/typescript-axios/index";
+import {
   ConsensusAlgorithmFamily,
   IPluginLedgerConnector,
   IWebServiceEndpoint,
@@ -729,5 +733,12 @@ export class PluginLedgerConnectorBesu
       request.transactionHash,
     );
     return { transaction };
+  }
+
+  public async getPastLogs(
+    request: GetPastLogsV1Request,
+  ): Promise<GetPastLogsV1Response> {
+    const logs = await this.web3.eth.getPastLogs(request);
+    return { logs };
   }
 }

@@ -190,6 +190,61 @@ export enum EthContractInvocationType {
 /**
  * 
  * @export
+ * @interface EvmLog
+ */
+export interface EvmLog {
+    /**
+     * 
+     * @type {string}
+     * @memberof EvmLog
+     */
+    address: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EvmLog
+     */
+    data: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EvmLog
+     */
+    blockHash: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EvmLog
+     */
+    transactionHash: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof EvmLog
+     */
+    topics: Array<string>;
+    /**
+     * 
+     * @type {number}
+     * @memberof EvmLog
+     */
+    logIndex: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof EvmLog
+     */
+    transactionIndex: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof EvmLog
+     */
+    blockNumber: number;
+}
+/**
+ * 
+ * @export
  * @interface EvmTransaction
  */
 export interface EvmTransaction {
@@ -291,6 +346,50 @@ export interface GetBalanceV1Response {
      * @memberof GetBalanceV1Response
      */
     balance: string;
+}
+/**
+ * 
+ * @export
+ * @interface GetPastLogsV1Request
+ */
+export interface GetPastLogsV1Request {
+    /**
+     * 
+     * @type {any}
+     * @memberof GetPastLogsV1Request
+     */
+    toBlock?: any | null;
+    /**
+     * 
+     * @type {any}
+     * @memberof GetPastLogsV1Request
+     */
+    fromBlock?: any | null;
+    /**
+     * 
+     * @type {any}
+     * @memberof GetPastLogsV1Request
+     */
+    address?: any | null;
+    /**
+     * 
+     * @type {Array<any>}
+     * @memberof GetPastLogsV1Request
+     */
+    topics?: Array<any>;
+}
+/**
+ * 
+ * @export
+ * @interface GetPastLogsV1Response
+ */
+export interface GetPastLogsV1Response {
+    /**
+     * 
+     * @type {Array<EvmLog>}
+     * @memberof GetPastLogsV1Response
+     */
+    logs: Array<EvmLog>;
 }
 /**
  * 

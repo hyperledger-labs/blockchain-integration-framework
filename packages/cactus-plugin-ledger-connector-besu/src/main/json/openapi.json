@@ -110,7 +110,83 @@
                         "type": "string"
                         }
                     }
-                          
+                },        
+            "GetPastLogsV1Response": {
+                "type": "object",
+                "required": [
+                    "logs"                    
+                ],
+                "properties": {
+                    "logs": {
+                        "type": "array", 
+                        "items":{
+                            "$ref": "#/components/schemas/EvmLog"
+                        }
+                    }
+                   
+                }
+            },
+            "GetPastLogsV1Request": {
+                "type": "object",
+                "properties": {
+                    "toBlock": {
+                    },
+                    "fromBlock": {
+                    
+                    },
+                    "address": {
+                    },
+                    "topics": {
+                        "type" : "array",
+                        "items":{
+
+                        }
+                    }
+
+                }
+            },
+            "EvmLog":{
+                "type" : "object",
+                "required": [
+                  "address",
+                  "data",
+                  "blockHash",
+                  "transactionHash",
+                  "topics",
+                  "logIndex",
+                  "transactionIndex",
+                  "blockNumber"
+                ],
+                "properties": {
+                  "address":{
+                    "type": "string"
+                  },
+                  "data":{
+                    "type": "string"
+                  },
+                  "blockHash":{
+                    "type": "string"
+                  },
+                  "transactionHash":{
+                    "type": "string"
+                  },
+                  "topics":{
+                    "type": "array",
+                    "items":{
+                      "type" :"string" 
+                      
+                    }
+                  },
+                  "logIndex":{
+                    "type": "number"
+                  },
+                  "transactionIndex":{
+                    "type": "number"
+                  },
+                  "blockNumber":{
+                    "type": "number"
+                  }
+              }
             },
             "WatchBlocksV1": {
                 "type": "string",
