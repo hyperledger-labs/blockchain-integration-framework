@@ -149,6 +149,10 @@ export class PluginLedgerConnectorQuorum
     }
   }
 
+  public async onPluginInit(): Promise<unknown> {
+    return;
+  }
+
   async registerWebServices(app: Express): Promise<IWebServiceEndpoint[]> {
     const webServices = await this.getOrCreateWebServices();
     await Promise.all(webServices.map((ws) => ws.registerExpress(app)));

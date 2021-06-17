@@ -194,6 +194,10 @@ export class PluginKeychainVault implements ICactusPlugin, IPluginWebService {
     return `@hyperledger/cactus-plugin-keychain-vault`;
   }
 
+  public async onPluginInit(): Promise<unknown> {
+    return;
+  }
+
   async rotateEncryptionKeys(): Promise<void> {
     throw new Error("Method not implemented.");
   }

@@ -91,6 +91,10 @@ export class PluginConsortiumManual
     return this.instanceId;
   }
 
+  public async onPluginInit(): Promise<unknown> {
+    return;
+  }
+
   public getPrometheusExporter(): PrometheusExporter {
     return this.prometheusExporter;
   }
