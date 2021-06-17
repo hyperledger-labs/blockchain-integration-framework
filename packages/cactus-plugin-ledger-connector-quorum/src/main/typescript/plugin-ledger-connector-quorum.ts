@@ -12,6 +12,8 @@ const Contract = new Web3().eth.Contract;
 import { ContractSendMethod } from "web3-eth-contract";
 import { TransactionReceipt } from "web3-eth";
 
+import * as OpenApiValidator from "express-openapi-validator";
+
 import {
   ConsensusAlgorithmFamily,
   IPluginLedgerConnector,
@@ -35,6 +37,20 @@ import {
 
 import { DeployContractSolidityBytecodeEndpoint } from "./web-services/deploy-contract-solidity-bytecode-endpoint";
 
+// import {
+//   DeployContractSolidityBytecodeV1Request,
+//   DeployContractSolidityBytecodeV1Response,
+//   EthContractInvocationType,
+//   InvokeContractV1Request,
+//   InvokeContractV1Response,
+//   RunTransactionRequest,
+//   RunTransactionResponse,
+//   Web3SigningCredentialGethKeychainPassword,
+//   Web3SigningCredentialCactusKeychainRef,
+//   Web3SigningCredentialPrivateKeyHex,
+//   Web3SigningCredentialType,
+// } from "./generated/openapi/typescript-axios/";
+
 import {
   DeployContractSolidityBytecodeV1Request,
   DeployContractSolidityBytecodeV1Response,
@@ -47,7 +63,7 @@ import {
   Web3SigningCredentialCactusKeychainRef,
   Web3SigningCredentialPrivateKeyHex,
   Web3SigningCredentialType,
-} from "./generated/openapi/typescript-axios/";
+} from "./mock-generated/";
 
 import { RunTransactionEndpoint } from "./web-services/run-transaction-endpoint";
 import { InvokeContractEndpoint } from "./web-services/invoke-contract-endpoint";
@@ -155,6 +171,28 @@ export class PluginLedgerConnectorQuorum
 
   async registerWebServices(app: Express): Promise<IWebServiceEndpoint[]> {
     const webServices = await this.getOrCreateWebServices();
+
+    app.use(
+      OpenApiValidator.middleware({
+        apiSpec: "../json/openapi.json",
+        validateRequests: true, // (default)
+        validateResponses: true, // false by default
+      }),
+    );
+
+    // app.use(
+    //   (
+    //     err: { status: number; message: string; errors: string[] },
+    //     req: Request,
+    //     res: Response,
+    //   ) => {
+    //     res.status(err.status || 500).json({
+    //       message: err.message,
+    //       errors: err.errors,
+    //     });
+    //   },
+    // );
+
     await Promise.all(webServices.map((ws) => ws.registerExpress(app)));
     return webServices;
   }

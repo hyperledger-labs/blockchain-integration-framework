@@ -407,12 +407,17 @@
             "DeployContractSolidityBytecodeV1Request": {
                 "type": "object",
                 "required": [
+                    "fake",
                     "contractName",
                     "bytecode",
                     "web3SigningCredential",
                     "keychainId"
                 ],
                 "properties": {
+                    "fake": {
+                        "type": "string",
+                        "nullable": false
+                    },
                     "contractName": {
                         "type": "string",
                         "description": "The contract name for retrieve the contracts json on the keychain.",
