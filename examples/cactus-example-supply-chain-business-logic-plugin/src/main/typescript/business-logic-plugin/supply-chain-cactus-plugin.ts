@@ -162,4 +162,8 @@ export class SupplyChainCactusPlugin
   public getPackageName(): string {
     return "@hyperledger/cactus-example-supply-chain-backend";
   }
+
+  public async onPluginInit(): Promise<unknown> {
+    return;
+  }
 }

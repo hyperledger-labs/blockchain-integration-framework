@@ -74,6 +74,10 @@ export class PluginLedgerConnectorStub
     return Optional.empty();
   }
 
+  public async onPluginInit(): Promise<unknown> {
+    return;
+  }
+
   public async shutdown(): Promise<void> {
     return;
   }
