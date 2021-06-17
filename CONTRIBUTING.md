@@ -71,7 +71,7 @@ Further reading:
 
 
 ## PR Checklist - Contributor/Developer
-### To avoid issues in the future, do not install dependencies globally. Ensure all dependencies are kept self-contained.
+**To avoid issues in the future, do not install dependencies globally. Ensure all dependencies are kept self-contained.**
 
 1. Fork [hyperledger/cactus](https://github.com/hyperledger/cactus) via Github UI
    - If you are using the Git client on the Windows operating system, you will need to enable long paths for git
@@ -356,13 +356,13 @@ for both them separately anyway:
   - An integration test:
 
       ```sh
-      npx tap --timeout=600 packages/cactus-test-plugin-consortium-manual/src/test/typescript/integration/plugin-consortium-manual/security-isolation-via-api-server-ports.ts
+      npx tap --ts --timeout=600 packages/cactus-test-plugin-consortium-manual/src/test/typescript/integration/plugin-consortium-manual/security-isolation-via-api-server-ports.ts
       ```
 
   - A unit test:
 
       ```sh
-      npx tap --timeout=600 packages/cactus-common/src/test/typescript/unit/objects/get-all-method-names.ts
+      npx tap --ts --timeout=600 packages/cactus-common/src/test/typescript/unit/objects/get-all-method-names.ts
       ```
 
 #### Running all test cases (unit+integration)
@@ -462,7 +462,7 @@ chmod +x ./packages/cactus-cmd-api-server/dist/lib/main/typescript/cmd/cactus-ap
 You can run this test case the same way you would run any other test case (which is also a requirement in itself for each test case):
 
 ```sh
-npx tap --timeout=600 packages/cactus-test-plugin-ledger-connector-quorum/src/test/typescript/integration/plugin-ledger-connector-quorum/deploy-contract/deploy-contract-via-web-service.ts
+npx tap --ts --timeout=600 packages/cactus-test-plugin-ledger-connector-quorum/src/test/typescript/integration/plugin-ledger-connector-quorum/deploy-contract/deploy-contract-via-web-service.ts
 ```
 
 You can specify an arbitrary set of test cases to run in a single execution via glob patterns. Examples of these glob
@@ -470,9 +470,9 @@ patterns can be observed in the root directory's `package.json` file which has n
 a single command (the CI script uses these):
 
 ```json
-"test:all": "tap --jobs=1 --timeout=600 \"packages/cactus-*/src/test/typescript/{unit,integration}/\"",
-"test:unit": "tap --timeout=600 \"packages/cactus-*/src/test/typescript/unit/\"",
-"test:integration": "tap --jobs=1 --timeout=600 \"packages/cactus-*/src/test/typescript/integration/\""
+"test:all": "tap --ts --jobs=1 --timeout=600 \"packages/cactus-*/src/test/typescript/{unit,integration}/\"",
+"test:unit": "tap --ts --timeout=600 \"packages/cactus-*/src/test/typescript/unit/\"",
+"test:integration": "tap --ts --jobs=1 --timeout=600 \"packages/cactus-*/src/test/typescript/integration/\""
 ```
 
 Following a similar pattern if you have a specific folder where your test cases are, you can run everything in that
@@ -484,7 +484,7 @@ For example this can work as well:
 ```sh
 # Starting from the project root
 cd packages/cactus-test-plugin-ledger-connector-quorum/src/test/typescript/integration/plugin-ledger-connector-quorum
-npx tap --jobs=1 --timeout=600 \"./\"
+npx tap --ts --jobs=1 --timeout=600 \"./\"
 ```
 
 > Be aware that glob patterns need quoting in some operating system's shell environments and not necessarily on others.
