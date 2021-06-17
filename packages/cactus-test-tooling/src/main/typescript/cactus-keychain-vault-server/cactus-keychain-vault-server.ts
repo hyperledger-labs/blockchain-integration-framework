@@ -38,7 +38,7 @@ export class CactusKeychainVaultServer {
   private container: Container | undefined;
   private containerId: string | undefined;
 
-  public get className() {
+  public get className(): string {
     return CactusKeychainVaultServer.CLASS_NAME;
   }
 
