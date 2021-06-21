@@ -990,7 +990,6 @@
                 }
             }
         },
-
         "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-transaction": {
             "post": {
                 "x-hyperledger-cactus": {
@@ -1018,6 +1017,41 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/GetTransactionV1Response"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-past-logs": {
+            "post": {
+                "x-hyperledger-cactus": {
+                    "http": {
+                        "verbLowerCase": "post",
+                        "path": "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-past-logs"
+                    }
+                },
+                "operationId": "getPastLogsV1",
+                "summary": "Gets past logs, matching the given options.",
+                "parameters": [],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/GetPastLogsV1Request"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+
+                                    "$ref": "#/components/schemas/GetPastLogsV1Response"
                                 }
                             }
                         }
