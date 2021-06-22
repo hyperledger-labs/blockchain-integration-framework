@@ -111,6 +111,7 @@ function mainTask()
   {
     echo "$(date +%FT%T%z) [CI] First (#1) try of tests failed starting second try now..."
     npm run test:all -- --bail && echo "$(date +%FT%T%z) [CI] Second (#2) try of tests succeeded OK."
+    
   } ||
   {
     # If the third try fails then the execution will reach the last echo and the exit 1 statement
