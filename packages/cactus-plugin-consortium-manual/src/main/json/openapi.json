@@ -39,7 +39,7 @@
                 "properties": {
                     "jws": {
                         "description": "The JSON Web Signature of the Cactus node.",
-                        "$ref": "../../../../../cactus-core-api/src/main/json/openapi.json#/components/schemas/JWSGeneral",
+                        "$ref": "../../../../cactus-core-api/src/main/json/openapi.json#/components/schemas/JWSGeneral",
                         "nullable": false
                     }
                 }
@@ -52,7 +52,7 @@
                 "properties": {
                     "jws": {
                         "description": "The JSON Web Signature of the Cactus consortium.",
-                        "$ref": "../../../../../cactus-core-api/src/main/json/openapi.json#/components/schemas/JWSGeneral",
+                        "$ref": "../../../../cactus-core-api/src/main/json/openapi.json#/components/schemas/JWSGeneral",
                         "nullable": false,
                         "format": "The general format which is a JSON object, not a string."
                     }

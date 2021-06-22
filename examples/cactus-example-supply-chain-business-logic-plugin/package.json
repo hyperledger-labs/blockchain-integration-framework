@@ -12,7 +12,7 @@
     "dist/*"
   ],
   "scripts": {
-    "generate-sdk": "docker run --rm -v \"${PWD}:/local\" openapitools/openapi-generator-cli:v5.1.1 generate -i ./local/src/main/json/openapi.json -g typescript-axios -o ./local/src/main/typescript/generated/openapi/typescript-axios/",
+    "generate-sdk": "openapi-generator-cli generate -i ./src/main/json/openapi.json -g typescript-axios -o ./src/main/typescript/generated/openapi/typescript-axios/",
     "tsc": "tsc --project ./tsconfig.json",
     "pretsc": "npm run generate-sdk",
     "watch": "npm-watch",
