@@ -1,5 +1,5 @@
 export interface IEthContractDeployment {
   address: string;
-  abi: any;
+  abi: unknown;
   bytecode: string;
 }
