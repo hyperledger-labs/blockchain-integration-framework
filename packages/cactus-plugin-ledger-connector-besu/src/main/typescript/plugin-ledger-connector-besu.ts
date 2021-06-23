@@ -68,6 +68,8 @@ import {
   GetTransactionV1Response,
   GetBlockV1Request,
   GetBlockV1Response,
+  GetBesuRecordV1Request,
+  GetBesuRecordV1Response,
 } from "./generated/openapi/typescript-axios";
 
 import { InvokeContractEndpoint } from "./web-services/invoke-contract-endpoint";
@@ -84,6 +86,7 @@ import { GetTransactionEndpoint } from "./web-services/get-transaction-endpoint"
 import { GetPastLogsEndpoint } from "./web-services/get-past-logs-endpoint";
 import { RunTransactionEndpoint } from "./web-services/run-transaction-endpoint";
 import { GetBlockEndpoint } from "./web-services/get-block-v1-endpoint-";
+import { GetBesuRecordEndpointV1 } from "./web-services/get-besu-record-endpoint-v1";
 
 export const E_KEYCHAIN_NOT_FOUND = "cactus.connector.besu.keychain_not_found";
 
@@ -259,6 +262,13 @@ export class PluginLedgerConnectorBesu
     }
     {
       const endpoint = new BesuSignTransactionEndpointV1({
+        connector: this,
+        logLevel: this.options.logLevel,
+      });
+      endpoints.push(endpoint);
+    }
+    {
+      const endpoint = new GetBesuRecordEndpointV1({
         connector: this,
         logLevel: this.options.logLevel,
       });
@@ -773,5 +783,58 @@ export class PluginLedgerConnectorBesu
   ): Promise<GetBlockV1Response> {
     const block = await this.web3.eth.getBlock(request.blockHashOrBlockNumber);
     return { block };
+  }
+  public async getBesuRecord(
+    request: GetBesuRecordV1Request,
+  ): Promise<GetBesuRecordV1Response> {
+    const fnTag = `${this.className}#getBesuRecord()`;
+    //////////////////////////////////////////////
+    let abi: any = undefined;
+    const resp: GetBesuRecordV1Response = {};
+    const txHash = request.transactionHash;
+
+    if (txHash) {
+      const transaction = await this.web3.eth.getTransaction(txHash);
+      if (transaction.input) {
+        resp.transactionInputData = transaction.input;
+        return resp;
+      }
+    }
+
+    if (request.invokeCall) {
+      if (request.invokeCall.contractAbi) {
+        if (typeof request.invokeCall.contractAbi === "string") {
+          abi = JSON.parse(request.invokeCall.contractAbi);
+        } else {
+          abi = request.invokeCall.contractAbi;
+        }
+      }
+      const { contractAddress } = request.invokeCall;
+      const contractInstance = new this.web3.eth.Contract(abi, contractAddress);
+      const methodRef = contractInstance.methods[request.invokeCall.methodName];
+      Checks.truthy(
+        methodRef,
+        `${fnTag} YourContract.${request.invokeCall.methodName}`,
+      );
+      const method: ContractSendMethod = methodRef(
+        ...request.invokeCall.params,
+      );
+
+      if (
+        request.invokeCall.invocationType === EthContractInvocationType.Call
+      ) {
+        const callOutput = await (method as any).call();
+        const res: GetBesuRecordV1Response = {
+          ledgerId: this.instanceId,
+          callOutput,
+        };
+        return res;
+      } else {
+        throw new Error(
+          `${fnTag} Unsupported invocation type ${request.invokeCall.invocationType}`,
+        );
+      }
+    }
+    return resp;
   }
 }
