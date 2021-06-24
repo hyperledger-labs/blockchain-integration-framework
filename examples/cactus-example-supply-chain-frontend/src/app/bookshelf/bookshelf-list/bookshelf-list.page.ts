@@ -53,7 +53,7 @@ export class BookshelfListPage implements OnInit {
     this.log.debug(`Fetched Bookshelf data: %o`, bookshelves);
   }
 
-  async clickShowDetail(bookshelf: Bookshelf) {
+  async clickShowDetail(bookshelf: Bookshelf): Promise<void> {
     this.log.debug("clickShowDetail()", bookshelf);
 
     const modal = await this.modalController.create({
@@ -73,7 +73,7 @@ export class BookshelfListPage implements OnInit {
     }
   }
 
-  async clickAddNew() {
+  async clickAddNew(): Promise<void> {
     this.log.debug(`clickAddNew()`);
     const modal = await this.modalController.create({
       component: BookshelfDetailPage,
