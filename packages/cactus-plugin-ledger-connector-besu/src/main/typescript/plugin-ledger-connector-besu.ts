@@ -6,6 +6,13 @@ import type { Socket as SocketIoSocket } from "socket.io";
 import type { Express } from "express";
 import { promisify } from "util";
 import { Optional } from "typescript-optional";
+
+import EEAClient, {
+  IPrivateTransactionReceipt,
+  ISendRawTransactionOptions,
+  IWeb3InstanceExtended,
+} from "web3-eea";
+
 import Web3 from "web3";
 import { AbiItem } from "web3-utils";
 
@@ -60,6 +67,7 @@ import {
   Web3SigningCredentialCactusKeychainRef,
   Web3SigningCredentialPrivateKeyHex,
   Web3SigningCredentialType,
+  Web3TransactionReceipt,
 } from "./generated/openapi/typescript-axios/";
 
 import { RunTransactionEndpoint } from "./web-services/run-transaction-endpoint";
@@ -98,6 +106,8 @@ export class PluginLedgerConnectorBesu
   public prometheusExporter: PrometheusExporter;
   private readonly log: Logger;
   private readonly web3: Web3;
+  // Undefined temp fix until async init code is merged.
+  private web3EEA: IWeb3InstanceExtended | undefined;
   private readonly pluginRegistry: PluginRegistry;
   private contracts: {
     [name: string]: Contract;
@@ -138,7 +148,19 @@ export class PluginLedgerConnectorBesu
       `${fnTag} options.prometheusExporter`,
     );
 
+    const web3Provider = new Web3.providers.HttpProvider(
+      this.options.rpcApiHttpHost,
+    );
+
+    this.web3 = new Web3(web3Provider);
+    this.initializeEEAClient();
+
     this.prometheusExporter.startMetricsCollection();
+  }
+
+  public async initializeEEAClient() {
+    const chainId = await this.web3.eth.getChainId();
+    this.web3EEA = EEAClient(this.web3, chainId);
   }
 
   public getPrometheusExporter(): PrometheusExporter {
@@ -293,6 +315,7 @@ export class PluginLedgerConnectorBesu
             timeoutMs: req.timeoutMs || 60000,
           },
           web3SigningCredential,
+          privateTransactionConfig: req.privateTransactionConfig,
         });
 
         const address = {
@@ -364,6 +387,7 @@ export class PluginLedgerConnectorBesu
           receiptType: ReceiptType.NodeTxPoolAck,
           timeoutMs: req.timeoutMs || 60000,
         },
+        privateTransactionConfig: req.privateTransactionConfig,
       };
       const out = await this.transact(txReq);
       //const transactionReceipt = out.transactionReceipt;
@@ -424,8 +448,20 @@ export class PluginLedgerConnectorBesu
       `${fnTag}:req.transactionConfig.rawTransaction`,
     );
     const rawTx = req.transactionConfig.rawTransaction as string;
+
     this.log.debug("Starting web3.eth.sendSignedTransaction(rawTransaction) ");
+
     const txPoolReceipt = await this.web3.eth.sendSignedTransaction(rawTx);
+
+    return this.getTxReceipt(req, txPoolReceipt);
+  }
+
+  public async getTxReceipt(
+    request: RunTransactionRequest,
+    txPoolReceipt: any,
+  ): Promise<RunTransactionResponse> {
+    const fnTag = `${this.className}#getTxReceipt()`;
+
     this.log.debug("Received preliminary receipt from Besu node.");
 
     if (txPoolReceipt instanceof Error) {
@@ -435,8 +471,8 @@ export class PluginLedgerConnectorBesu
     this.prometheusExporter.addCurrentTransaction();
 
     if (
-      req.consistencyStrategy.receiptType === ReceiptType.NodeTxPoolAck &&
-      req.consistencyStrategy.blockConfirmations > 0
+      request.consistencyStrategy.receiptType === ReceiptType.NodeTxPoolAck &&
+      request.consistencyStrategy.blockConfirmations > 0
     ) {
       throw new Error(
         `${fnTag} Conflicting parameters for consistency` +
@@ -445,13 +481,13 @@ export class PluginLedgerConnectorBesu
       );
     }
 
-    switch (req.consistencyStrategy.receiptType) {
+    switch (request.consistencyStrategy.receiptType) {
       case ReceiptType.NodeTxPoolAck:
         return { transactionReceipt: txPoolReceipt };
       case ReceiptType.LedgerBlockAck:
         this.log.debug("Starting poll for ledger TX receipt ...");
         const txHash = txPoolReceipt.transactionHash;
-        const { consistencyStrategy } = req;
+        const { consistencyStrategy } = request;
         const ledgerReceipt = await this.pollForTxReceipt(
           txHash,
           consistencyStrategy,
@@ -463,9 +499,52 @@ export class PluginLedgerConnectorBesu
         return { transactionReceipt: ledgerReceipt };
       default:
         throw new Error(
-          `${fnTag} Unrecognized ReceiptType: ${req.consistencyStrategy.receiptType}`,
+          `${fnTag} Unrecognized ReceiptType: ${request.consistencyStrategy.receiptType}`,
         );
     }
+  }
+
+  public async transactPrivate(
+    options: ISendRawTransactionOptions,
+  ): Promise<RunTransactionResponse> {
+    const fnTag = `${this.className}#transactPrivate()`;
+    if (!this.web3EEA) {
+      await this.initializeEEAClient();
+    }
+
+    const txHash = await this.web3EEA?.eea.sendRawTransaction(options);
+
+    if (!txHash) {
+      throw new Error(`${fnTag} Transaction Hash undefined`);
+    }
+    return this.getPrivateTxReceipt(options.privateFrom, txHash);
+  }
+
+  public async getPrivateTxReceipt(
+    privateFrom: string,
+    txHash: string,
+  ): Promise<RunTransactionResponse> {
+    const fnTag = `${this.className}#getPrivateTxReceipt()`;
+
+    const txPoolReceipt:
+      | IPrivateTransactionReceipt
+      | null
+      | undefined = await this.web3EEA?.priv.getTransactionReceipt(
+      txHash,
+      privateFrom,
+    );
+
+    if (txPoolReceipt) {
+      const r: Web3TransactionReceipt = {
+        ...txPoolReceipt,
+        status: txPoolReceipt.status === "0x0" ? false : true,
+        gasUsed: 0,
+      };
+
+      return { transactionReceipt: r };
+    }
+
+    throw new Error(`${fnTag} Transaction Hash undefined`);
   }
 
   public async transactPrivateKey(
@@ -476,6 +555,21 @@ export class PluginLedgerConnectorBesu
     const {
       secret,
     } = web3SigningCredential as Web3SigningCredentialPrivateKeyHex;
+
+    // Run transaction to EEA client here if private transaction
+
+    if (req.privateTransactionConfig) {
+      const options: ISendRawTransactionOptions = {
+        nonce: transactionConfig.nonce,
+        to: transactionConfig.to,
+        data: transactionConfig.data || "",
+        privateKey: secret,
+        ...req.privateTransactionConfig,
+        restriction: "restricted",
+      };
+
+      return this.transactPrivate(options);
+    }
 
     const signedTx = await this.web3.eth.accounts.signTransaction(
       transactionConfig,
@@ -497,7 +591,11 @@ export class PluginLedgerConnectorBesu
     req: RunTransactionRequest,
   ): Promise<RunTransactionResponse> {
     const fnTag = `${this.className}#transactCactusKeychainRef()`;
-    const { transactionConfig, web3SigningCredential } = req;
+    const {
+      transactionConfig,
+      web3SigningCredential,
+      privateTransactionConfig,
+    } = req;
     const {
       ethAccount,
       keychainEntryKey,
@@ -515,6 +613,7 @@ export class PluginLedgerConnectorBesu
     const privateKeyHex = await keychainPlugin?.get<string>(keychainEntryKey);
 
     return this.transactPrivateKey({
+      privateTransactionConfig,
       transactionConfig,
       web3SigningCredential: {
         ethAccount,
@@ -580,7 +679,11 @@ export class PluginLedgerConnectorBesu
         keychainPlugin,
         `${fnTag} keychain for ID:"${req.keychainId}"`,
       );
-
+      if (!keychainPlugin.has(req.contractName)) {
+        throw new Error(
+          `${fnTag} Cannot create an instance of the contract because the contractName and the contractName on the keychain does not match`,
+        );
+      }
       const networkId = await this.web3.eth.net.getId();
 
       const tmpContract = new this.web3.eth.Contract(req.contractAbi);
@@ -596,6 +699,7 @@ export class PluginLedgerConnectorBesu
       const web3SigningCredential = req.web3SigningCredential as
         | Web3SigningCredentialPrivateKeyHex
         | Web3SigningCredentialCactusKeychainRef;
+
       const runTxResponse = await this.transact({
         transactionConfig: {
           data,
@@ -609,6 +713,7 @@ export class PluginLedgerConnectorBesu
           timeoutMs: req.timeoutMs || 60000,
         },
         web3SigningCredential,
+        privateTransactionConfig: req.privateTransactionConfig,
       });
 
       const keychainHasContract = await keychainPlugin.has(contractName);

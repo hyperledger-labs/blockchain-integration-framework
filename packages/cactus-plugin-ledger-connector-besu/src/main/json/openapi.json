@@ -431,6 +431,26 @@
                     }
                 }
             },
+            "BesuPrivateTransactionConfig" : {
+                "type": "object",
+                "required" : [
+                    "privateFrom",
+                    "privateFor"
+                ],
+                "properties" : {
+                    "privateFrom": {
+                        "type": "string",
+                        "nullable": false
+                    },
+                    "privateFor": {
+                        "type": "array",
+                        "default": [],
+                        "items": {},
+                        "nullable": false
+                    }
+
+                }
+            },
             "Web3TransactionReceipt": {
                 "type": "object",
                 "required": [
@@ -505,6 +525,9 @@
                     },
                     "consistencyStrategy": {
                         "$ref": "#/components/schemas/ConsistencyStrategy"
+                    },
+                    "privateTransactionConfig": {
+                        "$ref": "#/components/schemas/BesuPrivateTransactionConfig"
                     }
                 }
             },
@@ -580,6 +603,9 @@
                         "minimum": 0,
                         "default": 60000,
                         "nullable": false
+                    },
+                    "privateTransactionConfig": {
+                        "$ref": "#/components/schemas/BesuPrivateTransactionConfig"
                     }
                 }
             },
@@ -686,6 +712,9 @@
                         "description": "The keychainId for retrieve the contracts json.",
                         "minLength": 1,
                         "maxLength": 100
+                    },
+                    "privateTransactionConfig": {
+                        "$ref": "#/components/schemas/BesuPrivateTransactionConfig"
                     }
                 }
             },

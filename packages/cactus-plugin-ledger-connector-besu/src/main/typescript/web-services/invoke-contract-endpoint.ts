@@ -17,6 +17,7 @@ import { registerWebServiceEndpoint } from "@hyperledger/cactus-core";
 import { PluginLedgerConnectorBesu } from "../plugin-ledger-connector-besu";
 
 import OAS from "../../json/openapi.json";
+import { InvokeContractV1Request } from "../generated/openapi/typescript-axios";
 
 export interface IInvokeContractEndpointOptions {
   logLevel?: LogLevelDesc;
@@ -86,7 +87,7 @@ export class InvokeContractEndpoint implements IWebServiceEndpoint {
   public async handleRequest(req: Request, res: Response): Promise<void> {
     const reqTag = `${this.getVerbLowerCase()} - ${this.getPath()}`;
     this.log.debug(reqTag);
-    const reqBody = req.body;
+    const reqBody: InvokeContractV1Request = req.body;
     try {
       const resBody = await this.options.connector.invokeContract(reqBody);
       res.json(resBody);

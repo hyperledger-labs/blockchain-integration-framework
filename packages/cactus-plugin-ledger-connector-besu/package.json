@@ -91,10 +91,11 @@
     "joi": "14.3.1",
     "openapi-types": "7.0.1",
     "prom-client": "13.1.0",
+    "run-time-error": "1.4.0",
     "rxjs": "6.6.7",
     "socket.io-client": "4.0.1",
     "typescript-optional": "2.0.1",
-    "web3": "1.2.7",
+    "web3-eea": "0.11.0",
     "web3-utils": "1.2.7"
   },
   "devDependencies": {
