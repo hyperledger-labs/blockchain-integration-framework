@@ -107,7 +107,7 @@ export class SupplyChainAppDummyInfrastructure {
     this.quorum = new QuorumTestLedger();
     this.fabric = new FabricTestLedgerV1({
       publishAllPorts: true,
-      imageName: "hyperledger/cactus-fabric-all-in-one",
+      imageName: "ghcr.io/hyperledger/cactus-fabric-all-in-one",
       imageVersion: "2021-03-02-ssh-hotfix",
       logLevel: level,
     });

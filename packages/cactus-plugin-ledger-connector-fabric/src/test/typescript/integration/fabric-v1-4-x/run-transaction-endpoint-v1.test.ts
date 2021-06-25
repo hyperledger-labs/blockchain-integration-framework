@@ -61,7 +61,7 @@ test(testCase, async (t: Test) => {
     publishAllPorts: true,
     emitContainerLogs: true,
     logLevel,
-    imageName: "hyperledger/cactus-fabric-all-in-one",
+    imageName: "ghcr.io/hyperledger/cactus-fabric-all-in-one",
     imageVersion: "2020-12-16-3ddfd8f-v1.4.8",
     envVars: new Map([
       ["FABRIC_VERSION", "1.4.8"],

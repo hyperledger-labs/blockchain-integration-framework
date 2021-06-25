@@ -43,7 +43,7 @@ export interface IFabricTestLedgerV1ConstructorOptions {
  */
 const DEFAULT_OPTS = Object.freeze({
   imageVersion: "2021-01-05-3400c06",
-  imageName: "hyperledger/cactus-fabric-all-in-one",
+  imageName: "ghcr.io/hyperledger/cactus-fabric-all-in-one",
   envVars: new Map([["FABRIC_VERSION", "1.4.8"]]),
 });
 export const FABRIC_TEST_LEDGER_DEFAULT_OPTIONS = DEFAULT_OPTS;

@@ -59,7 +59,7 @@ test(testCase, async (t: Test) => {
     publishAllPorts: true,
     // imageName: "faio14x",
     // imageVersion: "latest",
-    imageName: "hyperledger/cactus-fabric-all-in-one",
+    imageName: "ghcr.io/hyperledger/cactus-fabric-all-in-one",
     imageVersion: "2021-04-21-2016750",
   });
 
