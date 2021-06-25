@@ -578,9 +578,6 @@ export class Containers {
     log.debug(`Clearing ${imageIds.length} images.... %o`, imageIds);
 
     const cleanUpCmds = [
-      // `docker kill $(docker ps -q)`,
-      // `docker rm $(docker ps -a -q)`,
-      // `docker rmi $(docker images -q -a)`,
       { binary: "docker", args: ["rmi", ...imageIds] },
       { binary: "docker", args: ["volume", "prune", "--force"] },
     ];
