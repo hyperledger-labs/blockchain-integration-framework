@@ -102,11 +102,15 @@
   },
   "devDependencies": {
     "@types/dockerode": "2.5.28",
+    "@types/esm": "3.2.0",
     "@types/fs-extra": "8.1.0",
     "@types/joi": "14.3.4",
     "@types/node-ssh": "7.0.0",
     "@types/ssh2": "0.5.46",
     "@types/ssh2-streams": "0.1.8",
-    "@types/tar-stream": "2.1.0"
+    "@types/tar-stream": "2.1.0",
+    "@types/temp": "0.9.0",
+    "esm": "3.2.25",
+    "temp": "0.9.4"
   }
 }

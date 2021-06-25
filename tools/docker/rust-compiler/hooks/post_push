@@ -1,0 +1,18 @@
+#!/bin/bash
+
+
+SHORTHASH="$(git rev-parse --short HEAD)"
+TODAYS_DATE="$(date +%F)"
+
+#
+# We tag every image with today's date and also the git short hash
+# Today's date helps humans quickly intuit which version is older/newer
+# And the short hash helps identify the exact git revision that the image was
+# built from in case you are chasing some exotic bug that requires this sort of
+# rabbithole diving where you are down to comparing the images at this level.
+#
+DOCKER_TAG="$TODAYS_DATE-$SHORTHASH"
+
+
+docker tag $IMAGE_NAME $DOCKER_REPO:$DOCKER_TAG
+docker push $DOCKER_REPO:$DOCKER_TAG
