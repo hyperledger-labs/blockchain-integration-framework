@@ -31,6 +31,11 @@ function dumpDiskUsageInfo()
   else
     df || true
   fi
+  if ! [ -x "$(command -v docker)" ]; then
+    echo 'docker is not installed, skipping...'
+  else
+    docker system df || true
+  fi
 }
 
 function mainTask()
@@ -106,20 +111,25 @@ function mainTask()
   # Tests are still flaky (on weak hardware such as the CI env) despite our best
   # efforts so here comes the mighty hammer of brute force. 3 times the charm...
   {
+    dumpDiskUsageInfo
     npm run test:all -- --bail && echo "$(date +%FT%T%z) [CI] First (#1) try of tests succeeded OK."
   } ||
   {
+    dumpDiskUsageInfo
     echo "$(date +%FT%T%z) [CI] First (#1) try of tests failed starting second try now..."
     npm run test:all -- --bail && echo "$(date +%FT%T%z) [CI] Second (#2) try of tests succeeded OK."
     
   } ||
   {
+    dumpDiskUsageInfo
     # If the third try fails then the execution will reach the last echo and the exit 1 statement
     # ensuring that the script crashes if 3 out of 3 test runs have failed.
     echo "$(date +%FT%T%z) [CI] Second (#2) try of tests failed starting third and last try now..."
     npm run test:all -- --bail && echo "$(date +%FT%T%z) [CI] Third (#3) try of tests succeeded OK." || \
       echo "$(date +%FT%T%z) [CI] Third (#3) try of tests failed so giving up at this point" ; exit 1
   }
+
+  dumpDiskUsageInfo
 
   # The webpack production build needs more memory than the default allocation
   export NODE_OPTIONS=--max_old_space_size=4096
