@@ -988,6 +988,40 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
+         * 
+         * @summary Return balance of an address of a given block
+         * @param {GetBalanceV1Request} [getBalanceV1Request] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getbalanceV1: async (getBalanceV1Request?: GetBalanceV1Request, options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-balance`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(getBalanceV1Request, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Obtain signatures of ledger from the corresponding transaction hash.
          * @summary Obtain signatures of ledger from the corresponding transaction hash.
          * @param {SignTransactionRequest} signTransactionRequest 
@@ -1077,6 +1111,17 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
+         * 
+         * @summary Return balance of an address of a given block
+         * @param {GetBalanceV1Request} [getBalanceV1Request] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getbalanceV1(getBalanceV1Request?: GetBalanceV1Request, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetBalanceV1Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getbalanceV1(getBalanceV1Request, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
          * Obtain signatures of ledger from the corresponding transaction hash.
          * @summary Obtain signatures of ledger from the corresponding transaction hash.
          * @param {SignTransactionRequest} signTransactionRequest 
@@ -1135,6 +1180,16 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          */
         getPrometheusExporterMetricsV1(options?: any): AxiosPromise<string> {
             return localVarFp.getPrometheusExporterMetricsV1(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Return balance of an address of a given block
+         * @param {GetBalanceV1Request} [getBalanceV1Request] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getbalanceV1(getBalanceV1Request?: GetBalanceV1Request, options?: any): AxiosPromise<GetBalanceV1Response> {
+            return localVarFp.getbalanceV1(getBalanceV1Request, options).then((request) => request(axios, basePath));
         },
         /**
          * Obtain signatures of ledger from the corresponding transaction hash.
@@ -1201,6 +1256,18 @@ export class DefaultApi extends BaseAPI {
      */
     public getPrometheusExporterMetricsV1(options?: any) {
         return DefaultApiFp(this.configuration).getPrometheusExporterMetricsV1(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Return balance of an address of a given block
+     * @param {GetBalanceV1Request} [getBalanceV1Request] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public getbalanceV1(getBalanceV1Request?: GetBalanceV1Request, options?: any) {
+        return DefaultApiFp(this.configuration).getbalanceV1(getBalanceV1Request, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

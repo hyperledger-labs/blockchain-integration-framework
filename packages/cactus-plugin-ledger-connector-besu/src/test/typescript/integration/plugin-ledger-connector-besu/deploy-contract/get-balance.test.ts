@@ -32,14 +32,6 @@ test("can get balance of an account", async (t: Test) => {
    * @see https://github.com/hyperledger/besu/blob/1.5.1/config/src/main/resources/dev.json
    */
   const firstHighNetWorthAccount = "627306090abaB3A6e1400e9345bC60c78a8BEf57";
-  /*
-  const besuKeyPair = {
-    privateKey:
-      "c87509a1c067bbde78beb793e6fa76530b6382a4c0241e5e4a9ec0a0f44dc0d3",
-  };
-  const contractName = "HelloWorld";
-
-  */
   const web3 = new Web3(rpcApiHttpHost);
   const testEthAccount = web3.eth.accounts.create(uuidv4());
 

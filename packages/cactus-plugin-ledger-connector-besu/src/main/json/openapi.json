@@ -846,6 +846,40 @@
                 }
             }
         },
+        "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-balance": {
+            "post": {
+                "x-hyperledger-cactus": { 
+                    "http": {
+                        "verbLowerCase": "post",
+                        "path": "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-balance"
+                    }
+                },
+                "operationId": "getbalanceV1",
+                "summary": "Return balance of an address of a given block",
+                "parameters": [],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/GetBalanceV1Request"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GetBalanceV1Response"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/run-transaction": {
             "post": {
                 "x-hyperledger-cactus": {
