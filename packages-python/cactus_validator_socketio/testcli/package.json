@@ -1,0 +1,8 @@
+{
+  "name": "testcli",
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {
+    "socket.io-client": "^4.1.2"
+  }
+}
