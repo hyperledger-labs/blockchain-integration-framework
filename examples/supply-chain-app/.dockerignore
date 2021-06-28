@@ -39,6 +39,8 @@ coverage/
 # Introperability App specifics
 examples/simple-asset-transfer/fabric/**/hfc-key-store/
 
+examples/supply-chain-app/Dockerfile
+
 bin/
 .tmp/
 lerna-debug.log

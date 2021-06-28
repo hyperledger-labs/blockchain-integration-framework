@@ -1,6 +1,11 @@
-FROM node:12.20.1-alpine3.12 as builder
+FROM node:16.2.0-alpine3.13 as builder
 
 RUN apk update
+
+RUN apk --no-cache --update add alpine-sdk && \
+    apk --no-cache --update add libffi-dev openssl-dev && \
+    apk --no-cache --update add build-base && \
+    apk --no-cache --update add openjdk11
 
 # Need git because some of our npm depedencies might be coming
 # straight from github instead of being an npm package on npmjs.com.
@@ -8,8 +13,6 @@ RUN apk add --no-cache git
 
 # Some install scripts of the npm package fabric-network need python
 RUN apk add --no-cache python3 py3-pip
-
-RUN npm install modclean -g
 
 WORKDIR /
 RUN mkdir /app/
@@ -23,23 +26,6 @@ RUN npm run webpack:dev:web
 RUN npm run build:dev:frontend -- --scope='@hyperledger/cactus-example-supply-chain-frontend'
 RUN ./node_modules/.bin/lerna clean --yes
 RUN ./node_modules/.bin/lerna bootstrap -- --production --no-optional
-
-# RUN modclean --run --patterns="default:*" --path ./examples/cactus-example-supply-chain-backend/
-# RUN modclean --run --patterns="default:*" --path ./examples/cactus-example-supply-chain-business-logic-plugin/
-# RUN modclean --run --patterns="default:*" --path ./examples/cactus-example-supply-chain-frontend/
-# RUN modclean --run --patterns="default:*" --path ./packages/cactus-api-client/
-# RUN modclean --run --patterns="default:*" --path ./packages/cactus-cmd-api-server/
-# RUN modclean --run --patterns="default:*" --path ./packages/cactus-cockpit/
-# RUN modclean --run --patterns="default:*" --path ./packages/cactus-common/
-# RUN modclean --run --patterns="default:*" --path ./packages/cactus-core-api/
-# RUN modclean --run --patterns="default:*" --path ./packages/cactus-core/
-# RUN modclean --run --patterns="default:*" --path ./packages/cactus-plugin-consortium-manual/
-# RUN modclean --run --patterns="default:*" --path ./packages/cactus-plugin-keychain-memory/
-# RUN modclean --run --patterns="default:*" --path ./packages/cactus-plugin-keychain-vault/
-# RUN modclean --run --patterns="default:*" --path ./packages/cactus-plugin-ledger-connector-besu/
-# RUN modclean --run --patterns="default:*" --path ./packages/cactus-plugin-ledger-connector-fabric/
-# RUN modclean --run --patterns="default:*" --path ./packages/cactus-plugin-ledger-connector-quorum/
-# RUN modclean --run --patterns="default:*" --path ./packages/cactus-test-tooling/
 
 RUN rm -rf ./packages/cactus-test-plugin*
 RUN rm -rf ./packages/cactus-test-cmd*

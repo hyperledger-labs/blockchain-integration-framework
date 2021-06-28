@@ -149,4 +149,8 @@ export class PluginKeychainVaultRemoteAdapter
   public getPackageName(): string {
     return `@hyperledger/cactus-plugin-keychain-vault`;
   }
+
+  public async onPluginInit(): Promise<unknown> {
+    return;
+  }
 }

@@ -140,6 +140,10 @@ export class PluginLedgerConnectorXdai
     return this.instanceId;
   }
 
+  public async onPluginInit(): Promise<unknown> {
+    return;
+  }
+
   public getHttpServer(): Optional<Server | SecureServer> {
     return Optional.ofNullable(this.httpServer);
   }
@@ -292,10 +296,10 @@ export class PluginLedgerConnectorXdai
       const payload = (method.send as any).request();
       const { params } = payload;
       const [transactionConfig] = params;
+      transactionConfig.from = web3SigningCredential.ethAccount;
       if (req.gas == undefined) {
         req.gas = await this.web3.eth.estimateGas(transactionConfig);
       }
-      transactionConfig.from = web3SigningCredential.ethAccount;
       transactionConfig.gas = req.gas;
       transactionConfig.gasPrice = req.gasPrice;
       transactionConfig.value = req.value;

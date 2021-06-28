@@ -108,6 +108,10 @@ export class PluginLedgerConnectorCorda
     return "@hyperledger/cactus-plugin-ledger-connector-corda";
   }
 
+  public async onPluginInit(): Promise<unknown> {
+    return;
+  }
+
   public deployContract(): Promise<any> {
     throw new Error("Method not implemented.");
   }

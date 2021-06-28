@@ -68,6 +68,8 @@ export interface ICactusPlugin {
    * Hyperledger Besu deployment)
    */
   getPackageName(): string;
+
+  onPluginInit(): Promise<unknown>;
 }
 
 export function isICactusPlugin(x: unknown): x is ICactusPlugin {

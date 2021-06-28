@@ -31,6 +31,11 @@ RUN apt-get update \
 RUN apt-get update \
     && apt-get install python3-pip -y
 
+# Install GVM (Go Version Manager) dependencies
+RUN apt-get update \
+    && apt-get -y install curl git mercurial make binutils bison gcc build-essential
+
+
 VOLUME [ "/var/lib/docker" ]
 
 # Setting the ENTRYPOINT to docker-init.sh will start up the Docker Engine 
@@ -40,14 +45,23 @@ ENTRYPOINT [ "/usr/local/share/docker-init.sh" ]
 CMD [ "sleep", "infinity" ]
 
 # [Optional] Uncomment this section to install additional OS packages.
-# RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-#     && apt-get -y install --no-install-recommends <your-package-list-here>
+RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
+    && apt-get -y install --no-install-recommends openjdk-11-jdk
 
 COPY post-create-commands.sh /home/vscode/bin/
 
-# Installing Node Version Manager (nvm) and Node v16
 USER vscode
 SHELL ["/bin/bash", "--login", "-i", "-c"]
+
+# Install GVM  (Go Version Manager)
+RUN ["/bin/bash", "-c", "bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/1.0.22/binscripts/gvm-installer)"]
+RUN source /home/vscode/.gvm/scripts/gvm
+
+# Install Go
+RUN gvm install go1.16.5 -B
+RUN gvm use go1.16.5 --default
+
+# Installing Node Version Manager (nvm)
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
 RUN source /home/vscode/.bashrc && nvm install 16.3.0
 SHELL ["/bin/bash", "--login", "-c"]

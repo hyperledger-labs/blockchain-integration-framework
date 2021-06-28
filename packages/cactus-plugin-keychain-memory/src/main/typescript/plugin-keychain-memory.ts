@@ -112,6 +112,10 @@ export class PluginKeychainMemory {
     return `@hyperledger/cactus-plugin-keychain-memory`;
   }
 
+  public async onPluginInit(): Promise<unknown> {
+    return;
+  }
+
   async get<T>(key: string): Promise<T> {
     return this.backend.get(key) as T;
   }

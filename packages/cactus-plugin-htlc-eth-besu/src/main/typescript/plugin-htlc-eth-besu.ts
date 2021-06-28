@@ -83,6 +83,10 @@ export class PluginHtlcEthBesu implements ICactusPlugin, IPluginWebService {
     return "@hyperledger/cactus-plugin-htlc-eth-besu";
   }
 
+  public async onPluginInit(): Promise<unknown> {
+    return;
+  }
+
   async registerWebServices(app: Express): Promise<IWebServiceEndpoint[]> {
     const webServices = await this.getOrCreateWebServices();
     webServices.forEach((ws) => ws.registerExpress(app));

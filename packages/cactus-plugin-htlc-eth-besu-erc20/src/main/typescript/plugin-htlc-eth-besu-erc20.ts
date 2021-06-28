@@ -74,6 +74,10 @@ export class PluginHtlcEthBesuErc20
     return;
   }
 
+  public async onPluginInit(): Promise<unknown> {
+    return;
+  }
+
   public getInstanceId(): string {
     return this.instanceId;
   }

@@ -26,6 +26,10 @@ test("PluginRegistry", (tMain: Test) => {
         throw new Error("This is a mock. Not implemented.");
       },
       getPackageName: () => "@hyperledger/cactus-plugin-keychain-mock",
+
+      onPluginInit: async () => {
+        throw new Error("not sure how this works");
+      },
     };
 
     const pluginRegistry = new PluginRegistry({

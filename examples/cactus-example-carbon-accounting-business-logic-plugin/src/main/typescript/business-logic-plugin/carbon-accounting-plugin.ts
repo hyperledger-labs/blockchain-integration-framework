@@ -142,6 +142,10 @@ export class CarbonAccountingPlugin
     return "@hyperledger/cactus-example-carbon-accounting-backend";
   }
 
+  public async onPluginInit(): Promise<unknown> {
+    return;
+  }
+
   public async enrollAdminV1(
     req: EnrollAdminV1Request,
   ): Promise<EnrollAdminV1Response> {

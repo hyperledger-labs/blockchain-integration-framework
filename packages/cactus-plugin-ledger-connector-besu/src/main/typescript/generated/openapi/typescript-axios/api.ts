@@ -190,6 +190,79 @@ export enum EthContractInvocationType {
 /**
  * 
  * @export
+ * @interface EvmTransaction
+ */
+export interface EvmTransaction {
+    /**
+     * 
+     * @type {string}
+     * @memberof EvmTransaction
+     */
+    hash?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof EvmTransaction
+     */
+    nonce?: number;
+    /**
+     * 
+     * @type {any}
+     * @memberof EvmTransaction
+     */
+    blockHash?: any | null;
+    /**
+     * 
+     * @type {any}
+     * @memberof EvmTransaction
+     */
+    blockNumber?: any | null;
+    /**
+     * 
+     * @type {any}
+     * @memberof EvmTransaction
+     */
+    transactionIndex?: any | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof EvmTransaction
+     */
+    from?: string;
+    /**
+     * 
+     * @type {any}
+     * @memberof EvmTransaction
+     */
+    to?: any | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof EvmTransaction
+     */
+    value?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EvmTransaction
+     */
+    gasPrice?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof EvmTransaction
+     */
+    gas?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof EvmTransaction
+     */
+    input?: string;
+}
+/**
+ * 
+ * @export
  * @interface GetBalanceV1Request
  */
 export interface GetBalanceV1Request {
@@ -218,6 +291,32 @@ export interface GetBalanceV1Response {
      * @memberof GetBalanceV1Response
      */
     balance: string;
+}
+/**
+ * 
+ * @export
+ * @interface GetTransactionV1Request
+ */
+export interface GetTransactionV1Request {
+    /**
+     * 
+     * @type {string}
+     * @memberof GetTransactionV1Request
+     */
+    transactionHash: string;
+}
+/**
+ * 
+ * @export
+ * @interface GetTransactionV1Response
+ */
+export interface GetTransactionV1Response {
+    /**
+     * 
+     * @type {EvmTransaction}
+     * @memberof GetTransactionV1Response
+     */
+    transaction: EvmTransaction;
 }
 /**
  * 
