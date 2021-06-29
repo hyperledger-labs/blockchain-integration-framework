@@ -21,10 +21,6 @@ test("constructor does not throw if valid input is provided", (assert: Test) => 
 
 test("starts/stops/destroys a docker container", async (assert: Test) => {
   const besuTestLedger = new BesuTestLedger();
-  assert.tearDown(async () => {
-    await besuTestLedger.stop();
-    await besuTestLedger.destroy();
-  });
   test.onFinish(() => besuTestLedger.stop());
   test.onFinish(() => besuTestLedger.destroy());
 
