@@ -94,6 +94,11 @@ export {
 } from "./openethereum/openethereum-test-ledger";
 
 export {
+  GoIpfsTestContainer,
+  IGoIpfsTestContainerOptions,
+} from "./go-ipfs/go-ipfs-test-container";
+
+export {
   SAMPLE_CORDAPP_ROOT_DIRS,
   SampleCordappEnum,
 } from "./corda/sample-cordapp-enum";
