@@ -92,6 +92,17 @@ export interface IPluginLedgerConnectorBesuOptions
   logLevel?: LogLevelDesc;
 }
 
+// export interface Log{
+//   address: string;
+//   data: string;
+//   blockHash: string;
+//   transactionHash: string;
+//   topics: Array<string>;
+//   logIndex: number;
+//   transactionIndex: number;
+//   blockNumber: number;
+
+// }
 export class PluginLedgerConnectorBesu
   implements
     IPluginLedgerConnector<
