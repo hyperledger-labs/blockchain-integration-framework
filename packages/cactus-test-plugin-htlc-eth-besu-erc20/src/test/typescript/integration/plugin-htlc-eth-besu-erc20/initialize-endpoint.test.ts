@@ -62,6 +62,7 @@ test(testCase, async (t: Test) => {
     await besuTestLedger.stop();
     t.comment("Ledger #1 destroying...");
     await besuTestLedger.destroy();
+    await pruneDockerAllIfGithubAction({ logLevel });
   });
 
   const rpcApiHttpHost = await besuTestLedger.getRpcApiHttpHost();
@@ -232,11 +233,5 @@ test("Test initialize function with invalid params", async (t: Test) => {
   } catch (error) {
     t.equal(error.response.status, 400, "response status is 400");
   }
-  t.end();
-});
-
-test("AFTER " + testCase, async (t: Test) => {
-  const pruning = pruneDockerAllIfGithubAction({ logLevel });
-  await t.doesNotReject(pruning, "Pruning did not throw OK");
   t.end();
 });

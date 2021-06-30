@@ -69,6 +69,7 @@ test(testCase, async (t: Test) => {
   const tearDown = async () => {
     await ledger.stop();
     await ledger.destroy();
+    await pruneDockerAllIfGithubAction({ logLevel });
   };
 
   test.onFinish(tearDown);
@@ -325,11 +326,5 @@ test(testCase, async (t: Test) => {
   t.ok(asset.owner, "asset.owner truthy OK");
   t.equal(asset.owner, assetOwner, "asset.owner === assetOwner OK");
 
-  t.end();
-});
-
-test("AFTER " + testCase, async (t: Test) => {
-  const pruning = pruneDockerAllIfGithubAction({ logLevel });
-  await t.doesNotReject(pruning, "Pruning didn't throw OK");
   t.end();
 });

@@ -66,6 +66,7 @@ test(testCase, async (t: Test) => {
   const tearDown = async () => {
     await ledger.stop();
     await ledger.destroy();
+    await pruneDockerAllIfGithubAction({ logLevel });
   };
 
   test.onFinish(tearDown);
@@ -395,11 +396,5 @@ test(testCase, async (t: Test) => {
     `GetAssetByRange ResponseBody: ${JSON.stringify(getResQuery.data)}`,
   );
 
-  t.end();
-});
-
-test("AFTER " + testCase, async (t: Test) => {
-  const pruning = pruneDockerAllIfGithubAction({ logLevel });
-  await t.doesNotReject(pruning, "Pruning did not throw OK");
   t.end();
 });

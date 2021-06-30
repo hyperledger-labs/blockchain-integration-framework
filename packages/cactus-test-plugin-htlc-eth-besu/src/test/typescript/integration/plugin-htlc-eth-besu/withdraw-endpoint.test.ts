@@ -60,9 +60,10 @@ test(testCase, async (t: Test) => {
   t.comment("Starting Besu Test Ledger");
   const besuTestLedger = new BesuTestLedger({ logLevel });
 
-  test.onFailure(async () => {
+  test.onFinish(async () => {
     await besuTestLedger.stop();
     await besuTestLedger.destroy();
+    await pruneDockerAllIfGithubAction({ logLevel });
   });
 
   await besuTestLedger.start();
@@ -239,13 +240,5 @@ test(testCase, async (t: Test) => {
   );
   t.equal(resStatus.status, 200, "response status is 200 OK");
   t.equal(resStatus.data, 3, "the contract status is Withdrawn");
-  await besuTestLedger.stop();
-  await besuTestLedger.destroy();
-  t.end();
-});
-
-test("AFTER " + testCase, async (t: Test) => {
-  const pruning = pruneDockerAllIfGithubAction({ logLevel });
-  await t.doesNotReject(pruning, "Pruning did not throw OK");
   t.end();
 });

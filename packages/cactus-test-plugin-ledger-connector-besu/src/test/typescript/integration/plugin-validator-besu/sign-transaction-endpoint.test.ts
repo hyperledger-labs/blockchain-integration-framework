@@ -79,6 +79,7 @@ test(testCase, async (t: Test) => {
   const tearDown = async () => {
     await besuTestLedger.stop();
     await besuTestLedger.destroy();
+    await pruneDockerAllIfGithubAction({ logLevel });
   };
 
   test.onFinish(tearDown);
@@ -191,10 +192,4 @@ test(testCase, async (t: Test) => {
       "Response text are equal",
     );
   }
-});
-
-test("AFTER " + testCase, async (t: Test) => {
-  const pruning = pruneDockerAllIfGithubAction({ logLevel });
-  await t.doesNotReject(pruning, "Pruning didn't throw OK");
-  t.end();
 });
