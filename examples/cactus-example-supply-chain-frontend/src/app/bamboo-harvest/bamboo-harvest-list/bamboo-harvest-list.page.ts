@@ -53,7 +53,7 @@ export class BambooHarvestListPage implements OnInit {
     this.log.debug(`Fetched BambooHarvest data: %o`, bambooHarvests);
   }
 
-  async clickShowDetail(bambooHarvest: BambooHarvest) {
+  async clickShowDetail(bambooHarvest: BambooHarvest): Promise<void> {
     this.log.debug("clickShowDetail()", bambooHarvest);
 
     const modal = await this.modalController.create({
@@ -73,7 +73,7 @@ export class BambooHarvestListPage implements OnInit {
     }
   }
 
-  async clickAddNew() {
+  async clickAddNew(): Promise<void> {
     this.log.debug(`clickAddNew()`);
     const modal = await this.modalController.create({
       component: BambooHarvestDetailPage,

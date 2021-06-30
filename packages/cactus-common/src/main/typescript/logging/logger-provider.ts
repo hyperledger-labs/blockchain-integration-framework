@@ -5,7 +5,7 @@ export class LoggerProvider {
   private static loggers: Map<string, Logger> = new Map();
   private static logLevel: LogLevelDesc = "warn";
 
-  public static getOrCreate(loggerOptions: ILoggerOptions) {
+  public static getOrCreate(loggerOptions: ILoggerOptions): Logger {
     // make sure log level is set to global default if otherwise wasn't provided
     loggerOptions.level = loggerOptions.level || LoggerProvider.logLevel;
 
@@ -22,7 +22,7 @@ export class LoggerProvider {
   public static setLogLevel(
     logLevel: LogLevelDesc,
     applyToCachedLoggers = true,
-  ) {
+  ): void {
     LoggerProvider.logLevel = logLevel;
     if (applyToCachedLoggers) {
       LoggerProvider.loggers.forEach((logger: Logger) =>

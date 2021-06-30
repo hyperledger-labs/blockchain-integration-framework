@@ -24,7 +24,7 @@ export class ConsortiumRepository {
   private readonly log: Logger;
   private readonly db: ConsortiumDatabase;
 
-  public get className() {
+  public get className(): string {
     return ConsortiumRepository.CLASS_NAME;
   }
 

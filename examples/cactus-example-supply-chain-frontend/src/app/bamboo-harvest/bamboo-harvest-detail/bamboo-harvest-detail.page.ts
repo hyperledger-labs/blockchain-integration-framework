@@ -30,7 +30,7 @@ export class BambooHarvestDetailPage implements OnInit {
     this.log = LoggerProvider.getOrCreate({ label: "BambooHarvestDetailPage" });
   }
 
-  async ngOnInit() {
+  async ngOnInit(): Promise<void> {
     this.log.debug("component initialized.", this.bambooHarvest);
 
     if (!this.bambooHarvest) {

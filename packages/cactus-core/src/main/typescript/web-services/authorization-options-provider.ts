@@ -33,7 +33,7 @@ export class AuthorizationOptionsProvider
     });
   }
 
-  public get className() {
+  public get className(): string {
     return AuthorizationOptionsProvider.CLASS_NAME;
   }
 

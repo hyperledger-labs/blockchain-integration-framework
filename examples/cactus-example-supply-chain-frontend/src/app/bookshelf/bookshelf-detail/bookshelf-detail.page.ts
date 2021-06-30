@@ -46,7 +46,7 @@ export class BookshelfDetailPage implements OnInit {
     }
   }
 
-  async ngOnInit() {
+  async ngOnInit(): Promise<void> {
     this.log.debug("component initialized.", this.bookshelf);
 
     this._supplyChainApi = await this.baseClient.ofLedger(
@@ -79,13 +79,13 @@ export class BookshelfDetailPage implements OnInit {
     this.log.debug(`BambooHarvest IDs: %o`, this.bambooHarvestIds);
   }
 
-  onClickFormSubmit(value: any) {
+  onClickFormSubmit(value: any): void {
     this.log.debug("form submitted", value);
     this.bookshelf = value;
     this.modalController.dismiss(this.bookshelf);
   }
 
-  onClickBtnCancel() {
+  onClickBtnCancel(): void {
     this.log.debug("form submission cancelled by user");
     this.modalController.dismiss();
   }

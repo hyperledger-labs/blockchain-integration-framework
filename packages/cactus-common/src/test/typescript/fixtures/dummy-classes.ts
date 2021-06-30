@@ -7,7 +7,7 @@ export class Base {
     this.y = "y";
   }
 
-  getX() {
+  getX(): string {
     return "x";
   }
 }
@@ -20,7 +20,7 @@ export class A extends Base {
     this.b = "b";
   }
 
-  getA() {
+  getA(): string {
     return "a";
   }
 }
