@@ -6,10 +6,7 @@ import { Optional } from "typescript-optional";
 
 import OAS from "../json/openapi.json";
 import * as OpenApiValidator from "express-openapi-validator";
-import {
-  OpenAPIV3,
-  OpenApiValidatorOpts,
-} from "express-openapi-validator/dist/framework/types";
+import { OpenAPIV3 } from "express-openapi-validator/dist/framework/types";
 
 import {
   IPluginWebService,
@@ -101,16 +98,10 @@ export class PluginHtlcEthBesu implements ICactusPlugin, IPluginWebService {
   async registerWebServices(app: Express): Promise<IWebServiceEndpoint[]> {
     const apiSpec = this.getOpenApiSpecs();
     const webServices = await this.getOrCreateWebServices();
-    const openApiOptions = {
+    const openApiMiddleware = OpenApiValidator.middleware({
       apiSpec,
       validateApiSpec: false,
-      $refParser: {
-        mode: "dereference",
-      },
-    };
-    const openApiMiddleware = OpenApiValidator.middleware(
-      (openApiOptions as any) as OpenApiValidatorOpts,
-    );
+    });
     app.use(openApiMiddleware);
     app.use(
       (

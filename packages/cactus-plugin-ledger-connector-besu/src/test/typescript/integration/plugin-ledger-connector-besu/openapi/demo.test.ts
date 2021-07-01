@@ -5,9 +5,7 @@ import {
   Web3SigningCredentialType,
   PluginLedgerConnectorBesu,
   BesuApiClient,
-  DeployContractSolidityBytecodeV1Request,
   IPluginLedgerConnectorBesuOptions,
-  SignTransactionRequest,
 } from "../../../../../main/typescript/public-api";
 import { PluginKeychainMemory } from "@hyperledger/cactus-plugin-keychain-memory";
 import { BesuTestLedger } from "@hyperledger/cactus-test-tooling";
