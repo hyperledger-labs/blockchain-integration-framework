@@ -7,9 +7,16 @@ import { createServer as createSecureServer } from "https";
 import { gte } from "semver";
 import npm from "npm";
 import expressHttpProxy from "express-http-proxy";
-import type { Application, Request, Response, RequestHandler } from "express";
+import type {
+  Application,
+  Request,
+  Response,
+  RequestHandler,
+  NextFunction,
+} from "express";
 import express from "express";
-import { OpenApiValidator } from "express-openapi-validator";
+// import { OpenApiValidator } from "express-openapi-validator";
+import * as OpenApiValidator from "express-openapi-validator";
 import compression from "compression";
 import bodyParser from "body-parser";
 import cors from "cors";
@@ -35,7 +42,11 @@ import { Logger, LoggerProvider, Servers } from "@hyperledger/cactus-common";
 
 import { ICactusApiServerOptions } from "./config/config-service";
 import OAS from "../json/openapi.json";
-import { OpenAPIV3 } from "express-openapi-validator/dist/framework/types";
+import {
+  OpenApiRequestHandler,
+  OpenAPIV3,
+  OpenApiValidatorOpts,
+} from "express-openapi-validator/dist/framework/types";
 
 import { PrometheusExporter } from "./prometheus-exporter/prometheus-exporter";
 import { AuthorizerFactory } from "./authzn/authorizer-factory";
@@ -516,7 +527,32 @@ export class ApiServer {
     }
 
     const openApiValidator = this.createOpenApiValidator();
-    await openApiValidator.install(app);
+    app.use(openApiValidator);
+    // manage errors caused by api validation
+    app.use(
+      (
+        err: {
+          status?: number;
+          errors: [
+            {
+              path: string;
+              message: string;
+              errorCode: string;
+            },
+          ];
+        },
+        req: Request,
+        res: Response,
+        next: NextFunction,
+      ) => {
+        if (err) {
+          res.status(err.status || 500);
+          res.send(err.errors);
+        } else {
+          next();
+        }
+      },
+    );
 
     this.getOrCreateWebServices(app); // The API server's own endpoints
 
@@ -592,12 +628,13 @@ export class ApiServer {
     }
   }
 
-  createOpenApiValidator(): OpenApiValidator {
-    return new OpenApiValidator({
+  createOpenApiValidator(): OpenApiRequestHandler[] {
+    const options: OpenApiValidatorOpts = {
       apiSpec: OAS as OpenAPIV3.Document,
       validateRequests: true,
       validateResponses: false,
-    });
+    };
+    return OpenApiValidator.middleware(options);
   }
 
   createCorsMiddleware(allowedDomains: string[]): RequestHandler {

@@ -100,7 +100,7 @@
     "express-http-proxy": "1.6.0",
     "express-jwt": "6.0.0",
     "express-jwt-authz": "2.4.1",
-    "express-openapi-validator": "3.10.0",
+    "express-openapi-validator": "4.12.12",
     "http-status-codes": "2.1.4",
     "jose": "1.28.1",
     "node-forge": "0.10.0",

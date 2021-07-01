@@ -3,7 +3,7 @@ import { Server as SecureServer } from "https";
 
 import type { Server as SocketIoServer } from "socket.io";
 import type { Socket as SocketIoSocket } from "socket.io";
-import type { Express } from "express";
+import type { Express, NextFunction, Request, Response } from "express";
 import { promisify } from "util";
 import { Optional } from "typescript-optional";
 import Web3 from "web3";
@@ -15,6 +15,10 @@ import {
   GetBalanceV1Request,
   GetBalanceV1Response,
 } from "./generated/openapi/typescript-axios/index";
+
+import OAS from "../json/openapi.json";
+import * as OpenApiValidator from "express-openapi-validator";
+import { OpenAPIV3 } from "express-openapi-validator/dist/framework/types";
 
 import {
   GetPastLogsV1Request,
@@ -163,6 +167,10 @@ export class PluginLedgerConnectorBesu
     return res;
   }
 
+  getOpenApiSpecs(): OpenAPIV3.Document {
+    return (OAS as unknown) as OpenAPIV3.Document;
+  }
+
   public getInstanceId(): string {
     return this.instanceId;
   }
@@ -190,6 +198,38 @@ export class PluginLedgerConnectorBesu
     const { web3 } = this;
     const { logLevel } = this.options;
     const webServices = await this.getOrCreateWebServices();
+
+    app.use(
+      OpenApiValidator.middleware({
+        apiSpec: this.getOpenApiSpecs(),
+        validateApiSpec: false,
+      }),
+    );
+    app.use(
+      (
+        err: {
+          status?: number;
+          errors: [
+            {
+              path: string;
+              message: string;
+              errorCode: string;
+            },
+          ];
+        },
+        req: Request,
+        res: Response,
+        next: NextFunction,
+      ) => {
+        if (err) {
+          res.status(err.status || 500);
+          res.send(err.errors);
+        } else {
+          next();
+        }
+      },
+    );
+
     await Promise.all(webServices.map((ws) => ws.registerExpress(app)));
 
     wsApi.on("connection", (socket: SocketIoSocket) => {

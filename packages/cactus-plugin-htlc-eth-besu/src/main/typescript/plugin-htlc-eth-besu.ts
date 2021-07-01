@@ -1,8 +1,15 @@
 import { Server } from "http";
 import { Server as SecureServer } from "https";
 
-import { Express } from "express";
+import type { Express, NextFunction, Request, Response } from "express";
 import { Optional } from "typescript-optional";
+
+import OAS from "../json/openapi.json";
+import * as OpenApiValidator from "express-openapi-validator";
+import {
+  OpenAPIV3,
+  OpenApiValidatorOpts,
+} from "express-openapi-validator/dist/framework/types";
 
 import {
   IPluginWebService,
@@ -75,6 +82,10 @@ export class PluginHtlcEthBesu implements ICactusPlugin, IPluginWebService {
     return;
   }
 
+  getOpenApiSpecs(): OpenAPIV3.Document {
+    return (OAS as unknown) as OpenAPIV3.Document;
+  }
+
   public getInstanceId(): string {
     return this.instanceId;
   }
@@ -88,7 +99,45 @@ export class PluginHtlcEthBesu implements ICactusPlugin, IPluginWebService {
   }
 
   async registerWebServices(app: Express): Promise<IWebServiceEndpoint[]> {
+    const apiSpec = this.getOpenApiSpecs();
     const webServices = await this.getOrCreateWebServices();
+    const openApiOptions = {
+      apiSpec,
+      validateApiSpec: false,
+      $refParser: {
+        mode: "dereference",
+      },
+    };
+    const openApiMiddleware = OpenApiValidator.middleware(
+      (openApiOptions as any) as OpenApiValidatorOpts,
+    );
+    app.use(openApiMiddleware);
+    app.use(
+      (
+        err: {
+          status?: number;
+          errors: [
+            {
+              path: string;
+              message: string;
+              errorCode: string;
+            },
+          ];
+        },
+        req: Request,
+        res: Response,
+        next: NextFunction,
+      ) => {
+        if (err) {
+          console.log(err);
+          res.status(err.status || 500);
+          res.send(err.errors);
+        } else {
+          next();
+        }
+      },
+    );
+
     webServices.forEach((ws) => ws.registerExpress(app));
     return webServices;
   }

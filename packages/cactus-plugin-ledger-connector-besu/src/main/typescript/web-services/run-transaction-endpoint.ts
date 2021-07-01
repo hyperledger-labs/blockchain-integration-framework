@@ -89,7 +89,8 @@ export class RunTransactionEndpoint implements IWebServiceEndpoint {
     const reqBody = req.body;
     try {
       const resBody = await this.options.connector.transact(reqBody);
-      res.json({ success: true, data: resBody });
+      // res.json({ success: true, data: resBody });
+      res.json(resBody);
     } catch (ex) {
       this.log.error(`Crash while serving ${reqTag}`, ex);
       res.status(500).json({

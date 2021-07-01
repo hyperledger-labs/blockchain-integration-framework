@@ -8,26 +8,6 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     }
   },
-  "servers": [
-    {
-      "url": "https://www.cactus.stream/{basePath}",
-      "description": "Public test instance",
-      "variables": {
-        "basePath": {
-          "default": ""
-        }
-      }
-    },
-    {
-      "url": "http://localhost:4000/{basePath}",
-      "description": "Local test instance",
-      "variables": {
-        "basePath": {
-          "default": ""
-        }
-      }
-    }
-  ],
   "components": {
     "schemas": {
       "NewContractObj": {
@@ -43,6 +23,7 @@
           "web3SigningCredential",
           "keychainId"
         ],
+        "additionalProperties": false,
         "properties": {
           "contractAddress": {
             "description": "Contract address",
@@ -108,6 +89,7 @@
           "connectorId",
           "keychainId"
         ],
+        "additionalProperties": false,
         "properties": {
           "id": {
             "description": "Contract htlc id for refund",
@@ -150,6 +132,7 @@
           "connectorId",
           "keychainId"
         ],
+        "additionalProperties": false,
         "properties": {
           "id": {
             "description": "Contract locked id",
@@ -196,6 +179,7 @@
           "constructorArgs",
           "web3SigningCredential"
         ],
+        "additionalProperties": false,
         "properties": {
           "connectorId": {
             "description": "connectorId for the connector besu plugin",

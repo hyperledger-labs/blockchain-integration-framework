@@ -9,26 +9,6 @@
             "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
         }
     },
-    "servers": [
-        {
-            "url": "https://www.cactus.stream/{basePath}",
-            "description": "Public test instance",
-            "variables": {
-                "basePath": {
-                    "default": ""
-                }
-            }
-        },
-        {
-            "url": "http://localhost:4000/{basePath}",
-            "description": "Local test instance",
-            "variables": {
-                "basePath": {
-                    "default": ""
-                }
-            }
-        }
-    ],
     "components": {
         "schemas": {
             "GetBalanceV1Response": {
@@ -704,6 +684,7 @@
                     "transactionConfig",
                     "consistencyStrategy"
                 ],
+                "additionalProperties": false,
                 "properties": {
                     "web3SigningCredential": {
                         "$ref": "#/components/schemas/Web3SigningCredential",
@@ -739,6 +720,7 @@
                     "keychainId",
                     "constructorArgs"
                 ],
+                "additionalProperties": false,
                 "properties": {
                     "contractName": {
                         "type": "string",
@@ -813,6 +795,7 @@
                     "methodName",
                     "params"
                 ],
+                "additionalProperties": false,
                 "properties": {
                     "contractName": {
                         "type": "string",
@@ -922,6 +905,7 @@
                     "keychainId",
                     "keychainRef"
                 ],
+                "additionalProperties": false,
                 "properties": {
                     "keychainId": {
                         "type": "string",
