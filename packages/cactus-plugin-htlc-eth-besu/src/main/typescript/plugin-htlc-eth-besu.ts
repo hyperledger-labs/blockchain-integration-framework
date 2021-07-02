@@ -37,6 +37,7 @@ import {
   WithdrawReq,
   NewContractObj,
   InitializeRequest,
+  GetStatusRequest,
 } from "./generated/openapi/typescript-axios";
 export interface IPluginHtlcEthBesuOptions extends ICactusPluginOptions {
   logLevel?: LogLevelDesc;
@@ -258,22 +259,19 @@ export class PluginHtlcEthBesu implements ICactusPlugin, IPluginWebService {
   }
 
   public async getStatus(
-    ids: string[],
-    connectorId: string,
-    keychainId: string,
-    web3SigningCredential: Web3SigningCredential,
+    req: GetStatusRequest,
   ): Promise<InvokeContractV1Response> {
     const connector = this.pluginRegistry.plugins.find(
-      (plugin) => plugin.getInstanceId() == connectorId,
+      (plugin) => plugin.getInstanceId() == req.connectorId,
     ) as PluginLedgerConnectorBesu;
 
     const result = await connector.invokeContract({
       contractName: HashTimeLockJSON.contractName,
-      signingCredential: web3SigningCredential,
+      signingCredential: req.web3SigningCredential,
       invocationType: EthContractInvocationType.Call,
       methodName: "getStatus",
-      params: [ids],
-      keychainId,
+      params: [req.ids],
+      keychainId: req.keychainId,
     });
     return result;
   }

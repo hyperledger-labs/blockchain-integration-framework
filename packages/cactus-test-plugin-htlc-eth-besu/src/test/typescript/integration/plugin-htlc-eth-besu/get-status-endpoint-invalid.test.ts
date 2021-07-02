@@ -216,12 +216,12 @@ test(testCase, async (t: Test) => {
 
   try {
     const ids = [responseTxId.callOutput as string];
-    const res = await api.getStatus(
+    const res = await api.getStatus({
       ids,
       web3SigningCredential,
       connectorId,
-      "",
-    );
+      keychainId: "",
+    });
     t.equal(res.status, 500, "response status is 500");
   } catch (e) {
     t.equal(e.response.status, 500);

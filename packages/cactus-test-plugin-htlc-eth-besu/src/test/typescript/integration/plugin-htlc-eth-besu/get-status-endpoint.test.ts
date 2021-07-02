@@ -127,6 +127,12 @@ test(testCase, async (t: Test) => {
   await pluginHtlc.getOrCreateWebServices();
   await pluginHtlc.registerWebServices(expressApp);
 
+  expressApp.use((err: Error, req: any, res: any) => {
+    console.error("ExpressJS Default Error Handler reached:");
+    console.error(err);
+    res.status(500).send("Something broke!");
+  });
+
   const web3 = new Web3(rpcApiHttpHost);
 
   t.comment("Deploys HashTimeLock via .json file on initialize function");
@@ -216,12 +222,12 @@ test(testCase, async (t: Test) => {
   );
 
   const ids = [responseTxId.callOutput as string];
-  const res = await api.getStatus(
+  const res = await api.getStatus({
     ids,
     web3SigningCredential,
     connectorId,
     keychainId,
-  );
+  });
   t.equal(res.status, 200, "response status is 200 OK");
   t.equal(res.data[0], "1", "the contract status is 1 - Active");
   t.end();
