@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist/lib/", /* Redirect output structure to the directory. */
+    "declarationDir": "dist/types",
+    "noImplicitAny": false
+  },
+  "include": [
+    "./src"
+  ]
+}

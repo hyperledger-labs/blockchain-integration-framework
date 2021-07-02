@@ -45,3 +45,10 @@ cactus-openapi-spec-*.json
 build/
 .gradle/
 site/
+
+!packages/cactus-plugin-something-somehow/src/main/typescript/implementation/ledger-plugin/fabric/validator/src/build
+!packages/cactus-plugin-something-somehow/src/main/typescript/implementation/ledger-plugin/fabric/validator/src/core/bin
+!packages/cactus-plugin-something-somehow/src/main/typescript/implementation/ledger-plugin/sawtooth/validator/src/build
+!packages/cactus-plugin-something-somehow/src/main/typescript/implementation/ledger-plugin/sawtooth/validator/src/core/bin
+!packages/cactus-plugin-something-somehow/src/main/typescript/implementation/ledger-plugin/go-ethereum/validator/src/build
+!packages/cactus-plugin-something-somehow/src/main/typescript/implementation/ledger-plugin/go-ethereum/validator/src/core/bin
