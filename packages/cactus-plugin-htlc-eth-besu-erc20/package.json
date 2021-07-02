@@ -1,105 +1,106 @@
 {
-    "name": "@hyperledger/cactus-plugin-htlc-eth-besu-erc20",
-    "version": "0.5.0",
-    "description": "Allows Cactus nodes to interact with HTLC contracts with ERC-20 Tokens",
-    "main": "dist/lib/main/typescript/index.js",
-    "mainMinified": "dist/cactus-plugin-htlc-eth-besu-erc20.node.umd.min.js",
-    "browser": "dist/cactus-plugin-htlc-eth-besu-erc20.web.umd.js",
-    "browserMinified": "dist/cactus-plugin-htlc-eth-besu-erc20.web.umd.min.js",
-    "module": "dist/lib/main/typescript/index.js",
-    "types": "dist/types/main/typescript/index.d.ts",
-    "files": [
-      "dist/*"
-    ],
-    "scripts": {
-      "generate-sdk": "openapi-generator-cli generate -i ./src/main/json/openapi.json -g typescript-axios -o ./src/main/typescript/generated/openapi/typescript-axios/ --reserved-words-mappings protected=protected",
-      "pretsc": "npm run generate-sdk",
-      "tsc": "tsc --project ./tsconfig.json",
-      "watch": "npm-watch",
-      "webpack": "npm-run-all webpack:dev webpack:prod",
-      "webpack:dev": "npm-run-all webpack:dev:node webpack:dev:web",
-      "webpack:dev:web": "webpack --env=dev --target=web --config ../../webpack.config.js",
-      "webpack:dev:node": "webpack --env=dev --target=node --config ../../webpack.config.js",
-      "webpack:prod": "npm-run-all webpack:prod:node webpack:prod:web",
-      "webpack:prod:web": "webpack --env=prod --target=web --config ../../webpack.config.js",
-      "webpack:prod:node": "webpack --env=prod --target=node --config ../../webpack.config.js"
-    },
-    "watch": {
-      "tsc": {
-        "patterns": [
-          "src/",
-          "src/*/json/**/openapi*"
-        ],
-        "ignore": [
-          "src/**/generated/*"
-        ],
-        "extensions": [
-          "ts",
-          "json"
-        ],
-        "quiet": true,
-        "verbose": false,
-        "runOnChangeOnly": true
-      }
-    },
-    "publishConfig": {
-      "access": "public"
-    },
-    "engines": {
-      "node": ">=10",
-      "npm": ">=6"
-    },
-    "repository": {
-      "type": "git",
-      "url": "git+https://github.com/hyperledger/cactus.git"
-    },
-    "keywords": [
-      "Hyperledger",
-      "Cactus",
-      "Integration",
-      "Blockchain",
-      "Distributed Ledger Technology"
-    ],
-    "author": {
-      "name": "Hyperledger Cactus Contributors",
-      "email": "cactus@lists.hyperledger.org",
-      "url": "https://www.hyperledger.org/use/cactus"
-    },
-    "contributors": [
-      {
-        "name": "Please add yourself to the list of contributors",
-        "email": "your.name@example.com",
-        "url": "https://example.com"
-      },
-      {
-        "name": "Peter Somogyvari",
-        "email": "peter.somogyvari@accenture.com",
-        "url": "https://accenture.com"
-      },
-      {
-        "name": "Jordi Giron",
-        "email": "jordi.giron.amezcua@accenture.com",
-        "url": "https://accenture.com"
-      }
-    ],
-    "license": "Apache-2.0",
-    "bugs": {
-      "url": "https://github.com/hyperledger/cactus/issues"
-    },
-    "homepage": "https://github.com/hyperledger/cactus#readme",
-    "dependencies": {
-      "@hyperledger/cactus-common": "0.5.0",
-      "@hyperledger/cactus-core": "0.5.0",
-      "@hyperledger/cactus-core-api": "0.5.0",
-      "@hyperledger/cactus-plugin-ledger-connector-besu": "0.5.0",
-      "axios": "0.21.1",
-      "express": "4.17.1",
-      "joi": "14.3.1",
-      "openapi-types": "7.0.1",
-      "typescript-optional": "2.0.1"
-    },
-    "devDependencies": {
-      "@types/express": "4.17.8",
-      "@types/joi": "14.3.4"
+  "name": "@hyperledger/cactus-plugin-htlc-eth-besu-erc20",
+  "version": "0.5.0",
+  "description": "Allows Cactus nodes to interact with HTLC contracts with ERC-20 Tokens",
+  "main": "dist/lib/main/typescript/index.js",
+  "mainMinified": "dist/cactus-plugin-htlc-eth-besu-erc20.node.umd.min.js",
+  "browser": "dist/cactus-plugin-htlc-eth-besu-erc20.web.umd.js",
+  "browserMinified": "dist/cactus-plugin-htlc-eth-besu-erc20.web.umd.min.js",
+  "module": "dist/lib/main/typescript/index.js",
+  "types": "dist/types/main/typescript/index.d.ts",
+  "files": [
+    "dist/*"
+  ],
+  "scripts": {
+    "generate-sdk": "docker run --rm -v \"${PWD}/../../:/local\" openapitools/openapi-generator-cli:v5.1.1 generate -i ./local/packages/cactus-plugin-htlc-eth-besu-erc20/src/main/json/openapi.json -g typescript-axios -o ./local/packages/cactus-plugin-htlc-eth-besu-erc20/src/main/typescript/generated/openapi/typescript-axios/ --reserved-words-mappings protected=protected",
+    "pretsc": "npm run generate-sdk",
+    "tsc": "tsc --project ./tsconfig.json",
+    "watch": "npm-watch",
+    "webpack": "npm-run-all webpack:dev webpack:prod",
+    "webpack:dev": "npm-run-all webpack:dev:node webpack:dev:web",
+    "webpack:dev:web": "webpack --env=dev --target=web --config ../../webpack.config.js",
+    "webpack:dev:node": "webpack --env=dev --target=node --config ../../webpack.config.js",
+    "webpack:prod": "npm-run-all webpack:prod:node webpack:prod:web",
+    "webpack:prod:web": "webpack --env=prod --target=web --config ../../webpack.config.js",
+    "webpack:prod:node": "webpack --env=prod --target=node --config ../../webpack.config.js"
+  },
+  "watch": {
+    "tsc": {
+      "patterns": [
+        "src/",
+        "src/*/json/**/openapi*"
+      ],
+      "ignore": [
+        "src/**/generated/*"
+      ],
+      "extensions": [
+        "ts",
+        "json"
+      ],
+      "quiet": true,
+      "verbose": false,
+      "runOnChangeOnly": true
     }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=10",
+    "npm": ">=6"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hyperledger/cactus.git"
+  },
+  "keywords": [
+    "Hyperledger",
+    "Cactus",
+    "Integration",
+    "Blockchain",
+    "Distributed Ledger Technology"
+  ],
+  "author": {
+    "name": "Hyperledger Cactus Contributors",
+    "email": "cactus@lists.hyperledger.org",
+    "url": "https://www.hyperledger.org/use/cactus"
+  },
+  "contributors": [
+    {
+      "name": "Please add yourself to the list of contributors",
+      "email": "your.name@example.com",
+      "url": "https://example.com"
+    },
+    {
+      "name": "Peter Somogyvari",
+      "email": "peter.somogyvari@accenture.com",
+      "url": "https://accenture.com"
+    },
+    {
+      "name": "Jordi Giron",
+      "email": "jordi.giron.amezcua@accenture.com",
+      "url": "https://accenture.com"
+    }
+  ],
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/hyperledger/cactus/issues"
+  },
+  "homepage": "https://github.com/hyperledger/cactus#readme",
+  "dependencies": {
+    "@hyperledger/cactus-common": "0.5.0",
+    "@hyperledger/cactus-core": "0.5.0",
+    "@hyperledger/cactus-core-api": "0.5.0",
+    "@hyperledger/cactus-plugin-ledger-connector-besu": "0.5.0",
+    "axios": "0.21.1",
+    "express": "4.17.1",
+    "express-openapi-validator": "4.12.12",
+    "joi": "14.3.1",
+    "openapi-types": "7.0.1",
+    "typescript-optional": "2.0.1"
+  },
+  "devDependencies": {
+    "@types/express": "4.17.8",
+    "@types/joi": "14.3.4"
+  }
 }

@@ -1,7 +1,7 @@
 import { Server } from "http";
 import { Server as SecureServer } from "https";
 
-import { Express } from "express";
+import { Express, NextFunction, Request, Response } from "express";
 import { promisify } from "util";
 import { Optional } from "typescript-optional";
 import Web3 from "web3";
@@ -9,6 +9,10 @@ import { AbiItem } from "web3-utils";
 
 import { Contract, ContractSendMethod } from "web3-eth-contract";
 import { TransactionReceipt } from "web3-eth";
+
+import OAS from "../json/openapi.json";
+import * as OpenApiValidator from "express-openapi-validator";
+import { OpenAPIV3 } from "express-openapi-validator/dist/framework/types";
 
 import {
   ConsensusAlgorithmFamily,
@@ -130,6 +134,10 @@ export class PluginLedgerConnectorXdai
     return this.prometheusExporter;
   }
 
+  getOpenApiSpecs(): OpenAPIV3.Document {
+    return (OAS as unknown) as OpenAPIV3.Document;
+  }
+
   public async getPrometheusExporterMetrics(): Promise<string> {
     const res: string = await this.prometheusExporter.getPrometheusMetrics();
     this.log.debug(`getPrometheusExporterMetrics() response: %o`, res);
@@ -158,6 +166,37 @@ export class PluginLedgerConnectorXdai
 
   async registerWebServices(app: Express): Promise<IWebServiceEndpoint[]> {
     const webServices = await this.getOrCreateWebServices();
+    app.use(
+      OpenApiValidator.middleware({
+        apiSpec: this.getOpenApiSpecs(),
+        validateApiSpec: false,
+      }),
+    );
+    app.use(
+      (
+        err: {
+          status?: number;
+          errors: [
+            {
+              path: string;
+              message: string;
+              errorCode: string;
+            },
+          ];
+        },
+        req: Request,
+        res: Response,
+        next: NextFunction,
+      ) => {
+        if (err) {
+          res.status(err.status || 500);
+          res.send(err.errors);
+        } else {
+          next();
+        }
+      },
+    );
+
     await Promise.all(webServices.map((ws) => ws.registerExpress(app)));
     return webServices;
   }

@@ -28,12 +28,6 @@ import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } fr
  */
 export interface DeployContractSolidityBytecodeV1Request {
     /**
-     * 
-     * @type {string}
-     * @memberof DeployContractSolidityBytecodeV1Request
-     */
-    fake: string;
-    /**
      * The contract name for retrieve the contracts json on the keychain.
      * @type {string}
      * @memberof DeployContractSolidityBytecodeV1Request

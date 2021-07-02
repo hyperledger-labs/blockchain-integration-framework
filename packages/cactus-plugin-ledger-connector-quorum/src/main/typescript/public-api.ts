@@ -1,5 +1,4 @@
-// export * from "./generated/openapi/typescript-axios";
-export * from "./mock-generated";
+export * from "./generated/openapi/typescript-axios";
 
 export {
   PluginLedgerConnectorQuorum,

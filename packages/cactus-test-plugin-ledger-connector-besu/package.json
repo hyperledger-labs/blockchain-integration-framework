@@ -87,8 +87,12 @@
     "@hyperledger/cactus-plugin-keychain-memory": "0.5.0",
     "@hyperledger/cactus-plugin-ledger-connector-besu": "0.5.0",
     "@hyperledger/cactus-test-tooling": "0.5.0",
+    "express-openapi-validator": "4.12.12",
     "key-encoder": "2.0.3",
     "web3": "1.2.11",
     "web3-eea": "0.10.0"
+  },
+  "devDependencies": {
+    "@hyperledger/cactus-cmd-api-server": "0.5.0"
   }
 }

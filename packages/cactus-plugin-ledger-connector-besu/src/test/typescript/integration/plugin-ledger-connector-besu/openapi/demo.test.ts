@@ -6,6 +6,7 @@ import {
   PluginLedgerConnectorBesu,
   BesuApiClient,
   IPluginLedgerConnectorBesuOptions,
+  ReceiptType,
 } from "../../../../../main/typescript/public-api";
 import { PluginKeychainMemory } from "@hyperledger/cactus-plugin-keychain-memory";
 import { BesuTestLedger } from "@hyperledger/cactus-test-tooling";
@@ -16,7 +17,6 @@ import {
   Secp256k1Keys,
 } from "@hyperledger/cactus-common";
 import HelloWorldContractJson from "../../../../solidity/hello-world-contract/HelloWorld.json";
-import Web3 from "web3";
 import { createServer } from "http";
 import { AddressInfo } from "net";
 import {
@@ -25,7 +25,6 @@ import {
   ConfigService,
 } from "@hyperledger/cactus-cmd-api-server";
 import { BesuApiClientOptions } from "../../../../../main/typescript/api-client/besu-api-client";
-import EEAClient, { IWeb3InstanceExtended } from "web3-eea";
 
 const logLevel: LogLevelDesc = "TRACE";
 
@@ -37,14 +36,14 @@ test(testCase, async (t: Test) => {
   const keychainRefForSigned = uuidv4();
   const keychainRefForUnsigned = uuidv4();
 
-  const httpServer1 = createServer();
+  const httpServer = createServer();
   await new Promise((resolve, reject) => {
-    httpServer1.once("error", reject);
-    httpServer1.once("listening", resolve);
-    httpServer1.listen(0, "127.0.0.1");
+    httpServer.once("error", reject);
+    httpServer.once("listening", resolve);
+    httpServer.listen(0, "127.0.0.1");
   });
-  const addressInfo1 = httpServer1.address() as AddressInfo;
-  const node1Host = `http://${addressInfo1.address}:${addressInfo1.port}`;
+  const addressInfo = httpServer.address() as AddressInfo;
+  const apiHost = `http://${addressInfo.address}:${addressInfo.port}`;
 
   const besuTestLedger = new BesuTestLedger();
   test.onFinish(async () => {
@@ -55,9 +54,8 @@ test(testCase, async (t: Test) => {
 
   const rpcApiHttpHost = await besuTestLedger.getRpcApiHttpHost();
   const rpcApiWsHost = await besuTestLedger.getRpcApiWsHost();
-
-  const web3Provider = new Web3.providers.HttpProvider(rpcApiHttpHost);
-  const web3 = new Web3(web3Provider);
+  const testEthAccount1 = await besuTestLedger.createEthTestAccount();
+  const testEthAccount2 = await besuTestLedger.createEthTestAccount();
 
   const fDeploy = "apiV1BesuDeployContractSolidityBytecode";
   const fSign = "signTransactionV1";
@@ -75,8 +73,7 @@ test(testCase, async (t: Test) => {
   });
 
   // keychainPlugin for unsigned transactions
-  const testEthAccount = web3.eth.accounts.create(uuidv4());
-  const keychainEntryValue = testEthAccount.privateKey;
+  const keychainEntryValue = testEthAccount1.privateKey;
   const unsignedKeychainPlugin = new PluginKeychainMemory({
     instanceId: uuidv4(),
     keychainId: keychainIdForUnsigned,
@@ -106,7 +103,7 @@ test(testCase, async (t: Test) => {
   apiServerOptions.authorizationProtocol = AuthorizationProtocol.NONE;
   apiServerOptions.configFile = "";
   apiServerOptions.apiCorsDomainCsv = "*";
-  apiServerOptions.apiPort = addressInfo1.port;
+  apiServerOptions.apiPort = addressInfo.port;
   apiServerOptions.cockpitPort = 0;
   apiServerOptions.apiTlsEnabled = false;
   const config = configService.newExampleConfigConvict(apiServerOptions);
@@ -114,7 +111,7 @@ test(testCase, async (t: Test) => {
   pluginRegistry.add(connector);
 
   const apiServer = new ApiServer({
-    httpServerApi: httpServer1,
+    httpServerApi: httpServer,
     config: config.getProperties(),
     pluginRegistry,
   });
@@ -123,40 +120,54 @@ test(testCase, async (t: Test) => {
   await apiServer.start();
 
   const besuApiClientOptions = new BesuApiClientOptions({
-    basePath: node1Host,
+    basePath: apiHost,
   });
   const apiClient = new BesuApiClient(besuApiClientOptions);
-
-  // DEPLOY DOES NOT WORK WHEN I CALL SIGN TRANSACTION BEFORE DEPLOY
-  // ALL WORKS WHEN I CALL SIGN TRANSACTION AFTER DEPLOY
 
   // sign a transaction
 
   test(`${testCase} - ${fSign} - ${cOk}`, async (t2: Test) => {
-    const web3Eea: IWeb3InstanceExtended = EEAClient(web3, 2018);
-    const orionKeyPair = await besuTestLedger.getOrionKeyPair();
-    const besuKeyPair = await besuTestLedger.getBesuKeyPair();
-    const besuPrivateKey = besuKeyPair.privateKey.toLowerCase().startsWith("0x")
-      ? besuKeyPair.privateKey.substring(2)
-      : besuKeyPair.privateKey; // besu node's private key
-
-    const contractOptions = {
-      data: `0x123`,
-      privateFrom: orionKeyPair.publicKey,
-      privateFor: [orionKeyPair.publicKey],
-      privateKey: besuPrivateKey,
-    };
-    const transactionHash = await web3Eea.eea.sendRawTransaction(
-      contractOptions,
+    const runTxRes = await apiClient.apiV1BesuRunTransaction({
+      consistencyStrategy: {
+        blockConfirmations: 0,
+        receiptType: ReceiptType.LedgerBlockAck,
+        timeoutMs: 120000,
+      },
+      transactionConfig: {
+        from: testEthAccount1.address,
+        to: testEthAccount2.address,
+        value: 1,
+        gas: 10000000,
+      },
+      web3SigningCredential: {
+        ethAccount: testEthAccount1.address,
+        secret: testEthAccount1.privateKey,
+        type: Web3SigningCredentialType.PrivateKeyHex,
+      },
+    });
+    t2.ok(runTxRes, "runTxRes truthy OK");
+    t2.ok(runTxRes.status, "runTxRes.status truthy OK");
+    t2.equal(runTxRes.status, 200, "runTxRes.status === 200 OK");
+    t2.ok(runTxRes.data, "runTxRes.data truthy OK");
+    t2.ok(
+      runTxRes.data.transactionReceipt,
+      "runTxRes.data.transactionReceipt truthy OK",
     );
 
-    const res = await apiClient.signTransactionV1({
+    const signTxRes = await apiClient.signTransactionV1({
       keychainId: keychainIdForSigned,
       keychainRef: keychainRefForSigned,
-      transactionHash,
+      transactionHash: runTxRes.data.transactionReceipt.transactionHash,
     });
-    if (res.data.signature) {
-      console.log(res.data.signature);
+
+    t2.ok(signTxRes, "signTxRes truthy OK");
+    t2.ok(signTxRes.status, "signTxRes.status truthy OK");
+    t2.equal(signTxRes.status, 200, "signTxRes.status === 200 OK");
+    t2.ok(signTxRes.data, "signTxRes.data truthy OK");
+    t2.ok(signTxRes.data.signature, "signTxRes.data.signature truthy OK");
+
+    if (signTxRes.data.signature) {
+      console.log(signTxRes.data.signature);
     }
 
     t2.end();
@@ -171,7 +182,7 @@ test(testCase, async (t: Test) => {
         "c87509a1c067bbde78beb793e6fa76530b6382a4c0241e5e4a9ec0a0f44dc0d3",
     };
 
-    const res = await apiClient.apiV1BesuDeployContractSolidityBytecode({
+    const deployRes = await apiClient.apiV1BesuDeployContractSolidityBytecode({
       keychainId: keychainIdForUnsigned,
       contractName: HelloWorldContractJson.contractName,
       contractAbi: HelloWorldContractJson.abi,
@@ -184,8 +195,18 @@ test(testCase, async (t: Test) => {
       bytecode: HelloWorldContractJson.bytecode,
       gas: 1000000,
     });
-    if (res.data.transactionReceipt) {
-      console.log(res.data.transactionReceipt);
+
+    t2.ok(deployRes, "deployRes truthy OK");
+    t2.ok(deployRes.status, "deployRes.status truthy OK");
+    t2.equal(deployRes.status, 200, "deployRes.status === 200 OK");
+    t2.ok(deployRes.data, "deployRes.data truthy OK");
+    t2.ok(
+      deployRes.data.transactionReceipt,
+      "deployRes.data.transactionReceipt truthy OK",
+    );
+
+    if (deployRes.data.transactionReceipt) {
+      console.log(deployRes.data.transactionReceipt);
     }
     t2.end();
   });

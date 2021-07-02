@@ -3,7 +3,11 @@ import { Server as SecureServer } from "https";
 
 import { Optional } from "typescript-optional";
 import { Config as SshConfig } from "node-ssh";
-import { Express } from "express";
+import { Express, NextFunction, Request, Response } from "express";
+
+import OAS from "../json/openapi.json";
+import * as OpenApiValidator from "express-openapi-validator";
+import { OpenAPIV3 } from "express-openapi-validator/dist/framework/types";
 
 import {
   IPluginLedgerConnector,
@@ -100,6 +104,10 @@ export class PluginLedgerConnectorCorda
     return consensusHasTransactionFinality(currentConsensusAlgorithmFamily);
   }
 
+  getOpenApiSpecs(): OpenAPIV3.Document {
+    return (OAS as unknown) as OpenAPIV3.Document;
+  }
+
   public getInstanceId(): string {
     return this.instanceId;
   }
@@ -123,6 +131,36 @@ export class PluginLedgerConnectorCorda
 
   async registerWebServices(app: Express): Promise<IWebServiceEndpoint[]> {
     const webServices = await this.getOrCreateWebServices();
+    app.use(
+      OpenApiValidator.middleware({
+        apiSpec: this.getOpenApiSpecs(),
+        validateApiSpec: false,
+      }),
+    );
+    app.use(
+      (
+        err: {
+          status?: number;
+          errors: [
+            {
+              path: string;
+              message: string;
+              errorCode: string;
+            },
+          ];
+        },
+        req: Request,
+        res: Response,
+        next: NextFunction,
+      ) => {
+        if (err) {
+          res.status(err.status || 500);
+          res.send(err.errors);
+        } else {
+          next();
+        }
+      },
+    );
     await Promise.all(webServices.map((ws) => ws.registerExpress(app)));
     // await Promise.all(webServices.map((ws) => ws.registerExpress(app)));
     return webServices;
