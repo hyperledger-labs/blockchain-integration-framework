@@ -101,6 +101,9 @@ export class PluginHtlcEthBesu implements ICactusPlugin, IPluginWebService {
     const openApiMiddleware = OpenApiValidator.middleware({
       apiSpec,
       validateApiSpec: false,
+      $refParser: {
+        mode: "dereference",
+      },
     });
     app.use(openApiMiddleware);
     app.use(
