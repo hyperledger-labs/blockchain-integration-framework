@@ -990,6 +990,41 @@
                 }
             }
         },
+
+        "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-transaction": {
+            "post": {
+                "x-hyperledger-cactus": {
+                    "http": {
+                        "verbLowerCase": "post",
+                        "path": "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-transaction"
+                    }
+                },
+                "operationId": "getTransaction",
+                "summary": "Executes a transaction on a besu ledger",
+                "parameters": [],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/GetTransactionV1Request"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GetTransactionV1Response"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/invoke-contract": {
             "post": {
                 "x-hyperledger-cactus": {
