@@ -97,7 +97,7 @@ class ApiPluginLedgerConnectorCordaServiceImpl(
         // org.hyperledger.cactus.plugin.ledger.connector.corda.server.model.InvokeContractV1Response["returnValue"]->
         // net.corda.client.jackson.internal.StxJson["wire"]->net.corda.client.jackson.internal.WireTransactionJson["outputs"])]
         // with root cause
-        return InvokeContractV1Response(true, id.toString(), (returnValue as SignedTransaction).id, progress)
+        return InvokeContractV1Response(true, id.toString(), (returnValue as SignedTransaction).id.toString(), progress)
     }
 
     // FIXME - make it clear in the documentation that this deployment endpoint is not recommended for production
@@ -277,6 +277,10 @@ class ApiPluginLedgerConnectorCordaServiceImpl(
         val nodeDiagnosticInfoCactus = reader.readValue<NodeDiagnosticInfo>(json)
         logger.debug("Responding with marshalled ${NodeDiagnosticInfo::class.qualifiedName}: {}", nodeDiagnosticInfoCactus)
         return DiagnoseNodeV1Response(nodeDiagnosticInfo = nodeDiagnosticInfoCactus)
+    }
+
+    override fun getPrometheusExporterMetricsV1(): String {
+        TODO("Not yet implemented")
     }
 
     override fun invokeContractV1(invokeContractV1Request: InvokeContractV1Request?): InvokeContractV1Response {
