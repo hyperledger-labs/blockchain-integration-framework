@@ -14,7 +14,7 @@
       -p 4000:4000 \
       -p 4100:4100 \
       -p 4200:4200 \
-      hyperledger/cactus-example-supply-chain-app:2021-03-24-feat-362
+      ghcr.io/hyperledger/cactus-example-supply-chain-app:2021-07-01--fix-1063-v2
     ```
 2. Observe the example application pulling up in the logs
    1. the test ledger containers,
