@@ -44,16 +44,16 @@ export class GetSingleStatusEndpoint implements IWebServiceEndpoint {
 
   public getVerbLowerCase(): string {
     const apiPath = this.getOASPath();
-    return apiPath.get["x-hyperledger-cactus"].http.verbLowerCase;
+    return apiPath.post["x-hyperledger-cactus"].http.verbLowerCase;
   }
 
   public getPath(): string {
     const apiPath = this.getOASPath();
-    return apiPath.get["x-hyperledger-cactus"].http.path;
+    return apiPath.post["x-hyperledger-cactus"].http.path;
   }
 
   public getOperationId(): string {
-    return this.getOASPath().get.operationId;
+    return this.getOASPath().post.operationId;
   }
 
   getAuthorizationOptionsProvider(): IAsyncProvider<IEndpointAuthzOptions> {
@@ -81,16 +81,8 @@ export class GetSingleStatusEndpoint implements IWebServiceEndpoint {
     const fnTag = "GetSingleStatusEndpoint#handleRequest()";
     this.log.debug(`GET ${this.getPath()}`);
     try {
-      const id = req.query["id"];
-      const connectorId = req.query["connectorId"];
-      const keychainId = req.query["keychainId"];
-      const web3SigningCredential = req.query["web3SigningCredential"];
-
       const { callOutput } = await this.options.plugin.getSingleStatus(
-        id as string,
-        connectorId as string,
-        keychainId as string,
-        (web3SigningCredential as unknown) as Web3SigningCredential,
+        req.body,
       );
 
       if (callOutput === undefined) {

@@ -232,12 +232,12 @@ test(testCase, async (t: Test) => {
     "Retrieved balance of test account OK",
   );
   t.comment("Get single status of HTLC");
-  const resStatus = await api.getSingleStatus(
-    callOutput as string,
+  const resStatus = await api.getSingleStatus({
+    id: callOutput as string,
     web3SigningCredential,
     connectorId,
     keychainId,
-  );
+  });
   t.equal(resStatus.status, 200, "response status is 200 OK");
   t.equal(resStatus.data, 3, "the contract status is Withdrawn");
   t.end();

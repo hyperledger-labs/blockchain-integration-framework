@@ -246,12 +246,12 @@ test(testCase, async (t: Test) => {
   );
   const balance2 = await web3.eth.getBalance(firstHighNetWorthAccount);
   t.equal(balance1, balance2, "Retrieved balance of test account OK");
-  const res = await api.getSingleStatus(
+  const res = await api.getSingleStatus({
     id,
     web3SigningCredential,
     connectorId,
     keychainId,
-  );
+  });
   t.equal(res.status, 200);
   t.equal(res.data, 2, "the contract status is Refunded");
   t.end();

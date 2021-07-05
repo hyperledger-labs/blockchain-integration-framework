@@ -215,12 +215,12 @@ test(testCase, async (t: Test) => {
     "Balance of account is OK",
   );
 
-  const res = await api.getSingleStatus(
-    callOutput as string,
+  const res = await api.getSingleStatus({
+    id: callOutput as string,
     web3SigningCredential,
     connectorId,
     keychainId,
-  );
+  });
   t.equal(res.status, 200);
   t.equal(res.data, 1, "the contract status is 1 - Active");
   t.end();
