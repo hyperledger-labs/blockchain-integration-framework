@@ -76,7 +76,9 @@
         "Albertirsa",
         "HTLC",
         "Htlc",
-        "htlc"
+        "htlc",
+        "htlc",
+        "parameterizable"
     ],
     "dictionaries": [
         "typescript,node,npm,go"
