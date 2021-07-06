@@ -125,7 +125,6 @@ export class PluginHtlcEthBesu implements ICactusPlugin, IPluginWebService {
         next: NextFunction,
       ) => {
         if (err) {
-          console.log(err);
           res.status(err.status || 500);
           res.send(err.errors);
         } else {

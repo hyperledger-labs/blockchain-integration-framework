@@ -205,6 +205,7 @@
           "connectorId",
           "keychainId"
         ],
+        "additionalProperties": false,
         "properties": {
           "ids": {
             "type": "array",
@@ -231,6 +232,7 @@
           "connectorId",
           "keychainId"
         ],
+        "additionalProperties": false,
         "properties": {
           "id": {
             "type": "string"
