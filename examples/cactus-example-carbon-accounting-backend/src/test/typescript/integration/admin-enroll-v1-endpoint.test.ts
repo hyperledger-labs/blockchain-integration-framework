@@ -97,6 +97,7 @@ test(testCase, async (t: Test) => {
   const carbonAccountingApp = new CarbonAccountingApp(appOptions);
   test.onFinish(async () => {
     await carbonAccountingApp.stop();
+    await pruneDockerAllIfGithubAction({ logLevel });
   });
 
   try {
@@ -165,11 +166,5 @@ test(testCase, async (t: Test) => {
     t.notok(out.response.data.success, "out.response.data.success falsy OK");
   }
 
-  t.end();
-});
-
-test("AFTER " + testCase, async (t: Test) => {
-  const pruning = pruneDockerAllIfGithubAction({ logLevel });
-  await t.doesNotReject(pruning, "Pruning didn't throw OK");
   t.end();
 });

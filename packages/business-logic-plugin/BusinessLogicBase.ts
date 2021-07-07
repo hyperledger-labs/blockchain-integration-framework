@@ -23,25 +23,25 @@ export class BusinessLogicBase implements BusinessLogicPlugin {
     eventFilter: object | null = null;
 
     startTransaction(req: Request, businessLogicID: string, tradeID: string): void {
-        // NOTE: This method implements the BisinessLogcPlugin operation(* Override by subclass)
+        // NOTE: This method implements the BusinessLogicPlugin operation(* Override by subclass)
     }
 
     executeNextTransaction(txInfo: object, txId: string): void {
-        // NOTE: This method implements the BisinessLogcPlugin operation(* Override by subclass)
+        // NOTE: This method implements the BusinessLogicPlugin operation(* Override by subclass)
     }
 
     getOperationStatus(tradeID: string): object {
-        // NOTE: This method implements the BisinessLogcPlugin operation(* Override by subclass)
+        // NOTE: This method implements the BusinessLogicPlugin operation(* Override by subclass)
         return {};
     }
 
     setConfig(data: []): object {
-        // NOTE: This method implements the BisinessLogcPlugin operation(* Override by subclass)
+        // NOTE: This method implements the BusinessLogicPlugin operation(* Override by subclass)
         return {};
     }
 
     onEvent(ledgerEvent: LedgerEvent, targetIndex: number): void {
-        // NOTE: This method implements the BisinessLogcPlugin operation(* Override by subclass)
+        // NOTE: This method implements the BusinessLogicPlugin operation(* Override by subclass)
     }
 
     getEventFilter(): object | null {
@@ -56,17 +56,17 @@ export class BusinessLogicBase implements BusinessLogicPlugin {
     }
 
     getEventDataNum(ledgerEvent: LedgerEvent): number {
-        // NOTE: This method implements the BisinessLogcPlugin operation(* Override by subclass)
+        // NOTE: This method implements the BusinessLogicPlugin operation(* Override by subclass)
         return 0;
     }
 
     getTxIDFromEvent(ledgerEvent: LedgerEvent, targetIndex: number): string | null {
-        // NOTE: This method implements the BisinessLogcPlugin operation(* Override by subclass)
+        // NOTE: This method implements the BusinessLogicPlugin operation(* Override by subclass)
         return null;
     }
 
     hasTxIDInTransactions(txID: string): boolean {
-        // NOTE: This method implements the BisinessLogcPlugin operation(* Override by subclass)
+        // NOTE: This method implements the BusinessLogicPlugin operation(* Override by subclass)
         return false;
     }
 }

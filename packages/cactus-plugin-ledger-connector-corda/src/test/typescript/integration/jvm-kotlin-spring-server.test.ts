@@ -46,6 +46,7 @@ test(testCase, async (t: Test) => {
   test.onFinish(async () => {
     await ledger.stop();
     await ledger.destroy();
+    await pruneDockerAllIfGithubAction({ logLevel });
   });
   const ledgerContainer = await ledger.start();
   t.ok(ledgerContainer, "CordaTestLedger container truthy post-start() OK");
@@ -399,11 +400,5 @@ test(testCase, async (t: Test) => {
   t.ok(res, "InvokeContractV1Request truthy OK");
   t.equal(res.status, 200, "InvokeContractV1Request status code === 200 OK");
 
-  t.end();
-});
-
-test("AFTER " + testCase, async (t: Test) => {
-  const pruning = pruneDockerAllIfGithubAction({ logLevel });
-  await t.doesNotReject(pruning, "Pruning didn't throw OK");
   t.end();
 });

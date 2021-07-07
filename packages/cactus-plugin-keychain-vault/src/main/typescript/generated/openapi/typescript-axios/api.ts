@@ -24,6 +24,32 @@ import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } fr
 /**
  * 
  * @export
+ * @interface DeleteKeychainEntryRequestV1
+ */
+export interface DeleteKeychainEntryRequestV1 {
+    /**
+     * The key of the entry to delete from the keychain.
+     * @type {string}
+     * @memberof DeleteKeychainEntryRequestV1
+     */
+    key: string;
+}
+/**
+ * 
+ * @export
+ * @interface DeleteKeychainEntryResponseV1
+ */
+export interface DeleteKeychainEntryResponseV1 {
+    /**
+     * The key of the entry that was deleted from the keychain.
+     * @type {string}
+     * @memberof DeleteKeychainEntryResponseV1
+     */
+    key: string;
+}
+/**
+ * 
+ * @export
  * @interface GetKeychainEntryRequest
  */
 export interface GetKeychainEntryRequest {
@@ -52,6 +78,44 @@ export interface GetKeychainEntryResponse {
      * @memberof GetKeychainEntryResponse
      */
     value: string;
+}
+/**
+ * 
+ * @export
+ * @interface HasKeychainEntryRequestV1
+ */
+export interface HasKeychainEntryRequestV1 {
+    /**
+     * The key to check for presence in the keychain.
+     * @type {string}
+     * @memberof HasKeychainEntryRequestV1
+     */
+    key: string;
+}
+/**
+ * 
+ * @export
+ * @interface HasKeychainEntryResponseV1
+ */
+export interface HasKeychainEntryResponseV1 {
+    /**
+     * The key that was used to check the presence of the value in the keychain.
+     * @type {string}
+     * @memberof HasKeychainEntryResponseV1
+     */
+    key: string;
+    /**
+     * Date and time encoded as JSON when the presence check was performed by the plugin backend.
+     * @type {string}
+     * @memberof HasKeychainEntryResponseV1
+     */
+    checkedAt: string;
+    /**
+     * The boolean true or false indicating the presence or absence of an entry under \'key\'.
+     * @type {boolean}
+     * @memberof HasKeychainEntryResponseV1
+     */
+    isPresent: boolean;
 }
 /**
  * 
@@ -94,14 +158,48 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
     return {
         /**
          * 
-         * @summary Retrieves the contents of a keychain entry from the backend.
-         * @param {GetKeychainEntryRequest} getKeychainEntryRequest Request body to obtain a keychain entry via its key
+         * @summary Deletes an entry from the keychain stored under the provided key.
+         * @param {DeleteKeychainEntryRequestV1} [deleteKeychainEntryRequestV1] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getKeychainEntry: async (getKeychainEntryRequest: GetKeychainEntryRequest, options: any = {}): Promise<RequestArgs> => {
+        deleteKeychainEntryV1: async (deleteKeychainEntryRequestV1?: DeleteKeychainEntryRequestV1, options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v1/plugins/@hyperledger/cactus-plugin-keychain-vault/delete-keychain-entry`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(deleteKeychainEntryRequestV1, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Retrieves the contents of a keychain entry from the backend.
+         * @param {GetKeychainEntryRequest} getKeychainEntryRequest Requst body to obtain a keychain entry via its key
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getKeychainEntryV1: async (getKeychainEntryRequest: GetKeychainEntryRequest, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'getKeychainEntryRequest' is not null or undefined
-            assertParamExists('getKeychainEntry', 'getKeychainEntryRequest', getKeychainEntryRequest)
+            assertParamExists('getKeychainEntryV1', 'getKeychainEntryRequest', getKeychainEntryRequest)
             const localVarPath = `/api/v1/plugins/@hyperledger/cactus-plugin-keychain-vault/get-keychain-entry`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -160,14 +258,48 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Sets a value under a key on the keychain backend.
-         * @param {SetKeychainEntryRequest} setKeychainEntryRequest Request body to write/update a keychain entry via its key
+         * @summary Retrieves the information regarding a key being present on the keychain or not.
+         * @param {HasKeychainEntryRequestV1} [hasKeychainEntryRequestV1] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        setKeychainEntry: async (setKeychainEntryRequest: SetKeychainEntryRequest, options: any = {}): Promise<RequestArgs> => {
+        hasKeychainEntryV1: async (hasKeychainEntryRequestV1?: HasKeychainEntryRequestV1, options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v1/plugins/@hyperledger/cactus-plugin-keychain-vault/has-keychain-entry`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(hasKeychainEntryRequestV1, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Sets a value under a key on the keychain backend.
+         * @param {SetKeychainEntryRequest} setKeychainEntryRequest Requst body to write/update a keychain entry via its key
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        setKeychainEntryV1: async (setKeychainEntryRequest: SetKeychainEntryRequest, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'setKeychainEntryRequest' is not null or undefined
-            assertParamExists('setKeychainEntry', 'setKeychainEntryRequest', setKeychainEntryRequest)
+            assertParamExists('setKeychainEntryV1', 'setKeychainEntryRequest', setKeychainEntryRequest)
             const localVarPath = `/api/v1/plugins/@hyperledger/cactus-plugin-keychain-vault/set-keychain-entry`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -206,13 +338,24 @@ export const DefaultApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @summary Retrieves the contents of a keychain entry from the backend.
-         * @param {GetKeychainEntryRequest} getKeychainEntryRequest Request body to obtain a keychain entry via its key
+         * @summary Deletes an entry from the keychain stored under the provided key.
+         * @param {DeleteKeychainEntryRequestV1} [deleteKeychainEntryRequestV1] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getKeychainEntry(getKeychainEntryRequest: GetKeychainEntryRequest, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetKeychainEntryResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getKeychainEntry(getKeychainEntryRequest, options);
+        async deleteKeychainEntryV1(deleteKeychainEntryRequestV1?: DeleteKeychainEntryRequestV1, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DeleteKeychainEntryResponseV1>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteKeychainEntryV1(deleteKeychainEntryRequestV1, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Retrieves the contents of a keychain entry from the backend.
+         * @param {GetKeychainEntryRequest} getKeychainEntryRequest Requst body to obtain a keychain entry via its key
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getKeychainEntryV1(getKeychainEntryRequest: GetKeychainEntryRequest, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetKeychainEntryResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getKeychainEntryV1(getKeychainEntryRequest, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -227,13 +370,24 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Sets a value under a key on the keychain backend.
-         * @param {SetKeychainEntryRequest} setKeychainEntryRequest Request body to write/update a keychain entry via its key
+         * @summary Retrieves the information regarding a key being present on the keychain or not.
+         * @param {HasKeychainEntryRequestV1} [hasKeychainEntryRequestV1] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async setKeychainEntry(setKeychainEntryRequest: SetKeychainEntryRequest, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SetKeychainEntryResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.setKeychainEntry(setKeychainEntryRequest, options);
+        async hasKeychainEntryV1(hasKeychainEntryRequestV1?: HasKeychainEntryRequestV1, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<HasKeychainEntryResponseV1>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.hasKeychainEntryV1(hasKeychainEntryRequestV1, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Sets a value under a key on the keychain backend.
+         * @param {SetKeychainEntryRequest} setKeychainEntryRequest Requst body to write/update a keychain entry via its key
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async setKeychainEntryV1(setKeychainEntryRequest: SetKeychainEntryRequest, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SetKeychainEntryResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.setKeychainEntryV1(setKeychainEntryRequest, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -248,13 +402,23 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
     return {
         /**
          * 
-         * @summary Retrieves the contents of a keychain entry from the backend.
-         * @param {GetKeychainEntryRequest} getKeychainEntryRequest Request body to obtain a keychain entry via its key
+         * @summary Deletes an entry from the keychain stored under the provided key.
+         * @param {DeleteKeychainEntryRequestV1} [deleteKeychainEntryRequestV1] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getKeychainEntry(getKeychainEntryRequest: GetKeychainEntryRequest, options?: any): AxiosPromise<GetKeychainEntryResponse> {
-            return localVarFp.getKeychainEntry(getKeychainEntryRequest, options).then((request) => request(axios, basePath));
+        deleteKeychainEntryV1(deleteKeychainEntryRequestV1?: DeleteKeychainEntryRequestV1, options?: any): AxiosPromise<DeleteKeychainEntryResponseV1> {
+            return localVarFp.deleteKeychainEntryV1(deleteKeychainEntryRequestV1, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Retrieves the contents of a keychain entry from the backend.
+         * @param {GetKeychainEntryRequest} getKeychainEntryRequest Requst body to obtain a keychain entry via its key
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getKeychainEntryV1(getKeychainEntryRequest: GetKeychainEntryRequest, options?: any): AxiosPromise<GetKeychainEntryResponse> {
+            return localVarFp.getKeychainEntryV1(getKeychainEntryRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -267,13 +431,23 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Sets a value under a key on the keychain backend.
-         * @param {SetKeychainEntryRequest} setKeychainEntryRequest Request body to write/update a keychain entry via its key
+         * @summary Retrieves the information regarding a key being present on the keychain or not.
+         * @param {HasKeychainEntryRequestV1} [hasKeychainEntryRequestV1] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        setKeychainEntry(setKeychainEntryRequest: SetKeychainEntryRequest, options?: any): AxiosPromise<SetKeychainEntryResponse> {
-            return localVarFp.setKeychainEntry(setKeychainEntryRequest, options).then((request) => request(axios, basePath));
+        hasKeychainEntryV1(hasKeychainEntryRequestV1?: HasKeychainEntryRequestV1, options?: any): AxiosPromise<HasKeychainEntryResponseV1> {
+            return localVarFp.hasKeychainEntryV1(hasKeychainEntryRequestV1, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Sets a value under a key on the keychain backend.
+         * @param {SetKeychainEntryRequest} setKeychainEntryRequest Requst body to write/update a keychain entry via its key
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        setKeychainEntryV1(setKeychainEntryRequest: SetKeychainEntryRequest, options?: any): AxiosPromise<SetKeychainEntryResponse> {
+            return localVarFp.setKeychainEntryV1(setKeychainEntryRequest, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -287,14 +461,26 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
 export class DefaultApi extends BaseAPI {
     /**
      * 
-     * @summary Retrieves the contents of a keychain entry from the backend.
-     * @param {GetKeychainEntryRequest} getKeychainEntryRequest Request body to obtain a keychain entry via its key
+     * @summary Deletes an entry from the keychain stored under the provided key.
+     * @param {DeleteKeychainEntryRequestV1} [deleteKeychainEntryRequestV1] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public getKeychainEntry(getKeychainEntryRequest: GetKeychainEntryRequest, options?: any) {
-        return DefaultApiFp(this.configuration).getKeychainEntry(getKeychainEntryRequest, options).then((request) => request(this.axios, this.basePath));
+    public deleteKeychainEntryV1(deleteKeychainEntryRequestV1?: DeleteKeychainEntryRequestV1, options?: any) {
+        return DefaultApiFp(this.configuration).deleteKeychainEntryV1(deleteKeychainEntryRequestV1, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Retrieves the contents of a keychain entry from the backend.
+     * @param {GetKeychainEntryRequest} getKeychainEntryRequest Requst body to obtain a keychain entry via its key
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public getKeychainEntryV1(getKeychainEntryRequest: GetKeychainEntryRequest, options?: any) {
+        return DefaultApiFp(this.configuration).getKeychainEntryV1(getKeychainEntryRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -310,14 +496,26 @@ export class DefaultApi extends BaseAPI {
 
     /**
      * 
-     * @summary Sets a value under a key on the keychain backend.
-     * @param {SetKeychainEntryRequest} setKeychainEntryRequest Request body to write/update a keychain entry via its key
+     * @summary Retrieves the information regarding a key being present on the keychain or not.
+     * @param {HasKeychainEntryRequestV1} [hasKeychainEntryRequestV1] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public setKeychainEntry(setKeychainEntryRequest: SetKeychainEntryRequest, options?: any) {
-        return DefaultApiFp(this.configuration).setKeychainEntry(setKeychainEntryRequest, options).then((request) => request(this.axios, this.basePath));
+    public hasKeychainEntryV1(hasKeychainEntryRequestV1?: HasKeychainEntryRequestV1, options?: any) {
+        return DefaultApiFp(this.configuration).hasKeychainEntryV1(hasKeychainEntryRequestV1, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Sets a value under a key on the keychain backend.
+     * @param {SetKeychainEntryRequest} setKeychainEntryRequest Requst body to write/update a keychain entry via its key
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public setKeychainEntryV1(setKeychainEntryRequest: SetKeychainEntryRequest, options?: any) {
+        return DefaultApiFp(this.configuration).setKeychainEntryV1(setKeychainEntryRequest, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
