@@ -16,23 +16,24 @@ import { registerWebServiceEndpoint } from "@hyperledger/cactus-core";
 
 import OAS from "../../json/openapi.json";
 import { PluginKeychainVault } from "../plugin-keychain-vault";
+import { HasKeychainEntryResponseV1 } from "../generated/openapi/typescript-axios";
 
-export interface ISetKeychainEntryEndpointV1Options {
+export interface IHasKeychainEntryEndpointV1Options {
   logLevel?: LogLevelDesc;
   plugin: PluginKeychainVault;
 }
 
-export class SetKeychainEntryEndpointV1 implements IWebServiceEndpoint {
-  public static readonly CLASS_NAME = "SetKeychainEntryEndpointV1";
+export class HasKeychainEntryEndpointV1 implements IWebServiceEndpoint {
+  public static readonly CLASS_NAME = "HasKeychainEntryEndpointV1";
 
   private readonly log: Logger;
   private readonly plugin: PluginKeychainVault;
 
   public get className(): string {
-    return SetKeychainEntryEndpointV1.CLASS_NAME;
+    return HasKeychainEntryEndpointV1.CLASS_NAME;
   }
 
-  constructor(public readonly options: ISetKeychainEntryEndpointV1Options) {
+  constructor(public readonly options: IHasKeychainEntryEndpointV1Options) {
     const fnTag = `${this.className}#constructor()`;
     Checks.truthy(options, `${fnTag} arg options`);
     Checks.truthy(options.plugin, `${fnTag} arg options.plugin`);
@@ -49,9 +50,9 @@ export class SetKeychainEntryEndpointV1 implements IWebServiceEndpoint {
     this.log.debug(`Instantiated ${this.className} OK`);
   }
 
-  public get oasPath() {
+  private get oasPath() {
     return OAS.paths[
-      "/api/v1/plugins/@hyperledger/cactus-plugin-keychain-vault/set-keychain-entry"
+      "/api/v1/plugins/@hyperledger/cactus-plugin-keychain-vault/has-keychain-entry"
     ].post;
   }
 
@@ -88,8 +89,12 @@ export class SetKeychainEntryEndpointV1 implements IWebServiceEndpoint {
     const tag = `${this.getVerbLowerCase().toUpperCase()} ${this.getPath()}`;
     try {
       this.log.debug(`${tag} %o`, req.body);
-      const { key, value } = req.body;
-      const resBody = await this.plugin.set(key, value);
+      const isPresent = await this.plugin.has(req.body.key);
+      const resBody: HasKeychainEntryResponseV1 = {
+        isPresent,
+        checkedAt: new Date().toJSON(),
+        key: req.body.key,
+      };
       res.status(200);
       res.json(resBody);
     } catch (ex) {

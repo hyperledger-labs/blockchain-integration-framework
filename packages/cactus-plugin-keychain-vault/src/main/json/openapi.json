@@ -12,8 +12,80 @@
   "components": {
     "schemas": {
       "PrometheusExporterMetricsResponse": {
-          "type": "string",
-          "nullable": false
+        "type": "string",
+        "nullable": false
+      },
+      "HasKeychainEntryRequestV1": {
+        "type": "object",
+        "required": [
+          "key"
+        ],
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "The key to check for presence in the keychain.",
+            "minLength": 1,
+            "maxLength": 1024,
+            "nullable": false
+          }
+        }
+      },
+      "HasKeychainEntryResponseV1": {
+        "type": "object",
+        "required": [
+          "key",
+          "isPresent",
+          "checkedAt"
+        ],
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "The key that was used to check the presence of the value in the keychain.",
+            "minLength": 1,
+            "maxLength": 1024,
+            "nullable": false
+          },
+          "checkedAt": {
+            "type": "string",
+            "description": "Date and time encoded as JSON when the presence check was performed by the plugin backend.",
+            "nullable": false
+          },
+          "isPresent": {
+            "type": "boolean",
+            "description": "The boolean true or false indicating the presence or absence of an entry under 'key'.",
+            "nullable": false
+          }
+        }
+      },
+      "DeleteKeychainEntryRequestV1": {
+        "type": "object",
+        "required": [
+          "key"
+        ],
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "The key of the entry to delete from the keychain.",
+            "minLength": 1,
+            "maxLength": 1024,
+            "nullable": false
+          }
+        }
+      },
+      "DeleteKeychainEntryResponseV1": {
+        "type": "object",
+        "required": [
+          "key"
+        ],
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "The key of the entry that was deleted from the keychain.",
+            "minLength": 1,
+            "maxLength": 1024,
+            "nullable": false
+          }
+        }
       }
     }
   },
@@ -23,30 +95,98 @@
         "x-hyperledger-cactus": {
           "http": {
             "path": "/api/v1/plugins/@hyperledger/cactus-plugin-keychain-vault/get-keychain-entry",
-            "verbLowerCase": "get"
+            "verbLowerCase": "post"
           }
         },
-        "operationId": "getKeychainEntry",
+        "operationId": "getKeychainEntryV1",
         "summary": "Retrieves the contents of a keychain entry from the backend.",
         "parameters": [],
         "requestBody": {
-          "$ref": "../../../../cactus-core-api/src/main/json/openapi.json#/components/requestBodies/keychain_get_entry_request_body"
+          "$ref": "https://raw.githubusercontent.com/hyperledger/cactus/v0.5.0/packages/cactus-core-api/src/main/json/openapi.json#/components/requestBodies/keychain_get_entry_request_body"
         },
         "responses": {
           "200": {
-            "$ref": "../../../../cactus-core-api/src/main/json/openapi.json#/components/responses/keychain_get_entry_200"
+            "$ref": "https://raw.githubusercontent.com/hyperledger/cactus/v0.5.0/packages/cactus-core-api/src/main/json/openapi.json#/components/responses/keychain_get_entry_200"
           },
           "400": {
-            "$ref": "../../../../cactus-core-api/src/main/json/openapi.json#/components/responses/keychain_get_entry_400"
+            "$ref": "https://raw.githubusercontent.com/hyperledger/cactus/v0.5.0/packages/cactus-core-api/src/main/json/openapi.json#/components/responses/keychain_get_entry_400"
           },
           "401": {
-            "$ref": "../../../../cactus-core-api/src/main/json/openapi.json#/components/responses/keychain_get_entry_401"
+            "$ref": "https://raw.githubusercontent.com/hyperledger/cactus/v0.5.0/packages/cactus-core-api/src/main/json/openapi.json#/components/responses/keychain_get_entry_401"
           },
           "404": {
-            "$ref": "../../../../cactus-core-api/src/main/json/openapi.json#/components/responses/keychain_get_entry_404"
+            "$ref": "https://raw.githubusercontent.com/hyperledger/cactus/v0.5.0/packages/cactus-core-api/src/main/json/openapi.json#/components/responses/keychain_get_entry_404"
           },
           "500": {
-            "$ref": "../../../../cactus-core-api/src/main/json/openapi.json#/components/responses/keychain_get_entry_500"
+            "$ref": "https://raw.githubusercontent.com/hyperledger/cactus/v0.5.0/packages/cactus-core-api/src/main/json/openapi.json#/components/responses/keychain_get_entry_500"
+          }
+        }
+      }
+    },
+    "/api/v1/plugins/@hyperledger/cactus-plugin-keychain-vault/delete-keychain-entry": {
+      "post": {
+        "x-hyperledger-cactus": {
+          "http": {
+            "path": "/api/v1/plugins/@hyperledger/cactus-plugin-keychain-vault/delete-keychain-entry",
+            "verbLowerCase": "post"
+          }
+        },
+        "operationId": "deleteKeychainEntryV1",
+        "summary": "Deletes an entry from the keychain stored under the provided key.",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteKeychainEntryRequestV1"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteKeychainEntryResponseV1"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/plugins/@hyperledger/cactus-plugin-keychain-vault/has-keychain-entry": {
+      "post": {
+        "x-hyperledger-cactus": {
+          "http": {
+            "path": "/api/v1/plugins/@hyperledger/cactus-plugin-keychain-vault/has-keychain-entry",
+            "verbLowerCase": "post"
+          }
+        },
+        "operationId": "hasKeychainEntryV1",
+        "summary": "Retrieves the information regarding a key being present on the keychain or not.",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HasKeychainEntryRequestV1"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HasKeychainEntryResponseV1"
+                }
+              }
+            }
           }
         }
       }
@@ -59,51 +199,51 @@
             "verbLowerCase": "post"
           }
         },
-        "operationId": "setKeychainEntry",
+        "operationId": "setKeychainEntryV1",
         "summary": "Sets a value under a key on the keychain backend.",
         "parameters": [],
         "requestBody": {
-          "$ref": "../../../../cactus-core-api/src/main/json/openapi.json#/components/requestBodies/keychain_set_entry_request_body"
+          "$ref": "https://raw.githubusercontent.com/hyperledger/cactus/v0.5.0/packages/cactus-core-api/src/main/json/openapi.json#/components/requestBodies/keychain_set_entry_request_body"
         },
         "responses": {
           "200": {
-            "$ref": "../../../../cactus-core-api/src/main/json/openapi.json#/components/responses/keychain_set_entry_200"
+            "$ref": "https://raw.githubusercontent.com/hyperledger/cactus/v0.5.0/packages/cactus-core-api/src/main/json/openapi.json#/components/responses/keychain_set_entry_200"
           },
           "400": {
-            "$ref": "../../../../cactus-core-api/src/main/json/openapi.json#/components/responses/keychain_set_entry_400"
+            "$ref": "https://raw.githubusercontent.com/hyperledger/cactus/v0.5.0/packages/cactus-core-api/src/main/json/openapi.json#/components/responses/keychain_set_entry_400"
           },
           "401": {
-            "$ref": "../../../../cactus-core-api/src/main/json/openapi.json#/components/responses/keychain_set_entry_401"
+            "$ref": "https://raw.githubusercontent.com/hyperledger/cactus/v0.5.0/packages/cactus-core-api/src/main/json/openapi.json#/components/responses/keychain_set_entry_401"
           },
           "500": {
-            "$ref": "../../../../cactus-core-api/src/main/json/openapi.json#/components/responses/keychain_set_entry_500"
+            "$ref": "https://raw.githubusercontent.com/hyperledger/cactus/v0.5.0/packages/cactus-core-api/src/main/json/openapi.json#/components/responses/keychain_set_entry_500"
           }
         }
       }
     },
     "/api/v1/plugins/@hyperledger/cactus-plugin-keychain-vault/get-prometheus-exporter-metrics": {
       "get": {
-          "x-hyperledger-cactus": {
-              "http": {
-                  "verbLowerCase": "get",
-                  "path": "/api/v1/plugins/@hyperledger/cactus-plugin-keychain-vault/get-prometheus-exporter-metrics"
-              }
-          },
-          "operationId": "getPrometheusExporterMetricsV1",
-          "summary": "Get the Prometheus Metrics",
-          "parameters": [],
-          "responses": {
-              "200": {
-                  "description": "OK",
-                  "content": {
-                      "text/plain": {
-                          "schema": {
-                              "$ref": "#/components/schemas/PrometheusExporterMetricsResponse"
-                          }
-                      }
-                  }
-              }
+        "x-hyperledger-cactus": {
+          "http": {
+            "verbLowerCase": "get",
+            "path": "/api/v1/plugins/@hyperledger/cactus-plugin-keychain-vault/get-prometheus-exporter-metrics"
           }
+        },
+        "operationId": "getPrometheusExporterMetricsV1",
+        "summary": "Get the Prometheus Metrics",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/PrometheusExporterMetricsResponse"
+                }
+              }
+            }
+          }
+        }
       }
     }
   }
