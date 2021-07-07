@@ -100,10 +100,10 @@ test("NodeJS API server + Rust plugin work together", async (t: Test) => {
   const key = uuidv4();
   const expected = uuidv4();
 
-  await apiClient.setKeychainEntry({ key, value: expected });
+  await apiClient.setKeychainEntryV1({ key, value: expected });
   const {
     data: { value: actual },
-  } = await apiClient.getKeychainEntry({ key });
+  } = await apiClient.getKeychainEntryV1({ key });
 
   t.equal(actual, expected, "Keychain stored value matches input OK");
 

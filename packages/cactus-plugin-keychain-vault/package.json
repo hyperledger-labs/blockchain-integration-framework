@@ -87,7 +87,6 @@
     "@hyperledger/cactus-core": "0.5.0",
     "@hyperledger/cactus-core-api": "0.5.0",
     "axios": "0.21.1",
-    "express": "4.17.1",
     "http-status-codes": "2.1.4",
     "node-vault": "0.9.21",
     "prom-client": "13.1.0",
