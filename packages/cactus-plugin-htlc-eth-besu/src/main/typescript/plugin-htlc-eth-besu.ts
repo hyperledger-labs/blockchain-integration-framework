@@ -27,7 +27,6 @@ import {
   InvokeContractV1Response,
   PluginLedgerConnectorBesu,
   RunTransactionResponse,
-  Web3SigningCredential,
 } from "@hyperledger/cactus-plugin-ledger-connector-besu";
 
 import HashTimeLockJSON from "../solidity/contracts/HashTimeLock.json";

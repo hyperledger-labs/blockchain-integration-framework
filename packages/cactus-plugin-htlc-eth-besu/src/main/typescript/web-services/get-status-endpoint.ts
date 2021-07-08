@@ -77,7 +77,7 @@ export class GetStatusEndpoint implements IWebServiceEndpoint {
 
   public async handleRequest(req: Request, res: Response): Promise<void> {
     const fnTag = "GetStatusEndpoint#handleRequest()";
-    this.log.debug(`GET ${this.getPath()}`);
+    this.log.debug(`POST ${this.getPath()}`);
     try {
       const { callOutput } = await this.options.plugin.getStatus(req.body);
 

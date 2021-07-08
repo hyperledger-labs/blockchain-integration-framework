@@ -13,7 +13,6 @@ import {
 } from "@hyperledger/cactus-core-api";
 import { registerWebServiceEndpoint } from "@hyperledger/cactus-core";
 import { PluginHtlcEthBesu } from "../plugin-htlc-eth-besu";
-import { Web3SigningCredential } from "../generated/openapi/typescript-axios";
 import OAS from "../../json/openapi.json";
 
 export interface IGetSingleStatusEndpointOptions {
@@ -79,7 +78,7 @@ export class GetSingleStatusEndpoint implements IWebServiceEndpoint {
 
   public async handleRequest(req: Request, res: Response): Promise<void> {
     const fnTag = "GetSingleStatusEndpoint#handleRequest()";
-    this.log.debug(`GET ${this.getPath()}`);
+    this.log.debug(`POST ${this.getPath()}`);
     try {
       const { callOutput } = await this.options.plugin.getSingleStatus(
         req.body,

@@ -27,6 +27,7 @@
           "connectorId",
           "keychainId"
         ],
+        "additionalProperties": false,
         "properties": {
           "contractAddress": {
             "description": "Contract address",
@@ -74,9 +75,7 @@
             "nullable": false
           },
           "web3SigningCredential": {
-            "description": "Web3SigningCredentialType",
-            "$ref": "https://raw.githubusercontent.com/hyperledger/cactus/v0.5.0/packages/cactus-plugin-ledger-connector-besu/src/main/json/openapi.json#/components/schemas/Web3SigningCredential",
-            "nullable": false
+            "$ref": "https://raw.githubusercontent.com/hyperledger/cactus/v0.5.0/packages/cactus-plugin-ledger-connector-besu/src/main/json/openapi.json#/components/schemas/Web3SigningCredential"
           },
           "connectorId": {
             "description": "connectorId for the connector besu plugin",
@@ -108,6 +107,7 @@
           "connectorId",
           "keychainId"
         ],
+        "additionalProperties": false,
         "properties": {
           "id": {
             "description": "Contract htlc id for refund",
@@ -115,9 +115,7 @@
             "nullable": false
           },
           "web3SigningCredential": {
-            "description": "Web3SigningCredentialType",
-            "$ref": "https://raw.githubusercontent.com/hyperledger/cactus/v0.5.0/packages/cactus-plugin-ledger-connector-besu/src/main/json/openapi.json#/components/schemas/Web3SigningCredential",
-            "nullable": false
+            "$ref": "https://raw.githubusercontent.com/hyperledger/cactus/v0.5.0/packages/cactus-plugin-ledger-connector-besu/src/main/json/openapi.json#/components/schemas/Web3SigningCredential"
           },
           "connectorId": {
             "description": "connectorId for the connector besu plugin",
@@ -150,6 +148,7 @@
           "connectorId",
           "keychainId"
         ],
+        "additionalProperties": false,
         "properties": {
           "id": {
             "description": "Contract locked id",
@@ -162,9 +161,7 @@
             "nullable": false
           },
           "web3SigningCredential": {
-            "description": "Web3SigningCredentialType",
-            "$ref": "https://raw.githubusercontent.com/hyperledger/cactus/v0.5.0/packages/cactus-plugin-ledger-connector-besu/src/main/json/openapi.json#/components/schemas/Web3SigningCredential",
-            "nullable": false
+            "$ref": "https://raw.githubusercontent.com/hyperledger/cactus/v0.5.0/packages/cactus-plugin-ledger-connector-besu/src/main/json/openapi.json#/components/schemas/Web3SigningCredential"
           },
           "connectorId": {
             "description": "connectorId for the connector besu plugin",
@@ -196,6 +193,7 @@
           "constructorArgs",
           "web3SigningCredential"
         ],
+        "additionalProperties": false,
         "properties": {
           "connectorId": {
             "description": "connectorId for the connector besu plugin",
@@ -213,12 +211,61 @@
             "default": []
         },
           "web3SigningCredential": {
-            "description": "Web3SigningCredential",
-            "$ref": "https://raw.githubusercontent.com/hyperledger/cactus/v0.5.0/packages/cactus-plugin-ledger-connector-besu/src/main/json/openapi.json#/components/schemas/Web3SigningCredential",
-            "nullable": false
+            "$ref": "https://raw.githubusercontent.com/hyperledger/cactus/v0.5.0/packages/cactus-plugin-ledger-connector-besu/src/main/json/openapi.json#/components/schemas/Web3SigningCredential"
           },
           "gas": {
             "type": "number"
+          }
+        }
+      },
+      "GetStatusRequest": {
+        "description": "Defines the parameters for retrieving the status of the HTLC swap.",
+        "required": [
+          "ids",
+          "web3SigningCredential",
+          "connectorId",
+          "keychainId"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "web3SigningCredential": {
+            "$ref": "https://raw.githubusercontent.com/hyperledger/cactus/v0.5.0/packages/cactus-plugin-ledger-connector-besu/src/main/json/openapi.json#/components/schemas/Web3SigningCredential"
+          },
+          "connectorId": {
+            "type": "string"
+          },
+          "keychainId": {
+            "type": "string"
+          }
+        }
+      },
+      "GetSingleStatusRequest": {
+        "description": "Defines the parameters for retrieving the single status of the HTLC swap.",
+        "required": [
+          "id",
+          "web3SigningCredential",
+          "connectorId",
+          "keychainId"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "web3SigningCredential": {
+            "$ref": "https://raw.githubusercontent.com/hyperledger/cactus/v0.5.0/packages/cactus-plugin-ledger-connector-besu/src/main/json/openapi.json#/components/schemas/Web3SigningCredential"
+          },
+          "connectorId": {
+            "type": "string"
+          },
+          "keychainId": {
+            "type": "string"
           }
         }
       }
@@ -321,53 +368,23 @@
       }
     },
     "/api/v1/plugins/@hyperledger/cactus-plugin-htlc-eth-besu-erc20/get-status": {
-      "get": {
+      "post": {
         "x-hyperledger-cactus": {
           "http": {
-            "verbLowerCase": "get",
+            "verbLowerCase": "post",
             "path": "/api/v1/plugins/@hyperledger/cactus-plugin-htlc-eth-besu-erc20/get-status"
           }
         },
         "operationId": "getStatus",
-        "summary": "Get array of status of a hashtimelock contract, the status are ( 0 - Invalid, 1 - Active, 2 - Refunded, 3 - Withdrawn, 4 - Expired)",
-        "parameters": [
-          {
-            "name": "ids",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string",
-                "format": "bytes32"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetStatusRequest"
               }
             }
-          },
-          {
-            "name": "web3SigningCredential",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "$ref": "https://raw.githubusercontent.com/hyperledger/cactus/v0.5.0/packages/cactus-plugin-ledger-connector-besu/src/main/json/openapi.json#/components/schemas/Web3SigningCredential"
-            }
-          },
-          {
-            "name": "connectorId",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "keychainId",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -377,50 +394,23 @@
       }
     },
     "/api/v1/plugins/@hyperledger/cactus-plugin-htlc-eth-besu-erc20/get-single-status": {
-      "get": {
+      "post": {
         "x-hyperledger-cactus": {
           "http": {
-            "verbLowerCase": "get",
+            "verbLowerCase": "post",
             "path": "/api/v1/plugins/@hyperledger/cactus-plugin-htlc-eth-besu-erc20/get-single-status"
           }
         },
         "operationId": "getSingleStatus",
-        "summary": "Get a status of a hashtimelock contract, the status are ( 0 - Invalid, 1 - Active, 2 - Refunded, 3 - Withdrawn, 4 - Expired)",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "bytes32"
-            }
-          },
-          {
-            "name": "web3SigningCredential",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "$ref": "https://raw.githubusercontent.com/hyperledger/cactus/v0.5.0/packages/cactus-plugin-ledger-connector-besu/src/main/json/openapi.json#/components/schemas/Web3SigningCredential"
-            }
-          },
-          {
-            "name": "connectorId",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "keychainId",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetSingleStatusRequest"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",

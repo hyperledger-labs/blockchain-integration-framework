@@ -265,12 +265,12 @@ test(testCase, async (t: Test) => {
     ],
   });
 
-  const res = await api.getSingleStatus(
-    callOutput as string,
+  const res = await api.getSingleStatus({
+    id: callOutput,
     web3SigningCredential,
     connectorId,
     keychainId,
-  );
+  });
   t.equal(res.status, 200, "response status is 200 OK");
   t.equal(res.data, 1, "the contract status is 1 - Active");
   t.end();
