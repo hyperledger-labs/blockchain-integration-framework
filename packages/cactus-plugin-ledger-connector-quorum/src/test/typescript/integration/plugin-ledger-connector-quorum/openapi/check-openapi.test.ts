@@ -132,7 +132,7 @@ test(testCase, async (t: Test) => {
   const fRun = "apiV1QuorumRunTransaction";
   const cOk = "without bad request error";
   const cWithoutParams = "not sending all required parameters";
-  const cInvalidParams = "sending parameters that are not valid";
+  const cInvalidParams = "sending invalid parameters";
 
   test(`${testCase} - ${fDeploy} - ${cOk}`, async (t2: Test) => {
     const parameters = {

@@ -7,15 +7,15 @@ import bodyParser from "body-parser";
 import {
   Configuration,
   DefaultApi as BesuApi,
-  IPluginHtlcEthBesuOptions,
-  PluginFactoryHtlcEthBesu,
-  NewContractObj,
+  IPluginHtlcEthBesuErc20Options,
+  PluginFactoryHtlcEthBesuErc20,
+  NewContractRequest,
   InitializeRequest,
-  RefundReq,
-  WithdrawReq,
+  RefundRequest,
+  WithdrawRequest,
   GetStatusRequest,
   GetSingleStatusRequest,
-} from "@hyperledger/cactus-plugin-htlc-eth-besu";
+} from "@hyperledger/cactus-plugin-htlc-eth-besu-erc20";
 import {
   EthContractInvocationType,
   PluginFactoryLedgerConnector,
@@ -35,22 +35,29 @@ import {
   BesuTestLedger,
   pruneDockerAllIfGithubAction,
 } from "@hyperledger/cactus-test-tooling";
-import { DataTest } from "../data-test";
-import DemoHelperJSON from "../../../solidity/contracts/DemoHelpers.json";
-import HashTimeLockJSON from "../../../../../../cactus-plugin-htlc-eth-besu/src/main/solidity/contracts/HashTimeLock.json";
+import TestTokenJSON from "../../../solidity/token-erc20-contract/Test_Token.json";
+import DemoHelperJSON from "../../../solidity/token-erc20-contract/DemoHelpers.json";
+import HashTimeLockJSON from "../../../../../../cactus-plugin-htlc-eth-besu-erc20/src/main/solidity/contracts/HashedTimeLockContract.json";
 
 const connectorId = uuidv4();
 const logLevel: LogLevelDesc = "INFO";
-const firstHighNetWorthAccount = "627306090abaB3A6e1400e9345bC60c78a8BEf57";
+const expiration = 2147483648;
+const secret =
+  "0x3853485acd2bfc3c632026ee365279743af107a30492e3ceaa7aefc30c2a048a";
+const estimatedGas = 6721975;
+const receiver = "0x627306090abaB3A6e1400e9345bC60c78a8BEf57";
+const hashLock =
+  "0x3c335ba7f06a8b01d0596589f73c19069e21c81e5013b91f408165d1bf623d32";
+const firstHighNetWorthAccount = "0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1";
 const privateKey =
-  "c87509a1c067bbde78beb793e6fa76530b6382a4c0241e5e4a9ec0a0f44dc0d3";
+  "0x4f3edf983ac636a65a842ce7c78d9aa706d3b113bce9c46f30d7d21715b23b1d";
 const web3SigningCredential: Web3SigningCredential = {
   ethAccount: firstHighNetWorthAccount,
   secret: privateKey,
   type: Web3SigningCredentialType.PrivateKeyHex,
 } as Web3SigningCredential;
 
-const testCase = "Test cactus-plugin-htlc-eth-besu openapi validation";
+const testCase = "Test cactus-plugin-htlc-eth-besu-erc20 openapi validation";
 
 test("BEFORE " + testCase, async (t: Test) => {
   const pruning = pruneDockerAllIfGithubAction({ logLevel });
@@ -87,9 +94,10 @@ test(testCase, async (t: Test) => {
     // pre-provision keychain with mock backend holding the private key of the
     // test account that we'll reference while sending requests with the
     // signing credential pointing to this keychain entry.
-    backend: new Map([[DemoHelperJSON.contractName, DemoHelperJSON]]),
+    backend: new Map([[TestTokenJSON.contractName, TestTokenJSON]]),
     logLevel,
   });
+  keychainPlugin.set(DemoHelperJSON.contractName, DemoHelperJSON);
   keychainPlugin.set(HashTimeLockJSON.contractName, HashTimeLockJSON);
 
   const factory = new PluginFactoryLedgerConnector({
@@ -106,13 +114,13 @@ test(testCase, async (t: Test) => {
   });
 
   pluginRegistry.add(connector);
-  const pluginOptions: IPluginHtlcEthBesuOptions = {
+  const pluginOptions: IPluginHtlcEthBesuErc20Options = {
     logLevel,
     instanceId: uuidv4(),
     pluginRegistry,
   };
 
-  const factoryHTLC = new PluginFactoryHtlcEthBesu({
+  const factoryHTLC = new PluginFactoryHtlcEthBesuErc20({
     pluginImportType: PluginImportType.Local,
   });
 
@@ -150,7 +158,9 @@ test(testCase, async (t: Test) => {
   const cInvalidParams = "sending invalid parameters";
 
   let hashTimeLockAddress: string;
-  let timestamp = 0;
+  let timestamp: number;
+  let tokenAddress: string;
+  let txId: string;
 
   test(`${testCase} - ${fInitialize} - ${cOk}`, async (t2: Test) => {
     const parameters = {
@@ -158,7 +168,7 @@ test(testCase, async (t: Test) => {
       keychainId,
       constructorArgs: [],
       web3SigningCredential,
-      gas: DataTest.estimated_gas,
+      gas: estimatedGas,
     };
 
     const res = await api.initialize(parameters);
@@ -176,7 +186,7 @@ test(testCase, async (t: Test) => {
       keychainId,
       constructorArgs: [],
       web3SigningCredential,
-      gas: DataTest.estimated_gas,
+      gas: estimatedGas,
     };
 
     try {
@@ -201,7 +211,7 @@ test(testCase, async (t: Test) => {
       keychainId,
       constructorArgs: [],
       web3SigningCredential,
-      gas: DataTest.estimated_gas,
+      gas: estimatedGas,
       fake: 7,
     };
 
@@ -222,15 +232,47 @@ test(testCase, async (t: Test) => {
   });
 
   test(`${testCase} - ${fNew} - ${cOk}`, async (t2: Test) => {
-    await connector.deployContract({
+    const deployOutToken = await connector.deployContract({
+      contractName: TestTokenJSON.contractName,
+      contractAbi: TestTokenJSON.abi,
+      bytecode: TestTokenJSON.bytecode,
+      web3SigningCredential,
+      keychainId,
+      constructorArgs: ["100", "token", "2", "TKN"],
+      gas: estimatedGas,
+    });
+    t2.ok(deployOutToken, "deployOutToken is truthy OK");
+    t2.ok(
+      deployOutToken.transactionReceipt,
+      "deployOutToken.transactionReceipt is truthy OK",
+    );
+    t2.ok(
+      deployOutToken.transactionReceipt.contractAddress,
+      "deployOutToken.transactionReceipt.contractAddress is truthy OK",
+    );
+    tokenAddress = deployOutToken.transactionReceipt.contractAddress as string;
+
+    const deployOutDemo = await connector.deployContract({
       contractName: DemoHelperJSON.contractName,
       contractAbi: DemoHelperJSON.abi,
       bytecode: DemoHelperJSON.bytecode,
       web3SigningCredential,
       keychainId,
       constructorArgs: [],
-      gas: DataTest.estimated_gas,
+      gas: estimatedGas,
     });
+    t2.ok(deployOutDemo, "deployOutToken is truthy OK");
+
+    const { success } = await connector.invokeContract({
+      contractName: TestTokenJSON.contractName,
+      keychainId,
+      signingCredential: web3SigningCredential,
+      invocationType: EthContractInvocationType.Send,
+      methodName: "approve",
+      params: [hashTimeLockAddress, "10"],
+      gas: estimatedGas,
+    });
+    t2.equal(success, true, "approve() transactionReceipt.status is true OK");
 
     const { callOutput } = await connector.invokeContract({
       contractName: DemoHelperJSON.contractName,
@@ -244,19 +286,21 @@ test(testCase, async (t: Test) => {
     timestamp = callOutput as number;
     timestamp = +timestamp + +10;
 
+    t2.comment("Call to newContract endpoint");
     const parameters = {
       contractAddress: hashTimeLockAddress,
       inputAmount: 10,
-      outputAmount: 0x04,
+      outputAmount: 1,
       expiration: timestamp,
-      hashLock: DataTest.hashLock,
-      receiver: DataTest.receiver,
+      hashLock,
+      tokenAddress,
+      receiver,
       outputNetwork: "BTC",
       outputAddress: "1AcVYm7M3kkJQH28FXAvyBFQzFRL6xPKu8",
-      connectorId: connectorId,
-      web3SigningCredential,
+      connectorId,
       keychainId,
-      gas: DataTest.estimated_gas,
+      web3SigningCredential,
+      gas: estimatedGas,
     };
     const res = await api.newContract(parameters);
     t2.ok(res, "newContract called successfully");
@@ -269,19 +313,20 @@ test(testCase, async (t: Test) => {
     const parameters = {
       // contractAddress: hashTimeLockAddress,
       inputAmount: 10,
-      outputAmount: 0x04,
+      outputAmount: 1,
       expiration: timestamp,
-      hashLock: DataTest.hashLock,
-      receiver: DataTest.receiver,
+      hashLock,
+      tokenAddress,
+      receiver,
       outputNetwork: "BTC",
       outputAddress: "1AcVYm7M3kkJQH28FXAvyBFQzFRL6xPKu8",
-      connectorId: connectorId,
-      web3SigningCredential,
+      connectorId,
       keychainId,
-      gas: DataTest.estimated_gas,
+      web3SigningCredential,
+      gas: estimatedGas,
     };
     try {
-      await api.newContract((parameters as any) as NewContractObj);
+      await api.newContract((parameters as any) as NewContractRequest);
     } catch (e) {
       t2.equal(e.response.status, 400, "Bad request");
       const fields = e.response.data.map((param: any) =>
@@ -300,20 +345,21 @@ test(testCase, async (t: Test) => {
     const parameters = {
       contractAddress: hashTimeLockAddress,
       inputAmount: 10,
-      outputAmount: 0x04,
+      outputAmount: 1,
       expiration: timestamp,
-      hashLock: DataTest.hashLock,
-      receiver: DataTest.receiver,
+      hashLock,
+      tokenAddress,
+      receiver,
       outputNetwork: "BTC",
       outputAddress: "1AcVYm7M3kkJQH28FXAvyBFQzFRL6xPKu8",
-      connectorId: connectorId,
-      web3SigningCredential,
+      connectorId,
       keychainId,
-      gas: DataTest.estimated_gas,
+      web3SigningCredential,
+      gas: estimatedGas,
       fake: 6,
     };
     try {
-      await api.newContract((parameters as any) as NewContractObj);
+      await api.newContract((parameters as any) as NewContractRequest);
     } catch (e) {
       t2.equal(e.response.status, 400, "Bad request");
       const fields = e.response.data.map((param: any) =>
@@ -337,19 +383,20 @@ test(testCase, async (t: Test) => {
       methodName: "getTxId",
       params: [
         firstHighNetWorthAccount,
-        DataTest.receiver,
+        receiver,
         10,
-        DataTest.hashLock,
+        hashLock,
         timestamp,
+        tokenAddress,
       ],
     });
     t2.ok(responseTxId.callOutput, "result is truthy OK");
-    const id = responseTxId.callOutput as string;
+    txId = responseTxId.callOutput as string;
 
     await timeout(6000);
 
     const parameters = {
-      id,
+      id: txId,
       web3SigningCredential,
       connectorId,
       keychainId,
@@ -368,7 +415,7 @@ test(testCase, async (t: Test) => {
       keychainId,
     };
     try {
-      await api.refund((parameters as any) as RefundReq);
+      await api.refund((parameters as any) as RefundRequest);
     } catch (e) {
       t2.equal(e.response.status, 400, "Bad request");
       const fields = e.response.data.map((param: any) =>
@@ -389,7 +436,7 @@ test(testCase, async (t: Test) => {
       fake: 3,
     };
     try {
-      await api.refund((parameters as any) as RefundReq);
+      await api.refund((parameters as any) as RefundRequest);
     } catch (e) {
       t2.equal(e.response.status, 400, "Bad request");
       const fields = e.response.data.map((param: any) =>
@@ -405,23 +452,59 @@ test(testCase, async (t: Test) => {
   });
 
   test(`${testCase} - ${fWithdraw} - ${cOk}`, async (t2: Test) => {
-    const bodyObj: NewContractObj = {
-      contractAddress: hashTimeLockAddress,
-      inputAmount: 10,
-      outputAmount: 0x04,
-      expiration: DataTest.expiration,
-      hashLock: DataTest.hashLock,
-      receiver: DataTest.receiver,
-      outputNetwork: "BTC",
-      outputAddress: "1AcVYm7M3kkJQH28FXAvyBFQzFRL6xPKu8",
-      connectorId: connectorId,
+    const deployOutToken = await connector.deployContract({
+      contractName: TestTokenJSON.contractName,
+      contractAbi: TestTokenJSON.abi,
+      bytecode: TestTokenJSON.bytecode,
       web3SigningCredential,
       keychainId,
-      gas: DataTest.estimated_gas,
-    };
-    await api.newContract(bodyObj);
+      constructorArgs: ["100", "token", "2", "TKN"],
+      gas: estimatedGas,
+    });
+    t2.ok(
+      deployOutToken.transactionReceipt.contractAddress,
+      "deployContract() output.transactionReceipt.contractAddress is truthy OK",
+    );
+    const tokenAddress = deployOutToken.transactionReceipt
+      .contractAddress as string;
 
-    const { callOutput } = await connector.invokeContract({
+    await connector.deployContract({
+      contractName: DemoHelperJSON.contractName,
+      contractAbi: DemoHelperJSON.abi,
+      bytecode: DemoHelperJSON.bytecode,
+      web3SigningCredential,
+      keychainId,
+      constructorArgs: [],
+      gas: estimatedGas,
+    });
+
+    await connector.invokeContract({
+      contractName: TestTokenJSON.contractName,
+      keychainId,
+      signingCredential: web3SigningCredential,
+      invocationType: EthContractInvocationType.Send,
+      methodName: "approve",
+      params: [hashTimeLockAddress, "10"],
+      gas: estimatedGas,
+    });
+
+    await api.newContract({
+      contractAddress: hashTimeLockAddress,
+      inputAmount: 10,
+      outputAmount: 1,
+      expiration,
+      hashLock,
+      tokenAddress,
+      receiver,
+      outputNetwork: "BTC",
+      outputAddress: "1AcVYm7M3kkJQH28FXAvyBFQzFRL6xPKu8",
+      connectorId,
+      keychainId,
+      web3SigningCredential,
+      gas: estimatedGas,
+    });
+
+    const responseTxId = await connector.invokeContract({
       contractName: DemoHelperJSON.contractName,
       keychainId,
       signingCredential: web3SigningCredential,
@@ -429,40 +512,40 @@ test(testCase, async (t: Test) => {
       methodName: "getTxId",
       params: [
         firstHighNetWorthAccount,
-        DataTest.receiver,
+        receiver,
         10,
-        DataTest.hashLock,
-        DataTest.expiration,
+        hashLock,
+        expiration,
+        tokenAddress,
       ],
     });
+    t2.ok(responseTxId.callOutput, "result is truthy OK");
+    const id = responseTxId.callOutput as string;
 
-    const parameters = {
-      id: callOutput,
-      secret:
-        "0x3853485acd2bfc3c632026ee365279743af107a30492e3ceaa7aefc30c2a048a",
+    const withdrawRequest: WithdrawRequest = {
+      id,
+      secret,
       web3SigningCredential,
       connectorId,
       keychainId,
     };
-
-    const res = await api.withdraw(parameters);
-    t2.equal(res.status, 200, "response status ok");
+    const resWithdraw = await api.withdraw(withdrawRequest);
+    t2.equal(resWithdraw.status, 200, "response status is 200 OK");
 
     t2.end();
   });
 
   test(`${testCase} - ${fWithdraw} - ${cWithoutParams}`, async (t2: Test) => {
     const parameters = {
-      // id: callOutput,
-      secret:
-        "0x3853485acd2bfc3c632026ee365279743af107a30492e3ceaa7aefc30c2a048a",
+      // id,
+      secret,
       web3SigningCredential,
       connectorId,
       keychainId,
     };
 
     try {
-      await api.withdraw((parameters as any) as WithdrawReq);
+      await api.withdraw((parameters as any) as WithdrawRequest);
     } catch (e) {
       t2.equal(e.response.status, 400, "Bad request");
       const fields = e.response.data.map((param: any) =>
@@ -477,8 +560,7 @@ test(testCase, async (t: Test) => {
   test(`${testCase} - ${fWithdraw} - ${cInvalidParams}`, async (t2: Test) => {
     const parameters = {
       id: "",
-      secret:
-        "0x3853485acd2bfc3c632026ee365279743af107a30492e3ceaa7aefc30c2a048a",
+      secret,
       web3SigningCredential,
       connectorId,
       keychainId,
@@ -486,7 +568,7 @@ test(testCase, async (t: Test) => {
     };
 
     try {
-      await api.withdraw((parameters as any) as WithdrawReq);
+      await api.withdraw((parameters as any) as WithdrawRequest);
     } catch (e) {
       t2.equal(e.response.status, 400, "Bad request");
       const fields = e.response.data.map((param: any) =>
@@ -502,49 +584,7 @@ test(testCase, async (t: Test) => {
   });
 
   test(`${testCase} - ${fStatus} - ${cOk}`, async (t2: Test) => {
-    const initRequest: InitializeRequest = {
-      connectorId,
-      keychainId,
-      constructorArgs: [],
-      web3SigningCredential,
-      gas: DataTest.estimated_gas,
-    };
-    const deployOut = await pluginHtlc.initialize(initRequest);
-    const hashTimeLockAddress2 = deployOut.transactionReceipt
-      .contractAddress as string;
-
-    const bodyObj: NewContractObj = {
-      contractAddress: hashTimeLockAddress2,
-      inputAmount: 10,
-      outputAmount: 0x04,
-      expiration: DataTest.expiration,
-      hashLock: DataTest.hashLock,
-      receiver: DataTest.receiver,
-      outputNetwork: "BTC",
-      outputAddress: "1AcVYm7M3kkJQH28FXAvyBFQzFRL6xPKu8",
-      connectorId: connectorId,
-      web3SigningCredential,
-      keychainId,
-      gas: DataTest.estimated_gas,
-    };
-    await api.newContract(bodyObj);
-
-    const { callOutput } = await connector.invokeContract({
-      contractName: DemoHelperJSON.contractName,
-      keychainId,
-      signingCredential: web3SigningCredential,
-      invocationType: EthContractInvocationType.Call,
-      methodName: "getTxId",
-      params: [
-        firstHighNetWorthAccount,
-        DataTest.receiver,
-        10,
-        DataTest.hashLock,
-        DataTest.expiration,
-      ],
-    });
-
-    const ids = [callOutput as string];
+    const ids = [txId as string];
 
     const parameters = {
       ids,
@@ -605,50 +645,8 @@ test(testCase, async (t: Test) => {
   });
 
   test(`${testCase} - ${fSingleStatus} - ${cOk}`, async (t2: Test) => {
-    const initRequest: InitializeRequest = {
-      connectorId,
-      keychainId,
-      constructorArgs: [],
-      web3SigningCredential,
-      gas: DataTest.estimated_gas,
-    };
-    const deployOut = await pluginHtlc.initialize(initRequest);
-    const hashTimeLockAddress2 = deployOut.transactionReceipt
-      .contractAddress as string;
-
-    const bodyObj: NewContractObj = {
-      contractAddress: hashTimeLockAddress2,
-      inputAmount: 10,
-      outputAmount: 0x04,
-      expiration: DataTest.expiration,
-      hashLock: DataTest.hashLock,
-      receiver: DataTest.receiver,
-      outputNetwork: "BTC",
-      outputAddress: "1AcVYm7M3kkJQH28FXAvyBFQzFRL6xPKu8",
-      connectorId: connectorId,
-      web3SigningCredential,
-      keychainId,
-      gas: DataTest.estimated_gas,
-    };
-    await api.newContract(bodyObj);
-
-    const { callOutput } = await connector.invokeContract({
-      contractName: DemoHelperJSON.contractName,
-      keychainId,
-      signingCredential: web3SigningCredential,
-      invocationType: EthContractInvocationType.Call,
-      methodName: "getTxId",
-      params: [
-        firstHighNetWorthAccount,
-        DataTest.receiver,
-        10,
-        DataTest.hashLock,
-        DataTest.expiration,
-      ],
-    });
-
     const parameters = {
-      id: callOutput,
+      id: txId,
       web3SigningCredential,
       connectorId,
       keychainId,

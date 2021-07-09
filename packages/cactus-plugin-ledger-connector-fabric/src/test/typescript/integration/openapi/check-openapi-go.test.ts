@@ -152,7 +152,7 @@ test(testCase, async (t: Test) => {
   const fDeployGo = "deployContractGoSourceV1";
   const cOk = "without bad request error";
   const cWithoutParams = "not sending all required parameters";
-  const cInvalidParams = "sending parameters that are not valid";
+  const cInvalidParams = "sending invalid parameters";
 
   test(`${testCase} - ${fDeployGo} - ${cOk}`, async (t2: Test) => {
     const parameters = {
