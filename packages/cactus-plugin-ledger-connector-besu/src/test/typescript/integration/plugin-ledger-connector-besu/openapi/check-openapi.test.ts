@@ -1,5 +1,6 @@
 import test, { Test } from "tape-promise/tape";
 import { v4 as uuidv4 } from "uuid";
+import { Server as SocketIoServer } from "socket.io";
 import { PluginRegistry } from "@hyperledger/cactus-core";
 import {
   Web3SigningCredentialType,
@@ -17,18 +18,18 @@ import { PluginKeychainMemory } from "@hyperledger/cactus-plugin-keychain-memory
 import { BesuTestLedger } from "@hyperledger/cactus-test-tooling";
 import KeyEncoder from "key-encoder";
 import {
+  IListenOptions,
   KeyFormat,
   LogLevelDesc,
   Secp256k1Keys,
+  Servers,
 } from "@hyperledger/cactus-common";
+import { Constants } from "@hyperledger/cactus-core-api";
+import express from "express";
+import bodyParser from "body-parser";
+import http from "http";
 import HelloWorldContractJson from "../../../../solidity/hello-world-contract/HelloWorld.json";
-import { createServer } from "http";
 import { AddressInfo } from "net";
-import {
-  ApiServer,
-  AuthorizationProtocol,
-  ConfigService,
-} from "@hyperledger/cactus-cmd-api-server";
 import { BesuApiClientOptions } from "../../../../../main/typescript/api-client/besu-api-client";
 
 const logLevel: LogLevelDesc = "TRACE";
@@ -41,24 +42,16 @@ test(testCase, async (t: Test) => {
   const keychainRefForSigned = uuidv4();
   const keychainRefForUnsigned = uuidv4();
 
-  const httpServer = createServer();
-  await new Promise((resolve, reject) => {
-    httpServer.once("error", reject);
-    httpServer.once("listening", resolve);
-    httpServer.listen(0, "127.0.0.1");
-  });
-  const addressInfo = httpServer.address() as AddressInfo;
-  const apiHost = `http://${addressInfo.address}:${addressInfo.port}`;
-
   const besuTestLedger = new BesuTestLedger();
+  await besuTestLedger.start();
   test.onFinish(async () => {
     await besuTestLedger.stop();
     await besuTestLedger.destroy();
   });
-  await besuTestLedger.start();
 
   const rpcApiHttpHost = await besuTestLedger.getRpcApiHttpHost();
   const rpcApiWsHost = await besuTestLedger.getRpcApiWsHost();
+
   const testEthAccount1 = await besuTestLedger.createEthTestAccount();
   const testEthAccount2 = await besuTestLedger.createEthTestAccount();
 
@@ -98,32 +91,36 @@ test(testCase, async (t: Test) => {
     logLevel,
   };
   const connector = new PluginLedgerConnectorBesu(options);
-
-  const configService = new ConfigService();
-  const apiServerOptions = configService.newExampleConfig();
-  apiServerOptions.authorizationProtocol = AuthorizationProtocol.NONE;
-  apiServerOptions.configFile = "";
-  apiServerOptions.apiCorsDomainCsv = "*";
-  apiServerOptions.apiPort = addressInfo.port;
-  apiServerOptions.cockpitPort = 0;
-  apiServerOptions.apiTlsEnabled = false;
-  const config = configService.newExampleConfigConvict(apiServerOptions);
-
   pluginRegistry.add(connector);
 
-  const apiServer = new ApiServer({
-    httpServerApi: httpServer,
-    config: config.getProperties(),
-    pluginRegistry,
+  const expressApp = express();
+  expressApp.use(bodyParser.json({ limit: "250mb" }));
+  const server = http.createServer(expressApp);
+
+  const wsApi = new SocketIoServer(server, {
+    path: Constants.SocketIoConnectionPathV1,
   });
 
-  test.onFinish(() => apiServer.shutdown());
-  await apiServer.start();
+  const listenOptions: IListenOptions = {
+    hostname: "localhost",
+    port: 0,
+    server,
+  };
+  const addressInfo = (await Servers.listen(listenOptions)) as AddressInfo;
+  test.onFinish(async () => await Servers.shutdown(server));
+  const { address, port } = addressInfo;
+  const apiHost = `http://${address}:${port}`;
+  t.comment(
+    `Metrics URL: ${apiHost}/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-prometheus-exporter-metrics`,
+  );
 
-  const besuApiClientOptions = new BesuApiClientOptions({
-    basePath: apiHost,
-  });
+  const wsBasePath = apiHost + Constants.SocketIoConnectionPathV1;
+  t.comment("WS base path: " + wsBasePath);
+  const besuApiClientOptions = new BesuApiClientOptions({ basePath: apiHost });
   const apiClient = new BesuApiClient(besuApiClientOptions);
+
+  await connector.getOrCreateWebServices();
+  await connector.registerWebServices(expressApp, wsApi);
 
   const fDeploy = "apiV1BesuDeployContractSolidityBytecode";
   const fInvoke = "apiV1BesuInvokeContract";

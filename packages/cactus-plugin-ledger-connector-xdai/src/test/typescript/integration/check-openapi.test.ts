@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import test, { Test } from "tape-promise/tape";
 import { v4 as uuidv4 } from "uuid";
 import {
@@ -18,20 +17,18 @@ import {
   K_DEV_WHALE_ACCOUNT_PUBLIC_KEY,
   OpenEthereumTestLedger,
 } from "@hyperledger/cactus-test-tooling";
-import {
-  LogLevelDesc,
-} from "@hyperledger/cactus-common";
 import HelloWorldContractJson from "../../solidity/hello-world-contract/HelloWorld.json";
-// import Web3 from "web3";
 import { PluginRegistry } from "@hyperledger/cactus-core";
-import { createServer } from "http";
+import express from "express";
+import bodyParser from "body-parser";
+import http from "http";
 import { AddressInfo } from "net";
 import { Configuration } from "@hyperledger/cactus-core-api";
 import {
-  ApiServer,
-  AuthorizationProtocol,
-  ConfigService,
-} from "@hyperledger/cactus-cmd-api-server";
+  LogLevelDesc,
+  IListenOptions,
+  Servers,
+} from "@hyperledger/cactus-common";
 
 const testCase = "xDai API";
 const logLevel: LogLevelDesc = "TRACE";
@@ -89,44 +86,23 @@ test(testCase, async (t: Test) => {
     pluginRegistry,
   });
 
-  // register the connector
-  pluginRegistry.add(connector);
+  const expressApp = express();
+  expressApp.use(bodyParser.json({ limit: "250mb" }));
+  const server = http.createServer(expressApp);
+  const listenOptions: IListenOptions = {
+    hostname: "0.0.0.0",
+    port: 0,
+    server,
+  };
+  const addressInfo = (await Servers.listen(listenOptions)) as AddressInfo;
+  test.onFinish(async () => await Servers.shutdown(server));
+  const { address, port } = addressInfo;
+  const apiHost = `http://${address}:${port}`;
+  const config = new Configuration({ basePath: apiHost });
+  const apiClient = new XdaiApi(config);
 
-  // create an http server
-  const httpServer = createServer();
-  await new Promise((resolve, reject) => {
-    httpServer.once("error", reject);
-    httpServer.once("listening", resolve);
-    httpServer.listen(0, "127.0.0.1");
-  });
-  const addressInfo = httpServer.address() as AddressInfo;
-  const apiHost = `http://${addressInfo.address}:${addressInfo.port}`;
-
-  // create configuration for api server
-  const configService = new ConfigService();
-  const apiServerOptions = configService.newExampleConfig();
-  apiServerOptions.authorizationProtocol = AuthorizationProtocol.NONE;
-  apiServerOptions.configFile = "";
-  apiServerOptions.apiCorsDomainCsv = "*";
-  apiServerOptions.apiPort = addressInfo.port;
-  apiServerOptions.cockpitPort = 0;
-  apiServerOptions.apiTlsEnabled = false;
-  const config = configService.newExampleConfigConvict(apiServerOptions);
-
-  // create an api server on the http server
-  const apiServer = new ApiServer({
-    httpServerApi: httpServer,
-    config: config.getProperties(),
-    pluginRegistry,
-  });
-
-  // start api server and shutdown when test finish
-  test.onFinish(() => apiServer.shutdown());
-  await apiServer.start();
-
-  // create the api client and attach it to http server
-  const apiConfig = new Configuration({ basePath: apiHost });
-  const apiClient = new XdaiApi(apiConfig);
+  await connector.getOrCreateWebServices();
+  await connector.registerWebServices(expressApp);
 
   const fDeploy = "apiV1QuorumDeployContractSolidityBytecode";
   const fInvoke = "apiV1QuorumInvokeContract";
@@ -175,8 +151,10 @@ test(testCase, async (t: Test) => {
         bytecode: HelloWorldContractJson.bytecode,
         gas: 1000000,
       };
-      await apiClient.deployContractV1(parameters as any as DeployContractV1Request);
-    } catch(e) {
+      await apiClient.deployContractV1(
+        (parameters as any) as DeployContractV1Request,
+      );
+    } catch (e) {
       t2.equal(e.response.status, 400, "Bad request");
       const fields = e.response.data.map((param: any) =>
         param.path.replace(".body.", ""),
@@ -206,8 +184,10 @@ test(testCase, async (t: Test) => {
         gas: 1000000,
         fake: 4,
       };
-      await apiClient.deployContractV1(parameters as any as DeployContractV1Request);
-    } catch(e) {
+      await apiClient.deployContractV1(
+        (parameters as any) as DeployContractV1Request,
+      );
+    } catch (e) {
       t2.equal(e.response.status, 400, "Bad request");
       const fields = e.response.data.map((param: any) =>
         param.path.replace(".body.", ""),
@@ -259,8 +239,10 @@ test(testCase, async (t: Test) => {
           type: Web3SigningCredentialType.PrivateKeyHex,
         },
       };
-      await apiClient.invokeContractV1(parameters as any as InvokeContractV1Request);
-    } catch(e) {
+      await apiClient.invokeContractV1(
+        (parameters as any) as InvokeContractV1Request,
+      );
+    } catch (e) {
       t2.equal(e.response.status, 400, "Bad request");
       const fields = e.response.data.map((param: any) =>
         param.path.replace(".body.", ""),
@@ -289,8 +271,10 @@ test(testCase, async (t: Test) => {
         },
         fake: 6,
       };
-      await apiClient.invokeContractV1(parameters as any as InvokeContractV1Request);
-    } catch(e) {
+      await apiClient.invokeContractV1(
+        (parameters as any) as InvokeContractV1Request,
+      );
+    } catch (e) {
       t2.equal(e.response.status, 400, "Bad request");
       const fields = e.response.data.map((param: any) =>
         param.path.replace(".body.", ""),
@@ -350,8 +334,10 @@ test(testCase, async (t: Test) => {
           gas: 22000,
         },
       };
-      await apiClient.runTransactionV1(parameters as any as RunTransactionV1Request);
-    } catch(e) {
+      await apiClient.runTransactionV1(
+        (parameters as any) as RunTransactionV1Request,
+      );
+    } catch (e) {
       t2.equal(e.response.status, 400, "Bad request");
       const fields = e.response.data.map((param: any) =>
         param.path.replace(".body.", ""),
@@ -386,8 +372,10 @@ test(testCase, async (t: Test) => {
         },
         fake: 9,
       };
-      await apiClient.runTransactionV1(parameters as any as RunTransactionV1Request);
-    } catch(e) {
+      await apiClient.runTransactionV1(
+        (parameters as any) as RunTransactionV1Request,
+      );
+    } catch (e) {
       t2.equal(e.response.status, 400, "Bad request");
       const fields = e.response.data.map((param: any) =>
         param.path.replace(".body.", ""),
@@ -400,7 +388,6 @@ test(testCase, async (t: Test) => {
 
     t2.end();
   });
-
 
   t.end();
 });

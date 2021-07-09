@@ -1,6 +1,5 @@
 import test, { Test } from "tape-promise/tape";
 import { v4 as uuidV4 } from "uuid";
-import { LogLevelDesc } from "@hyperledger/cactus-common";
 import { PluginKeychainMemory } from "@hyperledger/cactus-plugin-keychain-memory";
 import HelloWorldContractJson from "../../../../solidity/hello-world-contract/HelloWorld.json";
 import {
@@ -17,29 +16,21 @@ import {
   IQuorumGenesisOptions,
   IAccount,
 } from "@hyperledger/cactus-test-tooling";
-import { PluginRegistry } from "@hyperledger/cactus-core";
-import { createServer } from "http";
-import { AddressInfo } from "net";
-import { Configuration } from "@hyperledger/cactus-core-api";
 import {
-  ApiServer,
-  AuthorizationProtocol,
-  ConfigService,
-} from "@hyperledger/cactus-cmd-api-server";
+  LogLevelDesc,
+  IListenOptions,
+  Servers,
+} from "@hyperledger/cactus-common";
+import { PluginRegistry } from "@hyperledger/cactus-core";
+import { AddressInfo } from "net";
+import express from "express";
+import bodyParser from "body-parser";
+import http from "http";
+import { Configuration } from "@hyperledger/cactus-core-api";
 
 const logLevel: LogLevelDesc = "INFO";
 const testCase = "Quorum API";
 test(testCase, async (t: Test) => {
-  // create an http server
-  const httpServer = createServer();
-  await new Promise((resolve, reject) => {
-    httpServer.once("error", reject);
-    httpServer.once("listening", resolve);
-    httpServer.listen(0, "127.0.0.1");
-  });
-  const addressInfo = httpServer.address() as AddressInfo;
-  const apiHost = `http://${addressInfo.address}:${addressInfo.port}`;
-
   // create the test quorumTestLedger
   const containerImageVersion = "2021-01-08-7a055c3"; // Quorum v2.3.0, Tessera v0.10.0
   const containerImageName = "hyperledger/cactus-quorum-all-in-one";
@@ -98,34 +89,24 @@ test(testCase, async (t: Test) => {
     },
   );
 
-  // create configuration for api server
-  const configService = new ConfigService();
-  const apiServerOptions = configService.newExampleConfig();
-  apiServerOptions.authorizationProtocol = AuthorizationProtocol.NONE;
-  apiServerOptions.configFile = "";
-  apiServerOptions.apiCorsDomainCsv = "*";
-  apiServerOptions.apiPort = addressInfo.port;
-  apiServerOptions.cockpitPort = 0;
-  apiServerOptions.apiTlsEnabled = false;
-  const config = configService.newExampleConfigConvict(apiServerOptions);
+  const expressApp = express();
+  expressApp.use(bodyParser.json({ limit: "250mb" }));
+  const server = http.createServer(expressApp);
+  const listenOptions: IListenOptions = {
+    hostname: "0.0.0.0",
+    port: 0,
+    server,
+  };
+  const addressInfo = (await Servers.listen(listenOptions)) as AddressInfo;
+  test.onFinish(async () => await Servers.shutdown(server));
+  const { address, port } = addressInfo;
+  const apiHost = `http://${address}:${port}`;
 
-  // register the connector
-  pluginRegistry.add(connector);
-
-  // create an api server on the http server
-  const apiServer = new ApiServer({
-    httpServerApi: httpServer,
-    config: config.getProperties(),
-    pluginRegistry,
-  });
-
-  // start api server and shutdown when test finish
-  test.onFinish(() => apiServer.shutdown());
-  await apiServer.start();
-
-  // create the api client and attach it to http server
   const apiConfig = new Configuration({ basePath: apiHost });
   const apiClient = new QuorumApi(apiConfig);
+
+  await connector.getOrCreateWebServices();
+  await connector.registerWebServices(expressApp);
 
   const fDeploy = "apiV1QuorumDeployContractSolidityBytecode";
   const fInvoke = "apiV1QuorumInvokeContract";
