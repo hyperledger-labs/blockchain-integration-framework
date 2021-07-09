@@ -54,10 +54,10 @@ test("NodeJS API client + Rust plugin works together", async (tMain: Test) => {
   const expected = uuidv4();
 
   tMain.comment("Calling set keychain entry...");
-  await apiClient.setKeychainEntry({ key, value: expected });
+  await apiClient.setKeychainEntryV1({ key, value: expected });
   const {
     data: { value: actual },
-  } = await apiClient.getKeychainEntry({ key });
+  } = await apiClient.getKeychainEntryV1({ key });
 
   tMain.equal(actual, expected, "Keychain stored value matches input OK");
 

@@ -37,7 +37,7 @@ test("BEFORE " + testCase, async (t: Test) => {
 
 test(testCase, async (t: Test) => {
   const ledger = new CordaTestLedger({
-    imageName: "hyperledger/cactus-corda-4-6-all-in-one-obligation",
+    imageName: "ghcr.io/hyperledger/cactus-corda-4-6-all-in-one-obligation",
     imageVersion: "2021-03-19-feat-686",
     logLevel,
   });
@@ -46,6 +46,7 @@ test(testCase, async (t: Test) => {
   test.onFinish(async () => {
     await ledger.stop();
     await ledger.destroy();
+    await pruneDockerAllIfGithubAction({ logLevel });
   });
   const ledgerContainer = await ledger.start();
   t.ok(ledgerContainer, "CordaTestLedger container truthy post-start() OK");
@@ -84,7 +85,7 @@ test(testCase, async (t: Test) => {
 
   const connector = new CordaConnectorContainer({
     logLevel,
-    imageName: "hyperledger/cactus-connector-corda-server",
+    imageName: "ghcr.io/hyperledger/cactus-connector-corda-server",
     imageVersion: "2021-03-25-feat-622",
     // imageName: "cccs",
     // imageVersion: "latest",
@@ -399,11 +400,5 @@ test(testCase, async (t: Test) => {
   t.ok(res, "InvokeContractV1Request truthy OK");
   t.equal(res.status, 200, "InvokeContractV1Request status code === 200 OK");
 
-  t.end();
-});
-
-test("AFTER " + testCase, async (t: Test) => {
-  const pruning = pruneDockerAllIfGithubAction({ logLevel });
-  await t.doesNotReject(pruning, "Pruning didn't throw OK");
   t.end();
 });

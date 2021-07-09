@@ -45,6 +45,12 @@ export interface ConsistencyStrategy {
      * @memberof ConsistencyStrategy
      */
     blockConfirmations: number;
+    /**
+     * The amount of time (in milliseconds) connector will wait before making another confiramtion request to the network in case of previous confiramtion request fails
+     * @type {number}
+     * @memberof ConsistencyStrategy
+     */
+    pollIntervalMs?: number;
 }
 /**
  * 

@@ -1,4 +1,4 @@
-import { Express } from "express";
+import type { Express, Request, Response } from "express";
 
 import {
   Logger,
@@ -15,15 +15,18 @@ import {
 import { registerWebServiceEndpoint } from "@hyperledger/cactus-core";
 
 import OAS from "../../json/openapi.json";
+import { PluginKeychainVault } from "../plugin-keychain-vault";
 
 export interface ISetKeychainEntryEndpointV1Options {
   logLevel?: LogLevelDesc;
+  plugin: PluginKeychainVault;
 }
 
 export class SetKeychainEntryEndpointV1 implements IWebServiceEndpoint {
   public static readonly CLASS_NAME = "SetKeychainEntryEndpointV1";
 
   private readonly log: Logger;
+  private readonly plugin: PluginKeychainVault;
 
   public get className(): string {
     return SetKeychainEntryEndpointV1.CLASS_NAME;
@@ -32,6 +35,13 @@ export class SetKeychainEntryEndpointV1 implements IWebServiceEndpoint {
   constructor(public readonly options: ISetKeychainEntryEndpointV1Options) {
     const fnTag = `${this.className}#constructor()`;
     Checks.truthy(options, `${fnTag} arg options`);
+    Checks.truthy(options.plugin, `${fnTag} arg options.plugin`);
+    Checks.truthy(
+      options.plugin instanceof PluginKeychainVault,
+      `${fnTag} arg options.plugin instanceof PluginKeychainVault`,
+    );
+
+    this.plugin = options.plugin;
 
     const level = this.options.logLevel || "INFO";
     const label = this.className;
@@ -39,7 +49,7 @@ export class SetKeychainEntryEndpointV1 implements IWebServiceEndpoint {
     this.log.debug(`Instantiated ${this.className} OK`);
   }
 
-  private getOperation() {
+  public get oasPath() {
     return OAS.paths[
       "/api/v1/plugins/@hyperledger/cactus-plugin-keychain-vault/set-keychain-entry"
     ].post;
@@ -63,14 +73,29 @@ export class SetKeychainEntryEndpointV1 implements IWebServiceEndpoint {
   }
 
   public getVerbLowerCase(): string {
-    return this.getOperation()["x-hyperledger-cactus"].http.verbLowerCase;
+    return this.oasPath["x-hyperledger-cactus"].http.verbLowerCase;
   }
 
   public getPath(): string {
-    return this.getOperation()["x-hyperledger-cactus"].http.path;
+    return this.oasPath["x-hyperledger-cactus"].http.path;
   }
 
   public getExpressRequestHandler(): IExpressRequestHandler {
-    throw new Error("Method not implemented.");
+    return this.handleRequest.bind(this);
+  }
+
+  public async handleRequest(req: Request, res: Response): Promise<void> {
+    const tag = `${this.getVerbLowerCase().toUpperCase()} ${this.getPath()}`;
+    try {
+      this.log.debug(`${tag} %o`, req.body);
+      const { key, value } = req.body;
+      const resBody = await this.plugin.set(key, value);
+      res.status(200);
+      res.json(resBody);
+    } catch (ex) {
+      this.log.debug(`${tag} Failed to serve request:`, ex);
+      res.status(500);
+      res.json({ error: ex.stack });
+    }
   }
 }

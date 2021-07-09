@@ -59,13 +59,14 @@ test(testCase, async (t: Test) => {
     publishAllPorts: true,
     // imageName: "faio14x",
     // imageVersion: "latest",
-    imageName: "hyperledger/cactus-fabric-all-in-one",
+    imageName: "ghcr.io/hyperledger/cactus-fabric-all-in-one",
     imageVersion: "2021-04-21-2016750",
   });
 
   const tearDown = async () => {
     await ledger.stop();
     await ledger.destroy();
+    await pruneDockerAllIfGithubAction({ logLevel });
   };
 
   test.onFinish(tearDown);
@@ -258,11 +259,5 @@ test(testCase, async (t: Test) => {
   t.true(getRes.status > 199 && setRes.status < 300, "getRes status 2xx OK");
   t.comment(`HelloWorld.get() ResponseBody: ${JSON.stringify(getRes.data)}`);
   t.equal(getRes.data.functionOutput, testValue, "get returns UUID OK");
-  t.end();
-});
-
-test("AFTER " + testCase, async (t: Test) => {
-  const pruning = pruneDockerAllIfGithubAction({ logLevel });
-  await t.doesNotReject(pruning, "Pruning didn't throw OK");
   t.end();
 });

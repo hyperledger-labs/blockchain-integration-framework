@@ -3,6 +3,7 @@ import { Stream } from "stream";
 import { IncomingMessage } from "http";
 import { Container, ContainerInfo } from "dockerode";
 import Dockerode from "dockerode";
+import execa from "execa";
 import tar from "tar-stream";
 import fs from "fs-extra";
 import pRetry from "p-retry";
@@ -305,12 +306,17 @@ export class Containers {
   public static async exec(
     container: Container,
     cmd: string[],
+    timeoutMs = 300000, // 5 minutes default timeout
+    logLevel: LogLevelDesc = "INFO",
   ): Promise<string> {
     const fnTag = "Containers#exec()";
     Checks.truthy(container, `${fnTag} container`);
     Checks.truthy(cmd, `${fnTag} cmd`);
     Checks.truthy(Array.isArray(cmd), `${fnTag} isArray(cmd)`);
     Checks.truthy(cmd.length > 0, `${fnTag} path non empty array`);
+    Checks.nonBlankString(logLevel, `${fnTag} logLevel`);
+
+    const log = LoggerProvider.getOrCreate({ label: fnTag, level: logLevel });
 
     const exec = await container.exec({
       Cmd: cmd,
@@ -320,15 +326,29 @@ export class Containers {
     });
 
     return new Promise((resolve, reject) => {
+      log.debug(`Calling Exec Start on Docker Engine API...`);
+
       exec.start({ Tty: true }, (err: any, stream: Stream) => {
+        const timeoutIntervalId = setInterval(() => {
+          reject(new Error(`Docker Exec timed out after ${timeoutMs}ms`));
+        }, timeoutMs);
+
         if (err) {
-          return reject(err);
+          clearInterval(timeoutIntervalId);
+          const errorMessage = `Docker Engine API Exec Start Failed:`;
+          log.error(errorMessage, err);
+          return reject(new RuntimeError(errorMessage, err));
         }
+        log.debug(`Obtained output stream of Exec Start OK`);
         let output = "";
         stream.on("data", (data: Buffer) => {
           output += data.toString("utf-8");
         });
-        stream.on("end", () => resolve(output));
+        stream.on("end", () => {
+          clearInterval(timeoutIntervalId);
+          log.debug(`Finished Docker Exec OK. Output: ${output.length} bytes`);
+          resolve(output);
+        });
       });
     });
   }
@@ -525,15 +545,17 @@ export class Containers {
     let volumes;
     let images;
     let networks;
+    log.debug(`Pruning all docker resources...`);
+    try {
+      const { all } = await execa("docker", ["system", "df"], { all: true });
+      log.debug(all);
+    } catch (ex) {
+      log.info(`Ignoring failure of docker system df.`, ex);
+    }
     try {
       containers = await docker.pruneContainers();
     } catch (ex) {
       log.warn(`Failed to prune docker containers: `, ex);
-    }
-    try {
-      volumes = await docker.pruneVolumes();
-    } catch (ex) {
-      log.warn(`Failed to prune docker volumes: `, ex);
     }
     try {
       images = await docker.pruneImages();
@@ -541,11 +563,35 @@ export class Containers {
       log.warn(`Failed to prune docker images: `, ex);
     }
     try {
+      volumes = await docker.pruneVolumes();
+    } catch (ex) {
+      log.warn(`Failed to prune docker volumes: `, ex);
+    }
+    try {
       networks = await docker.pruneNetworks();
     } catch (ex) {
       log.warn(`Failed to prune docker networks: `, ex);
     }
 
+    const existingImages = await docker.listImages();
+    const imageIds = existingImages.map((it) => it.Id);
+    log.debug(`Clearing ${imageIds.length} images.... %o`, imageIds);
+
+    const cleanUpCmds = [
+      { binary: "docker", args: ["rmi", ...imageIds] },
+      { binary: "docker", args: ["volume", "prune", "--force"] },
+    ];
+    for (const { binary, args } of cleanUpCmds) {
+      try {
+        const { all, command } = await execa(binary, args, { all: true });
+        log.debug(command);
+        log.debug(all);
+      } catch (ex) {
+        // The first 3 commands might fail if there are no containers or images
+        // to delete (e.g. their number is zero)
+        log.info("Ignoring docker resource cleanup command failure.", ex);
+      }
+    }
     const response: IPruneDockerResourcesResponse = {
       containers,
       images,
@@ -554,6 +600,18 @@ export class Containers {
     };
 
     log.debug(`Finished pruning all docker resources. Outcome: %o`, response);
+    try {
+      const { all } = await execa("df", [], { all: true });
+      log.debug(all);
+    } catch (ex) {
+      log.info(`Ignoring failure of df.`, ex);
+    }
+    try {
+      const { all } = await execa("docker", ["system", "df"], { all: true });
+      log.debug(all);
+    } catch (ex) {
+      log.info(`Ignoring failure of docker system df.`, ex);
+    }
     return response;
   }
 }

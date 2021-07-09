@@ -74,6 +74,8 @@ test("compiles Rust code to bundler targeted .wasm", async (t: Test) => {
   const wasmPackBuildOut = await Containers.exec(
     dockerodeContainer,
     RustcBuildCmd.WASM_PACK_BUILD_BUNDLER,
+    300000,
+    "TRACE",
   );
   t.ok(wasmPackBuildOut, "wasmPackBuildOut truthy OK");
 

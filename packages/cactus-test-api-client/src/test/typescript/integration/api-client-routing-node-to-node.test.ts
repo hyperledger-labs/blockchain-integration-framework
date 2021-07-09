@@ -139,6 +139,7 @@ test(testCase, async (t: Test) => {
     test.onFinish(async () => {
       await quorumTestLedger1.stop();
       await quorumTestLedger1.destroy();
+      await pruneDockerAllIfGithubAction({ logLevel });
     });
     const rpcApiHttpHost1 = await quorumTestLedger1.getRpcApiHttpHost();
 
@@ -296,11 +297,5 @@ test(testCase, async (t: Test) => {
     t2.end();
   });
 
-  t.end();
-});
-
-test("AFTER " + testCase, async (t: Test) => {
-  const pruning = pruneDockerAllIfGithubAction({ logLevel });
-  await t.doesNotReject(pruning, "Pruning didn't throw OK");
   t.end();
 });

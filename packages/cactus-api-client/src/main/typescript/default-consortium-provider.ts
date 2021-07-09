@@ -23,7 +23,7 @@ export class DefaultConsortiumProvider
 
   private readonly log: Logger;
 
-  public get className() {
+  public get className(): string {
     return DefaultConsortiumProvider.CLASS_NAME;
   }
 

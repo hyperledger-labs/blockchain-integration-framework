@@ -17,6 +17,7 @@ test("BEFORE " + testCase, async (t: Test) => {
 
 test("Supply chain backend API calls can be executed", async (t: Test) => {
   t.ok(publicApi, "Public API of the package imported OK");
+  test.onFinish(async () => await pruneDockerAllIfGithubAction({ logLevel }));
 
   const projectRoot = path.join(__dirname, "../../../../../../");
 
@@ -61,11 +62,5 @@ test("Supply chain backend API calls can be executed", async (t: Test) => {
 
   await t.doesNotReject(childProcessPromise, "childProcessPromise resolves OK");
 
-  t.end();
-});
-
-test("AFTER " + testCase, async (t: Test) => {
-  const pruning = pruneDockerAllIfGithubAction({ logLevel });
-  await t.doesNotReject(pruning, "Pruning did not throw OK");
   t.end();
 });

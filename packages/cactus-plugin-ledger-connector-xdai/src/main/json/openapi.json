@@ -55,6 +55,11 @@
                         "type": "integer",
                         "minimum": 0,
                         "description": "The number of blocks to wait to be confirmed in addition to the block containing the transaction in question. Note that if the receipt type is set to only wait for node transaction pool ACK and this parameter is set to anything, but zero then the API will not accept the request due to conflicting parameters."
+                    },
+                    "pollIntervalMs" : {
+                        "type": "integer",
+                        "minimum": 0,
+                        "description": "The amount of time (in milliseconds) connector will wait before making another confiramtion request to the network in case of previous confiramtion request fails"
                     }
                 }
             },

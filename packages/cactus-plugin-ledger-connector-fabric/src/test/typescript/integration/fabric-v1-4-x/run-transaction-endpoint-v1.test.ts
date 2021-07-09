@@ -61,7 +61,7 @@ test(testCase, async (t: Test) => {
     publishAllPorts: true,
     emitContainerLogs: true,
     logLevel,
-    imageName: "hyperledger/cactus-fabric-all-in-one",
+    imageName: "ghcr.io/hyperledger/cactus-fabric-all-in-one",
     imageVersion: "2020-12-16-3ddfd8f-v1.4.8",
     envVars: new Map([
       ["FABRIC_VERSION", "1.4.8"],
@@ -72,6 +72,7 @@ test(testCase, async (t: Test) => {
   const tearDownLedger = async () => {
     await ledger.stop();
     await ledger.destroy();
+    await pruneDockerAllIfGithubAction({ logLevel });
   };
   test.onFinish(tearDownLedger);
 
@@ -222,11 +223,5 @@ test(testCase, async (t: Test) => {
       "Total Transaction Count of 3 recorded as expected. RESULT OK",
     );
   }
-  t.end();
-});
-
-test("AFTER " + testCase, async (t: Test) => {
-  const pruning = pruneDockerAllIfGithubAction({ logLevel });
-  await t.doesNotReject(pruning, "Pruning didn't throw OK");
   t.end();
 });

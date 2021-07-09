@@ -49,7 +49,10 @@ test("Supply chain backend API calls can be executed", async (t: Test) => {
     disableSignalHandlers: true,
   };
   const app = new SupplyChainApp(appOptions);
-  test.onFinish(() => app.stop());
+  test.onFinish(async () => {
+    await app.stop();
+    await pruneDockerAllIfGithubAction({ logLevel });
+  });
 
   // Node A => Besu
   // Node B => Quorum
@@ -127,11 +130,5 @@ test("Supply chain backend API calls can be executed", async (t: Test) => {
     "listShipmentRes status < 300 truthy OK",
   );
 
-  t.end();
-});
-
-test("AFTER " + testCase, async (t: Test) => {
-  const pruning = pruneDockerAllIfGithubAction({ logLevel });
-  await t.doesNotReject(pruning, "Pruning did not throw OK");
   t.end();
 });

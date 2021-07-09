@@ -61,7 +61,7 @@ test(testCase, async (t: Test) => {
     publishAllPorts: true,
     // imageName: "faio2x",
     // imageVersion: "latest",
-    imageName: "hyperledger/cactus-fabric2-all-in-one",
+    imageName: "ghcr.io/hyperledger/cactus-fabric2-all-in-one",
     imageVersion: "2021-04-20-nodejs",
     envVars: new Map([["FABRIC_VERSION", "2.2.0"]]),
     logLevel,
@@ -69,6 +69,7 @@ test(testCase, async (t: Test) => {
   const tearDown = async () => {
     await ledger.stop();
     await ledger.destroy();
+    await pruneDockerAllIfGithubAction({ logLevel });
   };
 
   test.onFinish(tearDown);
@@ -334,11 +335,5 @@ test(testCase, async (t: Test) => {
   t.ok(asset.Owner, "asset.Owner truthy OK");
   t.equal(asset.Owner, assetOwner, "asset.owner === assetOwner OK");
 
-  t.end();
-});
-
-test("AFTER " + testCase, async (t: Test) => {
-  const pruning = pruneDockerAllIfGithubAction({ logLevel });
-  await t.doesNotReject(pruning, "Pruning didn't throw OK");
   t.end();
 });

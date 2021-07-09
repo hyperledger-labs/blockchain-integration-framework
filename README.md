@@ -2,7 +2,8 @@
 
 # Hyperledger Cactus
 
- ![license](https://img.shields.io/github/license/hyperledger/cactus) [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/4089/badge)](https://bestpractices.coreinfrastructure.org/projects/4089)  ![GitHub issues](https://img.shields.io/github/issues/hyperledger/cactus) ![Travis (.org)](https://img.shields.io/travis/hyperledger/cactus)
+ ![license](https://img.shields.io/github/license/hyperledger/cactus) [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/4089/badge)](https://bestpractices.coreinfrastructure.org/projects/4089) [![codecov](https://codecov.io/gh/hyperledger/cactus/branch/master/graph/badge.svg?token=BJklIsqf1S)](https://codecov.io/gh/hyperledger/cactus)
+ ![GitHub issues](https://img.shields.io/github/issues/hyperledger/cactus) ![Travis (.org)](https://img.shields.io/travis/hyperledger/cactus)
 
 This project is an _Incubation_ Hyperledger project. For more information on the history of this project see the [Cactus wiki page](https://wiki.hyperledger.org/display/cactus). Information on what _Active_ entails can be found in
 the [Hyperledger Project Lifecycle document](https://wiki.hyperledger.org/display/TSC/Project+Lifecycle).
@@ -29,7 +30,7 @@ As blockchain technology proliferates, blockchain integration will become an inc
       -p 4000:4000 \
       -p 4100:4100 \
       -p 4200:4200 \
-      hyperledger/cactus-example-supply-chain-app:2021-03-24-feat-362
+      ghcr.io/hyperledger/cactus-example-supply-chain-app:2021-07-01--fix-1063-v2
     ```
 2. Wait for the output to show the message `INFO (api-server): Cactus Cockpit reachable http://0.0.0.0:3100`
 3. Visit http://localhost:3100 in a web browser with Javascript enabled

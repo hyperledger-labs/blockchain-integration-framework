@@ -110,7 +110,83 @@
                         "type": "string"
                         }
                     }
-                          
+                },        
+            "GetPastLogsV1Response": {
+                "type": "object",
+                "required": [
+                    "logs"                    
+                ],
+                "properties": {
+                    "logs": {
+                        "type": "array", 
+                        "items":{
+                            "$ref": "#/components/schemas/EvmLog"
+                        }
+                    }
+                   
+                }
+            },
+            "GetPastLogsV1Request": {
+                "type": "object",
+                "properties": {
+                    "toBlock": {
+                    },
+                    "fromBlock": {
+                    
+                    },
+                    "address": {
+                    },
+                    "topics": {
+                        "type" : "array",
+                        "items":{
+
+                        }
+                    }
+
+                }
+            },
+            "EvmLog":{
+                "type" : "object",
+                "required": [
+                  "address",
+                  "data",
+                  "blockHash",
+                  "transactionHash",
+                  "topics",
+                  "logIndex",
+                  "transactionIndex",
+                  "blockNumber"
+                ],
+                "properties": {
+                  "address":{
+                    "type": "string"
+                  },
+                  "data":{
+                    "type": "string"
+                  },
+                  "blockHash":{
+                    "type": "string"
+                  },
+                  "transactionHash":{
+                    "type": "string"
+                  },
+                  "topics":{
+                    "type": "array",
+                    "items":{
+                      "type" :"string" 
+                      
+                    }
+                  },
+                  "logIndex":{
+                    "type": "number"
+                  },
+                  "transactionIndex":{
+                    "type": "number"
+                  },
+                  "blockNumber":{
+                    "type": "number"
+                  }
+              }
             },
             "WatchBlocksV1": {
                 "type": "string",
@@ -846,6 +922,40 @@
                 }
             }
         },
+        "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-balance": {
+            "post": {
+                "x-hyperledger-cactus": { 
+                    "http": {
+                        "verbLowerCase": "post",
+                        "path": "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-balance"
+                    }
+                },
+                "operationId": "getbalanceV1",
+                "summary": "Return balance of an address of a given block",
+                "parameters": [],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/GetBalanceV1Request"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GetBalanceV1Response"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/run-transaction": {
             "post": {
                 "x-hyperledger-cactus": {
@@ -873,6 +983,75 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/RunTransactionResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-transaction": {
+            "post": {
+                "x-hyperledger-cactus": {
+                    "http": {
+                        "verbLowerCase": "post",
+                        "path": "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-transaction"
+                    }
+                },
+                "operationId": "getTransaction",
+                "summary": "Executes a transaction on a besu ledger",
+                "parameters": [],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/GetTransactionV1Request"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GetTransactionV1Response"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-past-logs": {
+            "post": {
+                "x-hyperledger-cactus": {
+                    "http": {
+                        "verbLowerCase": "post",
+                        "path": "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-past-logs"
+                    }
+                },
+                "operationId": "getPastLogsV1",
+                "summary": "Gets past logs, matching the given options.",
+                "parameters": [],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/GetPastLogsV1Request"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+
+                                    "$ref": "#/components/schemas/GetPastLogsV1Response"
                                 }
                             }
                         }

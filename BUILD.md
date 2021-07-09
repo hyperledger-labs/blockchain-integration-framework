@@ -128,7 +128,7 @@ For example you can *run a ledger contract deployment test* via the
 REST API with this command:
 
 ```sh
-npx tap --timeout=600 packages/cactus-test-plugin-ledger-connector-quorum/src/test/typescript/integration/plugin-ledger-connector-quorum/deploy-contract/deploy-contract-via-web-service.ts
+npx tap --ts --timeout=600 packages/cactus-test-plugin-ledger-connector-quorum/src/test/typescript/integration/plugin-ledger-connector-quorum/deploy-contract/deploy-contract-via-web-service.ts
 ```
 
 *You can also start the API server* and verify more complex scenarios with an

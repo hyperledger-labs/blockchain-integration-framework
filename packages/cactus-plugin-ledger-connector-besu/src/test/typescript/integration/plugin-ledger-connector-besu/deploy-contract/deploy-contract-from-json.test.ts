@@ -49,6 +49,7 @@ test(testCase, async (t: Test) => {
   test.onFinish(async () => {
     await besuTestLedger.stop();
     await besuTestLedger.destroy();
+    await pruneDockerAllIfGithubAction({ logLevel });
   });
 
   const rpcApiHttpHost = await besuTestLedger.getRpcApiHttpHost();
@@ -487,11 +488,5 @@ test(testCase, async (t: Test) => {
     t2.end();
   });
 
-  t.end();
-});
-
-test("AFTER " + testCase, async (t: Test) => {
-  const pruning = pruneDockerAllIfGithubAction({ logLevel });
-  await t.doesNotReject(pruning, "Pruning didn't throw OK");
   t.end();
 });

@@ -1,7 +1,7 @@
-import { Server } from "http";
-import { Server as SecureServer } from "https";
+import type { Server } from "http";
+import type { Server as SecureServer } from "https";
 
-import { Express } from "express";
+import type { Express } from "express";
 import { Optional } from "typescript-optional";
 import Vault from "node-vault";
 import HttpStatus from "http-status-codes";
@@ -13,16 +13,11 @@ import {
   LoggerProvider,
 } from "@hyperledger/cactus-common";
 import {
-  ICactusPlugin,
   ICactusPluginOptions,
+  IPluginKeychain,
   IPluginWebService,
   IWebServiceEndpoint,
 } from "@hyperledger/cactus-core-api";
-
-// TODO: Writing the getExpressRequestHandler() method for
-// GetKeychainEntryEndpointV1 and SetKeychainEntryEndpointV1
-// import { GetKeychainEntryEndpointV1 } from "./web-services/get-keychain-entry-endpoint-v1";
-// import { SetKeychainEntryEndpointV1 } from "./web-services/set-keychain-entry-endpoint-v1";
 
 import { PrometheusExporter } from "./prometheus-exporter/prometheus-exporter";
 
@@ -30,6 +25,10 @@ import {
   IGetPrometheusExporterMetricsEndpointV1Options,
   GetPrometheusExporterMetricsEndpointV1,
 } from "./web-services/get-prometheus-exporter-metrics-endpoint-v1";
+import { GetKeychainEntryEndpointV1 } from "./web-services/get-keychain-entry-endpoint-v1";
+import { SetKeychainEntryEndpointV1 } from "./web-services/set-keychain-entry-endpoint-v1";
+import { HasKeychainEntryEndpointV1 } from "./web-services/has-keychain-entry-endpoint-v1";
+import { DeleteKeychainEntryEndpointV1 } from "./web-services/delete-keychain-entry-endpoint-v1";
 
 export interface IPluginKeychainVaultOptions extends ICactusPluginOptions {
   logLevel?: LogLevelDesc;
@@ -62,7 +61,7 @@ export interface IPluginKeychainVaultOptions extends ICactusPluginOptions {
 
 export const K_DEFAULT_KV_SECRETS_MOUNT_PATH = "secret/";
 
-export class PluginKeychainVault implements ICactusPlugin, IPluginWebService {
+export class PluginKeychainVault implements IPluginWebService, IPluginKeychain {
   public static readonly CLASS_NAME = "PluginKeychainVault";
 
   private readonly apiVersion: string;
@@ -143,23 +142,34 @@ export class PluginKeychainVault implements ICactusPlugin, IPluginWebService {
     }
     const endpoints: IWebServiceEndpoint[] = [];
 
-    // TODO: Writing the getExpressRequestHandler() method for
-    // GetKeychainEntryEndpointV1 and SetKeychainEntryEndpointV1
-
-    // {
-    //   const ep = new GetKeychainEntryEndpointV1({
-    //     logLevel: this.opts.logLevel,
-    //   });
-    //   ep.registerExpress(expressApp);
-    //   endpoints.push(ep);
-    // }
-    // {
-    //   const ep = new SetKeychainEntryEndpointV1({
-    //     logLevel: this.opts.logLevel,
-    //   });
-    //   ep.registerExpress(expressApp);
-    //   endpoints.push(ep);
-    // }
+    {
+      const ep = new GetKeychainEntryEndpointV1({
+        logLevel: this.opts.logLevel,
+        plugin: this,
+      });
+      endpoints.push(ep);
+    }
+    {
+      const ep = new SetKeychainEntryEndpointV1({
+        logLevel: this.opts.logLevel,
+        plugin: this,
+      });
+      endpoints.push(ep);
+    }
+    {
+      const ep = new HasKeychainEntryEndpointV1({
+        logLevel: this.opts.logLevel,
+        plugin: this,
+      });
+      endpoints.push(ep);
+    }
+    {
+      const ep = new DeleteKeychainEntryEndpointV1({
+        logLevel: this.opts.logLevel,
+        plugin: this,
+      });
+      endpoints.push(ep);
+    }
     {
       const opts: IGetPrometheusExporterMetricsEndpointV1Options = {
         plugin: this,
@@ -168,7 +178,6 @@ export class PluginKeychainVault implements ICactusPlugin, IPluginWebService {
       const ep = new GetPrometheusExporterMetricsEndpointV1(opts);
       endpoints.push(ep);
     }
-
     this.endpoints = endpoints;
 
     return endpoints;
@@ -203,7 +212,7 @@ export class PluginKeychainVault implements ICactusPlugin, IPluginWebService {
   }
 
   public getEncryptionAlgorithm(): string {
-    return null as any;
+    return "AES256";
   }
 
   protected pathFor(key: string): string {
