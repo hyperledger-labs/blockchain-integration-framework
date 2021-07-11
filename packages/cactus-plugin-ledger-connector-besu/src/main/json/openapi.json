@@ -55,7 +55,78 @@
                     }
                 }
             },
+            "EvmBlock":{
+                "type":"object",
+                "properties":{
+                    "number":{
+                        "type":"number"
+                    },
+                    "hash":{
+                        "type":"string"
+                    },
+                    "parentHash":{
+                        "type":"string"
+                    },
+                    "nonce":{
+                        "type":"string"
+                    },
+                    "sha3Uncles":{
+                        "type":"string"
+                    },
+                    "logsBloom":{
+                        "type":"string"
+                    },
+                    "transactionsRoot":{
+                        "type":"string"
+                    },
+                    "stateRoot":{
+                        "type":"string"
+                    },
+                    "miner":{
+                        "type":"string"
+                    },
+                    "difficulty":{
+                        "type":"number"
+                    },
+                    "totalDifficulty":{
+                        "type":"number"
+                    },
+                    "extraData":{
+                        "type":"string"
+                    },
+                    "size":{
+                        "type":"number"
+                    },
+                    "gasLimit":{
+                        "type":"number"
+                    },
+                    "gasUsed":{
+                        "type":"number"
+                    },
+                    "timestamp":{
+                    },
+                    "transactions":{
+                        "type":"array",
+                        "items":{}
+                    },
+                    "uncles":{
+                        "type":"array",
+                        "items":{}
+                    }
+                }
+            },
+            "GetBlockV1Response": {
+                "type": "object",
+                "required": [
+                    "block"                    
+                ],
+                "properties": {
+                    "block": {
+                        "$ref":"#/components/schemas/EvmBlock"
+                    }
 
+                }
+            },
             "EvmTransaction":{
                 "type":"object",
                 "properties":{
@@ -98,9 +169,8 @@
                 "properties": {
                     "transaction": {
                         "$ref":"#/components/schemas/EvmTransaction"
-                        }
                     }
-               
+                }
             },
             "GetTransactionV1Request": {
                 "type": "object",
@@ -108,9 +178,9 @@
                 "properties": {
                     "transactionHash":{
                         "type": "string"
-                        }
                     }
-                },        
+                }
+            },       
             "GetPastLogsV1Response": {
                 "type": "object",
                 "required": [
@@ -187,6 +257,14 @@
                     "type": "number"
                   }
               }
+            },
+            "GetBlockV1Request": {
+                "required": ["blockHashOrBlockNumber"],
+                "type": "object",
+                "properties": {
+                    "blockHashOrBlockNumber": {
+                    }
+                }
             },
             "WatchBlocksV1": {
                 "type": "string",
@@ -949,6 +1027,40 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/GetBalanceV1Response"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-block": {
+            "post": {
+                "x-hyperledger-cactus": {
+                    "http": {
+                        "verbLowerCase": "post",
+                        "path": "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-block"
+                    }
+                },
+                "operationId": "getBlockV1",
+                "summary": "Returns a block matching the block",
+                "parameters": [],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/GetBlockV1Request"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GetBlockV1Response"
                                 }
                             }
                         }

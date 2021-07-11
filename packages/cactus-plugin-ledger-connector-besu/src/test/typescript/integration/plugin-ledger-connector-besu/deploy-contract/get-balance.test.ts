@@ -31,7 +31,7 @@ test("can get balance of an account", async (t: Test) => {
    *
    * @see https://github.com/hyperledger/besu/blob/1.5.1/config/src/main/resources/dev.json
    */
-  const firstHighNetWorthAccount = "627306090abaB3A6e1400e9345bC60c78a8BEf57";
+  const firstHighNetWorthAccount = besuTestLedger.getGenesisAccountPubKey();
   const web3 = new Web3(rpcApiHttpHost);
   const testEthAccount = web3.eth.accounts.create(uuidv4());
 

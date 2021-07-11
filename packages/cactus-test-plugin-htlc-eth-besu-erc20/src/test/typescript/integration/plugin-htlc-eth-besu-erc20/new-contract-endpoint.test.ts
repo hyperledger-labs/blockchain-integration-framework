@@ -37,7 +37,8 @@ import TestTokenJSON from "../../../solidity/token-erc20-contract/Test_Token.jso
 const logLevel: LogLevelDesc = "INFO";
 const estimatedGas = 6721975;
 const expiration = 2147483648;
-const receiver = "0x627306090abaB3A6e1400e9345bC60c78a8BEf57";
+const besuTestLedger = new BesuTestLedger({ logLevel });
+const receiver = "0x" + besuTestLedger.getGenesisAccountPubKey();
 const hashLock =
   "0x3c335ba7f06a8b01d0596589f73c19069e21c81e5013b91f408165d1bf623d32";
 const firstHighNetWorthAccount = "0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1";

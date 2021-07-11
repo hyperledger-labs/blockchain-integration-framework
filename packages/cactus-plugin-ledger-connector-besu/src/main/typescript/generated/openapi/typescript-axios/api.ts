@@ -190,6 +190,121 @@ export enum EthContractInvocationType {
 /**
  * 
  * @export
+ * @interface EvmBlock
+ */
+export interface EvmBlock {
+    /**
+     * 
+     * @type {number}
+     * @memberof EvmBlock
+     */
+    number?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof EvmBlock
+     */
+    hash?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EvmBlock
+     */
+    parentHash?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EvmBlock
+     */
+    nonce?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EvmBlock
+     */
+    sha3Uncles?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EvmBlock
+     */
+    logsBloom?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EvmBlock
+     */
+    transactionsRoot?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EvmBlock
+     */
+    stateRoot?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof EvmBlock
+     */
+    miner?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof EvmBlock
+     */
+    difficulty?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof EvmBlock
+     */
+    totalDifficulty?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof EvmBlock
+     */
+    extraData?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof EvmBlock
+     */
+    size?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof EvmBlock
+     */
+    gasLimit?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof EvmBlock
+     */
+    gasUsed?: number;
+    /**
+     * 
+     * @type {any}
+     * @memberof EvmBlock
+     */
+    timestamp?: any | null;
+    /**
+     * 
+     * @type {Array<any>}
+     * @memberof EvmBlock
+     */
+    transactions?: Array<any>;
+    /**
+     * 
+     * @type {Array<any>}
+     * @memberof EvmBlock
+     */
+    uncles?: Array<any>;
+}
+/**
+ * 
+ * @export
  * @interface EvmLog
  */
 export interface EvmLog {
@@ -346,6 +461,32 @@ export interface GetBalanceV1Response {
      * @memberof GetBalanceV1Response
      */
     balance: string;
+}
+/**
+ * 
+ * @export
+ * @interface GetBlockV1Request
+ */
+export interface GetBlockV1Request {
+    /**
+     * 
+     * @type {any}
+     * @memberof GetBlockV1Request
+     */
+    blockHashOrBlockNumber: any | null;
+}
+/**
+ * 
+ * @export
+ * @interface GetBlockV1Response
+ */
+export interface GetBlockV1Response {
+    /**
+     * 
+     * @type {EvmBlock}
+     * @memberof GetBlockV1Response
+     */
+    block: EvmBlock;
 }
 /**
  * 
@@ -1058,6 +1199,40 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Returns a block matching the block
+         * @param {GetBlockV1Request} [getBlockV1Request] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getBlockV1: async (getBlockV1Request?: GetBlockV1Request, options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-block`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(getBlockV1Request, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Gets past logs, matching the given options.
          * @param {GetPastLogsV1Request} [getPastLogsV1Request] 
          * @param {*} [options] Override http request option.
@@ -1269,6 +1444,17 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Returns a block matching the block
+         * @param {GetBlockV1Request} [getBlockV1Request] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getBlockV1(getBlockV1Request?: GetBlockV1Request, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetBlockV1Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getBlockV1(getBlockV1Request, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Gets past logs, matching the given options.
          * @param {GetPastLogsV1Request} [getPastLogsV1Request] 
          * @param {*} [options] Override http request option.
@@ -1363,6 +1549,16 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Returns a block matching the block
+         * @param {GetBlockV1Request} [getBlockV1Request] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getBlockV1(getBlockV1Request?: GetBlockV1Request, options?: any): AxiosPromise<GetBlockV1Response> {
+            return localVarFp.getBlockV1(getBlockV1Request, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Gets past logs, matching the given options.
          * @param {GetPastLogsV1Request} [getPastLogsV1Request] 
          * @param {*} [options] Override http request option.
@@ -1454,6 +1650,18 @@ export class DefaultApi extends BaseAPI {
      */
     public apiV1BesuRunTransaction(runTransactionRequest?: RunTransactionRequest, options?: any) {
         return DefaultApiFp(this.configuration).apiV1BesuRunTransaction(runTransactionRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Returns a block matching the block
+     * @param {GetBlockV1Request} [getBlockV1Request] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public getBlockV1(getBlockV1Request?: GetBlockV1Request, options?: any) {
+        return DefaultApiFp(this.configuration).getBlockV1(getBlockV1Request, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

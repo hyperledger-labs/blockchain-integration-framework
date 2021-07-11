@@ -66,9 +66,10 @@ import {
   Web3SigningCredentialType,
   GetTransactionV1Request,
   GetTransactionV1Response,
-} from "./generated/openapi/typescript-axios/";
+  GetBlockV1Request,
+  GetBlockV1Response,
+} from "./generated/openapi/typescript-axios";
 
-import { RunTransactionEndpoint } from "./web-services/run-transaction-endpoint";
 import { InvokeContractEndpoint } from "./web-services/invoke-contract-endpoint";
 import { isWeb3SigningCredentialNone } from "./model-type-guards";
 import { BesuSignTransactionEndpointV1 } from "./web-services/sign-transaction-endpoint-v1";
@@ -81,6 +82,8 @@ import { WatchBlocksV1Endpoint } from "./web-services/watch-blocks-v1-endpoint";
 import { GetBalanceEndpoint } from "./web-services/get-balance-endpoint";
 import { GetTransactionEndpoint } from "./web-services/get-transaction-endpoint";
 import { GetPastLogsEndpoint } from "./web-services/get-past-logs-endpoint";
+import { RunTransactionEndpoint } from "./web-services/run-transaction-endpoint";
+import { GetBlockEndpoint } from "./web-services/get-block-v1-endpoint-";
 
 export const E_KEYCHAIN_NOT_FOUND = "cactus.connector.besu.keychain_not_found";
 
@@ -235,6 +238,13 @@ export class PluginLedgerConnectorBesu
     }
     {
       const endpoint = new RunTransactionEndpoint({
+        connector: this,
+        logLevel: this.options.logLevel,
+      });
+      endpoints.push(endpoint);
+    }
+    {
+      const endpoint = new GetBlockEndpoint({
         connector: this,
         logLevel: this.options.logLevel,
       });
@@ -756,5 +766,12 @@ export class PluginLedgerConnectorBesu
   ): Promise<GetPastLogsV1Response> {
     const logs = await this.web3.eth.getPastLogs(request);
     return { logs };
+  }
+
+  public async getBlock(
+    request: GetBlockV1Request,
+  ): Promise<GetBlockV1Response> {
+    const block = await this.web3.eth.getBlock(request.blockHashOrBlockNumber);
+    return { block };
   }
 }

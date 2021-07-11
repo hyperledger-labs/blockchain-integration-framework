@@ -1,8 +1,0 @@
-{
-  "appId": "org.hyperledger.cactus",
-  "appName": "Cactus Cockpit",
-  "bundledWebRuntime": false,
-  "npmClient": "npm",
-  "webDir": "www",
-  "cordova": {}
-}

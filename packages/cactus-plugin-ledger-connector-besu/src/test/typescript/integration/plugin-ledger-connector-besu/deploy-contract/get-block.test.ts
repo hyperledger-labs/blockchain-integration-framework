@@ -4,7 +4,7 @@ import { PluginRegistry } from "@hyperledger/cactus-core";
 import {
   PluginLedgerConnectorBesu,
   PluginFactoryLedgerConnector,
-  GetPastLogsV1Request,
+  GetBlockV1Request,
 } from "../../../../../main/typescript/public-api";
 import { PluginKeychainMemory } from "@hyperledger/cactus-plugin-keychain-memory";
 import { BesuTestLedger } from "@hyperledger/cactus-test-tooling";
@@ -13,7 +13,7 @@ import HelloWorldContractJson from "../../../../solidity/hello-world-contract/He
 import Web3 from "web3";
 import { PluginImportType } from "@hyperledger/cactus-core-api";
 
-test("can get past logs of an account", async (t: Test) => {
+test("can get block from blockchain", async (t: Test) => {
   const logLevel: LogLevelDesc = "TRACE";
   const besuTestLedger = new BesuTestLedger();
   await besuTestLedger.start();
@@ -25,14 +25,6 @@ test("can get past logs of an account", async (t: Test) => {
 
   const rpcApiHttpHost = await besuTestLedger.getRpcApiHttpHost();
   const rpcApiWsHost = await besuTestLedger.getRpcApiWsHost();
-
-  /**
-   * Constant defining the standard 'dev' Besu genesis.json contents.
-   *
-   * @see https://github.com/hyperledger/besu/blob/1.5.1/config/src/main/resources/dev.json
-   */
-  const firstHighNetWorthAccount = besuTestLedger.getGenesisAccountPubKey();
-
   const web3 = new Web3(rpcApiHttpHost);
   const testEthAccount = web3.eth.accounts.create(uuidv4());
 
@@ -54,7 +46,6 @@ test("can get past logs of an account", async (t: Test) => {
   const factory = new PluginFactoryLedgerConnector({
     pluginImportType: PluginImportType.Local,
   });
-
   const connector: PluginLedgerConnectorBesu = await factory.create({
     rpcApiHttpHost,
     rpcApiWsHost,
@@ -62,10 +53,11 @@ test("can get past logs of an account", async (t: Test) => {
     pluginRegistry: new PluginRegistry({ plugins: [keychainPlugin] }),
   });
 
-  const req: GetPastLogsV1Request = { address: firstHighNetWorthAccount };
-  const pastLogs = await connector.getPastLogs(req);
-  t.comment(JSON.stringify(pastLogs));
-  t.ok(pastLogs, "Past logs response is OK :-)");
-  t.equal(typeof pastLogs, "object", "Past logs response type is OK :-)");
+  const request: GetBlockV1Request = { blockHashOrBlockNumber: 0 };
+  const currentBlock = await connector.getBlock(request);
+  t.comment(JSON.stringify(currentBlock));
+  //makes the information in to string
+  t.ok(currentBlock, " Block response is OK :-)");
+  t.equal(typeof currentBlock, "object", "Block response type is OK :-)");
   t.end();
 });
