@@ -68,6 +68,14 @@ export {
 } from "./vault-test-server/vault-test-server";
 
 export {
+  ILocalStackContainerOptions,
+  LocalStackContainer,
+  K_DEFAULT_LOCALSTACK_HTTP_PORT,
+  K_DEFAULT_LOCALSTACK_IMAGE_NAME,
+  K_DEFAULT_LOCALSTACK_IMAGE_VERSION,
+} from "./localstack/localstack-container";
+
+export {
   CORDA_CONNECTOR_DEFAULT_OPTIONS,
   CORDA_CONNECTOR_OPTIONS_JOI_SCHEMA,
   CordaConnectorContainer,

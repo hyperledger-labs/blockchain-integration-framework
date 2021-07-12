@@ -1,0 +1,102 @@
+{
+  "name": "@hyperledger/cactus-plugin-keychain-aws-sm",
+  "version": "0.5.0",
+  "description": "A keychain implementation storing its entries in AWS Secret Manger.",
+  "main": "dist/lib/main/typescript/index.js",
+  "mainMinified": "dist/cactus-plugin-keychain-aws-sm.node.umd.min.js",
+  "browser": "dist/cactus-plugin-keychain-aws-sm.web.umd.js",
+  "browserMinified": "dist/cactus-plugin-keychain-aws-sm.web.umd.min.js",
+  "module": "dist/lib/main/typescript/index.js",
+  "types": "dist/types/main/typescript/index.d.ts",
+  "files": [
+    "dist/*"
+  ],
+  "scripts": {
+    "generate-sdk": "docker run --rm -v \"${PWD}/../../:/local\" openapitools/openapi-generator-cli:v5.1.1 generate -i ./local/packages/cactus-plugin-keychain-aws-sm/src/main/json/openapi.json -g typescript-axios -o ./local/packages/cactus-plugin-keychain-aws-sm/src/main/typescript/generated/openapi/typescript-axios/",
+    "tsc": "tsc --project ./tsconfig.json",
+    "watch": "npm-watch",
+    "pretsc": "npm run generate-sdk",
+    "webpack": "npm-run-all webpack:dev webpack:prod",
+    "webpack:dev": "npm-run-all webpack:dev:node webpack:dev:web",
+    "webpack:dev:web": "webpack --env=dev --target=web --config ../../webpack.config.js",
+    "webpack:dev:node": "webpack --env=dev --target=node --config ../../webpack.config.js",
+    "webpack:prod": "npm-run-all webpack:prod:node webpack:prod:web",
+    "webpack:prod:web": "webpack --env=prod --target=web --config ../../webpack.config.js",
+    "webpack:prod:node": "webpack --env=prod --target=node --config ../../webpack.config.js"
+  },
+  "watch": {
+    "tsc": {
+      "patterns": [
+        "src/",
+        "src/*/json/**/openapi*"
+      ],
+      "ignore": [
+        "src/**/generated/*"
+      ],
+      "extensions": [
+        "ts",
+        "json"
+      ],
+      "quiet": true,
+      "verbose": false,
+      "runOnChangeOnly": true
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=10",
+    "npm": ">=6"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hyperledger/cactus.git"
+  },
+  "keywords": [
+    "Hyperledger",
+    "Cactus",
+    "Integration",
+    "Blockchain",
+    "Distributed Ledger Technology"
+  ],
+  "author": {
+    "name": "Hyperledger Cactus Contributors",
+    "email": "cactus@lists.hyperledger.org",
+    "url": "https://www.hyperledger.org/use/cactus"
+  },
+  "contributors": [
+    {
+      "name": "Please add yourself to the list of contributors",
+      "email": "your.name@example.com",
+      "url": "https://example.com"
+    },
+    {
+      "name": "Jagpreet Singh Sasan",
+      "email": "jagpreet.singh.sasan@accenture.com",
+      "url": "https://accenture.com"
+    }
+  ],
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/hyperledger/cactus/issues"
+  },
+  "homepage": "https://github.com/hyperledger/cactus#readme",
+  "dependencies": {
+    "@hyperledger/cactus-common": "0.5.0",
+    "@hyperledger/cactus-core": "0.5.0",
+    "@hyperledger/cactus-core-api": "0.5.0",
+    "aws-sdk": "2.903.0",
+    "axios": "0.21.1",
+    "http-status-codes": "2.1.4",
+    "typescript-optional": "2.0.1"
+  },
+  "devDependencies": {
+    "@hyperledger/cactus-test-tooling": "0.5.0",
+    "@types/express-serve-static-core": "4.17.17",
+    "@types/request": "2.48.5",
+    "@types/express": "4.17.8",
+    "internal-ip": "6.2.0",
+    "openapi-types": "7.2.2"
+  }
+}
