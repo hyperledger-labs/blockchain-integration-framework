@@ -2,11 +2,15 @@ import { Server } from "http";
 import { Server as SecureServer } from "https";
 import { Optional } from "typescript-optional";
 import { promisify } from "util";
-import express, { Express } from "express";
+import express, { Express, NextFunction, Request, Response } from "express";
 import bodyParser from "body-parser";
 import { JWS, JWK } from "jose";
 import jsonStableStringify from "json-stable-stringify";
 import { v4 as uuidv4 } from "uuid";
+
+import OAS from "../json/openapi.json";
+import * as OpenApiValidator from "express-openapi-validator";
+import { OpenAPIV3 } from "express-openapi-validator/dist/framework/types";
 
 import {
   ConsortiumDatabase,
@@ -85,6 +89,10 @@ export class PluginConsortiumManual
       `${fnTag} options.prometheusExporter`,
     );
     this.prometheusExporter.setNodeCount(this.getNodeCount());
+  }
+
+  getOpenApiSpecs(): OpenAPIV3.Document {
+    return (OAS as unknown) as OpenAPIV3.Document;
   }
 
   public getInstanceId(): string {
@@ -168,6 +176,41 @@ export class PluginConsortiumManual
     }
 
     const webServices = await this.getOrCreateWebServices();
+    const apiSpec = this.getOpenApiSpecs();
+    const openApiMiddleware = OpenApiValidator.middleware({
+      apiSpec,
+      validateApiSpec: false,
+      $refParser: {
+        mode: "dereference",
+      },
+    });
+    app.use(openApiMiddleware);
+    app.use(
+      (
+        err: {
+          status?: number;
+          errors: [
+            {
+              path: string;
+              message: string;
+              errorCode: string;
+            },
+          ];
+        },
+        req: Request,
+        res: Response,
+        next: NextFunction,
+      ) => {
+        if (err) {
+          console.log(err);
+          res.status(err.status || 500);
+          res.send(err.errors);
+        } else {
+          next();
+        }
+      },
+    );
+
     webServices.forEach((ws) => ws.registerExpress(webApp));
     return webServices;
   }
