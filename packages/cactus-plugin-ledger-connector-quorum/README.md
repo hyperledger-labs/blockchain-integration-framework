@@ -86,6 +86,125 @@ To check that all has been installed correctly and that the pugin has no errors,
 ```sh
 npm run test:plugin-ledger-connector-quorum
 ```
+
+### Building/running the container image locally
+
+In the Cactus project root say:
+
+```sh
+DOCKER_BUILDKIT=1 docker build -f ./packages/cactus-plugin-ledger-connector-quorum/Dockerfile . -t cplcb
+```
+
+Build with a specific version of the npm package:
+```sh
+DOCKER_BUILDKIT=1 docker build --build-arg NPM_PKG_VERSION=0.4.1 -f ./packages/cactus-plugin-ledger-connector-quorum/Dockerfile . -t cplcb
+```
+
+#### Running the container
+
+Launch container with plugin configuration as an **environment variable**:
+```sh
+docker run \
+  --rm \
+  --publish 3000:3000 \
+  --publish 4000:4000 \
+  --env PLUGINS='[{"packageName": "@hyperledger/cactus-plugin-ledger-connector-quorum", "type": "org.hyperledger.cactus.plugin_import_type.LOCAL",  "options": {"rpcApiHttpHost": "http://localhost:8545", "instanceId": "some-unique-quorum-connector-instance-id"}}]' \
+  cplcb
+```
+
+Launch container with plugin configuration as a **CLI argument**:
+```sh
+docker run \
+  --rm \
+  --publish 3000:3000 \
+   --publish 4000:4000 \
+  cplcb \
+    ./node_modules/.bin/cactusapi \
+    --plugins='[{"packageName": "@hyperledger/cactus-plugin-ledger-connector-quorum", "type": "org.hyperledger.cactus.plugin_import_type.LOCAL",  "options": {"rpcApiHttpHost": "http://localhost:8545", "instanceId": "some-unique-quorum-connector-instance-id"}}]'
+```
+
+Launch container with **configuration file** mounted from host machine:
+```sh
+
+echo '[{"packageName": "@hyperledger/cactus-plugin-ledger-connector-quorum", "type": "org.hyperledger.cactus.plugin_import_type.LOCAL",  "options": {"rpcApiHttpHost": "http://localhost:8545", "instanceId": "some-unique-quorum-connector-instance-id"}}]' > cactus.json
+
+docker run \
+  --rm \
+  --publish 3000:3000 \
+  --publish 4000:4000 \
+  --mount type=bind,source="$(pwd)"/cactus.json,target=/cactus.json \
+  cplcb \
+    ./node_modules/.bin/cactusapi \
+    --config-file=/cactus.json
+```
+
+#### Testing API calls with the container
+
+Don't have a quorum network on hand to test with? Test or develop against our quorum All-In-One container!
+
+**Terminal Window 1 (Ledger)**
+```sh
+docker run -p 0.0.0.0:8545:8545/tcp  -p 0.0.0.0:8546:8546/tcp  -p 0.0.0.0:8888:8888/tcp  -p 0.0.0.0:9001:9001/tcp  -p 0.0.0.0:9545:9545/tcp hyperledger/cactus-quorum-all-in-one:latest
+```
+
+**Terminal Window 2 (Cactus API Server)**
+```sh
+docker run \
+  --network host \
+  --rm \
+  --publish 3000:3000 \
+  --publish 4000:4000 \
+  --env PLUGINS='[{"packageName": "@hyperledger/cactus-plugin-ledger-connector-quorum", "type": "org.hyperledger.cactus.plugin_import_type.LOCAL",  "options": {"rpcApiHttpHost": "http://localhost:8545", "instanceId": "some-unique-quorum-connector-instance-id"}}]' \
+  cplcb
+```
+
+**Terminal Window 3 (curl - replace eth accounts as needed)**
+```sh
+curl --location --request POST 'http://127.0.0.1:4000/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-quorum/run-transaction' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "web3SigningCredential": {
+      "ethAccount": "627306090abaB3A6e1400e9345bC60c78a8BEf57",
+      "secret": "c87509a1c067bbde78beb793e6fa76530b6382a4c0241e5e4a9ec0a0f44dc0d3",
+      "type": "PRIVATE_KEY_HEX"
+    },
+    "consistencyStrategy": {
+      "blockConfirmations": 0,
+      "receiptType": "NODE_TX_POOL_ACK"
+    },
+    "transactionConfig": {
+      "from": "627306090abaB3A6e1400e9345bC60c78a8BEf57",
+      "to": "f17f52151EbEF6C7334FAD080c5704D77216b732",
+      "value": 1,
+      "gas": 10000000
+    }
+}'
+```
+
+The above should produce a response that looks similar to this:
+
+```json
+{
+    "success": true,
+    "data": {
+        "transactionReceipt": {
+            "blockHash": "0x7c97c038a5d3bd84613fe23ed442695276d5d2df97f4e7c4f10ca06765033ffd",
+            "blockNumber": 1218,
+            "contractAddress": null,
+            "cumulativeGasUsed": 21000,
+            "from": "0x627306090abab3a6e1400e9345bc60c78a8bef57",
+            "gasUsed": 21000,
+            "logs": [],
+            "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+            "status": true,
+            "to": "0xf17f52151ebef6c7334fad080c5704d77216b732",
+            "transactionHash": "0xc7fcb46c735bdc696d500bfc70c72595a2b8c31813929e5c61d9a5aec3376d6f",
+            "transactionIndex": 0
+        }
+    }
+}
+```
+
 ## Prometheus Exporter
 
 This class creates a prometheus exporter, which scrapes the transactions (total transaction count) for the use cases incorporating the use of Quorum connector plugin.
