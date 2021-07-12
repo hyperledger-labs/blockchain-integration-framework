@@ -1,4 +1,2 @@
-# TSLint configuration parameter
-packages/cactus-cockpit/tslint.json
 # Besu CLI argument
 tools/docker/besu-all-in-one/supervisord.conf

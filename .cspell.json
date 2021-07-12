@@ -79,7 +79,7 @@
         "htlc"
     ],
     "dictionaries": [
-        "typescript,node,npm,go"
+        "typescript,node,npm,go,rust"
     ],
     "ignorePaths": [
         "node_modules/**",

@@ -1,5 +1,12 @@
 {
+  "include": [
+    "src",
+    "src/**/*.json",
+  ],
   "compilerOptions": {
+    "paths": {
+      "@hyperledger/cactus-*": ["./*/src"]
+    },
     /* Basic Options */
     "incremental": true,                   /* Enable incremental compilation */
     "target": "ES2017", /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019' or 'ESNEXT'. */
@@ -8,6 +15,7 @@
       "es2015",
       "es2016",
       "es2017",
+      "es2019",
       "dom"
     ], /* Specify library files to be included in the compilation. */
     // "allowJs": true,                       /* Allow javascript files to be compiled. */
@@ -22,13 +30,13 @@
     // "rootDir": "./",                       /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */
     // "composite": true,                     /* Enable project compilation */
     // "tsBuildInfoFile": "./",               /* Specify file to store incremental compilation information */
-    // "removeComments": true,                /* Do not emit comments to output. */
+    "removeComments": false,                /* Do not emit comments to output. */
     // "noEmit": true,                        /* Do not emit outputs. */
     // "importHelpers": true,                 /* Import emit helpers from 'tslib'. */
     // "downlevelIteration": true,            /* Provide full support for iterables in 'for-of', spread, and destructuring when targeting 'ES5' or 'ES3'. */
     // "isolatedModules": true,               /* Transpile each file as a separate module (similar to 'ts.transpileModule'). */
     /* Strict Type-Checking Options */
-//    "strict": true, /* Enable all strict type-checking options. */
+    "strict": true, /* Enable all strict type-checking options. */
     // "noImplicitAny": true,                 /* Raise error on expressions and declarations with an implied 'any' type. */
     // "strictNullChecks": true,              /* Enable strict null checks. */
     // "strictFunctionTypes": true,           /* Enable strict checking of function types. */
@@ -65,18 +73,6 @@
     // "experimentalDecorators": true,        /* Enables experimental support for ES7 decorators. */
     // "emitDecoratorMetadata": true,         /* Enables experimental support for emitting type metadata for decorators. */
     /* Advanced Options */
-    "forceConsistentCasingInFileNames": true, /* Disallow inconsistently-cased references to the same file. */
-    "outDir": "../dist/packages"
+    "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file. */
   },
-  "include": [
-    "./business-logic-plugin/*.ts",
-    "./config/*.ts",
-    "./ledger-plugin/*.ts",
-    "./ledger-plugin/util/*.ts",
-    "./routing-interface/**/*.ts"
-  ],
-  "exclude": [
-    "copyStaticAssets.ts",
-    "./ledger-plugin/ValidatorAuthentication.ts"
-  ]
 }

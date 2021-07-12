@@ -1,11 +1,22 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "./dist/lib/", /* Redirect output structure to the directory. */
+    "composite": true,
+    "outDir": "./dist/lib/",
     "declarationDir": "dist/types",
     "resolveJsonModule": true,
+    "rootDir": "./src",
+    "tsBuildInfoFile": "../../.build-cache/cactus-core.tsbuildinfo"
   },
   "include": [
     "./src"
+  ],
+  "references": [
+    {
+      "path": "../cactus-common/tsconfig.json"
+    },
+    {
+      "path": "../cactus-core-api/tsconfig.json"
+    }
   ]
 }

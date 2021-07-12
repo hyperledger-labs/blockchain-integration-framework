@@ -94,7 +94,6 @@
     "web3-eth-contract": "1.2.7"
   },
   "devDependencies": {
-    "@hyperledger/cactus-common": "0.2.0",
     "@hyperledger/cactus-plugin-keychain-memory": "0.5.0",
     "@hyperledger/cactus-test-tooling": "0.5.0",
     "@types/express": "4.17.8",

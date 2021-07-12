@@ -19,23 +19,23 @@ jobs:
       max-parallel: 1024
       matrix:
         os: [ubuntu-20.04]
-        node-version: [v12.13.0, v14.15.1, v16.2.0]
+        node-version: [v12.22.3, v14.15.1, v16.2.0]
         experimental: [false]
         # include:
         #
         # # FIXME macOS does not work due to lack of docker support in GHA.
         # https://github.community/t/why-is-docker-not-installed-on-macos/17017
         #   - os: macos-11.0 # macOS Big Sur 11.0
-        #     node-version: v12.13.0
+        #     node-version: v12.22.3
         #     experimental: true
         #   - os: macos-10.15 # macOS Catalina 10.15
-        #     node-version: v12.13.0
+        #     node-version: v12.22.3
         #     experimental: true
         #
         # # FIXME
         # https://github.com/hyperledger/cactus/issues/171
         #   - os: windows-2019 # Windows Server 2019
-        #     node-version: v12.13.0
+        #     node-version: v12.22.3
         #     experimental: true
 
     steps:

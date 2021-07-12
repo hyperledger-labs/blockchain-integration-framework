@@ -19,7 +19,6 @@ module.exports = {
         test: /\.ts$/,
         exclude: /node_modules/,
         use: [
-          "cache-loader",
           {
             loader: "ts-loader",
             options: {
@@ -33,7 +32,6 @@ module.exports = {
         test: /\.(js|ts)$/,
         enforce: "pre",
         use: [
-          "cache-loader",
           {
             loader: "source-map-loader",
           },

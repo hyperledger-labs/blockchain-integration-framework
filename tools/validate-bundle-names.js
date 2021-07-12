@@ -3,7 +3,7 @@
 const { getPackageInfoList } = require("./get-package-info-list");
 
 const main = async () => {
-  const packageInfoList = await getPackageInfoList([/cactus-cockpit/]);
+  const packageInfoList = await getPackageInfoList([]);
 
   const errors = [];
 

@@ -571,7 +571,7 @@ export class ApiServer {
       },
     });
 
-    this.wsApi.use(socketIoAuthorizer);
+    this.wsApi.use(socketIoAuthorizer as never);
 
     return addressInfo;
   }

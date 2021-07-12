@@ -1,10 +1,11 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "composite": true,
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
-    "declaration": false,
+    "declaration": true,
     "downlevelIteration": true,
     "experimentalDecorators": true,
     "module": "esnext",
@@ -17,9 +18,38 @@
       "dom"
     ],
     "resolveJsonModule": true,
+    "rootDir": "./src",
+    "skipLibCheck": true,
+    "tsBuildInfoFile": "../../.build-cache/cactus-example-supply-chain-frontend.tsbuildinfo"
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
     "strictInjectionParameters": true
-  }
+  },
+  "references": [
+    {
+      "path": "../../packages/cactus-api-client/tsconfig.json"
+    },
+    {
+      "path": "../../packages/cactus-common/tsconfig.json"
+    },
+    {
+      "path": "../../packages/cactus-core-api/tsconfig.json"
+    },
+    {
+      "path": "../cactus-example-supply-chain-business-logic-plugin/tsconfig.json"
+    },
+    {
+      "path": "../../packages/cactus-plugin-consortium-manual/tsconfig.json"
+    },
+    {
+      "path": "../../packages/cactus-plugin-ledger-connector-besu/tsconfig.json"
+    },
+    {
+      "path": "../../packages/cactus-plugin-ledger-connector-fabric/tsconfig.json"
+    },
+    {
+      "path": "../../packages/cactus-plugin-ledger-connector-quorum/tsconfig.json"
+    }
+  ]
 }

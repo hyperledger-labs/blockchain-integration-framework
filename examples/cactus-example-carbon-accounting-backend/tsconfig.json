@@ -1,11 +1,47 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "./dist/lib/", /* Redirect output structure to the directory. */
+    "composite": true,
+    "outDir": "./dist/lib/",
     "declarationDir": "dist/types",
+    "rootDir": "./src",
+    "tsBuildInfoFile": "../../.build-cache/cactus-example-carbon-accounting-backend.tsbuildinfo"
   },
+  "references": [
+    {
+      "path": "../../packages/cactus-api-client/tsconfig.json"
+    },
+    {
+      "path": "../../packages/cactus-cmd-api-server/tsconfig.json"
+    },
+    {
+      "path": "../../packages/cactus-common/tsconfig.json"
+    },
+    {
+      "path": "../../packages/cactus-core/tsconfig.json"
+    },
+    {
+      "path": "../../packages/cactus-core-api/tsconfig.json"
+    },
+    {
+      "path": "../cactus-example-carbon-accounting-business-logic-plugin/tsconfig.json"
+    },
+    {
+      "path": "../../packages/cactus-plugin-keychain-memory/tsconfig.json"
+    },
+    {
+      "path": "../../packages/cactus-plugin-ledger-connector-fabric/tsconfig.json"
+    },
+    {
+      "path": "../../packages/cactus-plugin-ledger-connector-xdai/tsconfig.json"
+    },
+    {
+      "path": "../../packages/cactus-test-tooling/tsconfig.json"
+    }
+  ],
   "include": [
-    "./src"
+    "./src",
+    "src/**/*.json",
   ],
   "exclude": [
     "./src/utility-emissions-channel"

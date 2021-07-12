@@ -85,28 +85,13 @@ function mainTask()
   java -version
 
   # install npm 7 globally - needed because Node v12, v14 default to npm v6
-  npm install -g npm@7.14.0
+  npm install -g npm@7.19.1
   npm --version
 
   ### COMMON
   cd $PROJECT_ROOT_DIR
 
-  # https://stackoverflow.com/a/61789467
-  npm config list
-  npm config delete proxy
-  npm config delete http-proxy
-  npm config delete https-proxy
-
-  # https://stackoverflow.com/a/15483897
-  npm cache verify
-  npm cache clean --force
-  npm cache verify
-
-  npm ci
-  ./node_modules/.bin/lerna bootstrap
-
-  # The "quick" build that is enough for the tests to be runnable
-  npm run build:dev:backend
+  npm run configure
 
   # Tests are still flaky (on weak hardware such as the CI env) despite our best
   # efforts so here comes the mighty hammer of brute force. 3 times the charm...
@@ -118,7 +103,7 @@ function mainTask()
     dumpDiskUsageInfo
     echo "$(date +%FT%T%z) [CI] First (#1) try of tests failed starting second try now..."
     npm run test:all -- --bail && echo "$(date +%FT%T%z) [CI] Second (#2) try of tests succeeded OK."
-    
+
   } ||
   {
     dumpDiskUsageInfo

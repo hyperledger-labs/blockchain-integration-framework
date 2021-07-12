@@ -1,5 +1,6 @@
 # Frequently Asked Questions - Hyperledger Cactus <!-- omit in toc -->
 
+- [npm install fails with `code EMFILE` (syscall connect)](#npm-install-fails-with-code-emfile-syscall-connect)
 - [Where does the project name come from?](#where-does-the-project-name-come-from)
 - [Re-building the code after I change it slow. What to do?](#re-building-the-code-after-i-change-it-slow-what-to-do)
 - [The watch script fails with `Internal watch failed: watch ENOSPC`](#the-watch-script-fails-with-internal-watch-failed-watch-enospc)
@@ -9,6 +10,20 @@
 - [What are the minimum and recommended hardware specs? Do you have a cool story about this?](#what-are-the-minimum-and-recommended-hardware-specs-do-you-have-a-cool-story-about-this)
 - [Why do all the tests bind the HTTP/S listeners to a random port?](#why-do-all-the-tests-bind-the-https-listeners-to-a-random-port)
 - [HTTP requests sent with Postman/curl/etc. hang if I'm debugging a test case with VSCode, why?](#http-requests-sent-with-postmancurletc-hang-if-im-debugging-a-test-case-with-vscode-why)
+
+## npm install fails with `code EMFILE` (syscall connect)
+
+If you encounter this error it happens because the number of open files permitted
+by your operating system is lower than the number of files npm needs to have open
+in order to finish installing your dependencies.
+
+You can most likely solve this problem (assuming you are running on the recommended
+operating system distribution) by running the command below on the terminal which
+will increase said limit to 200k from the default () 4096.
+
+```sh
+echo fs.file-max=200000 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+```
 
 ## Where does the project name come from?
 

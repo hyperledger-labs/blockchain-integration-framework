@@ -1,3 +1,8 @@
 module.exports = (_, options) => {
-  return require(`./webpack.${options.env}.${options.target}.js`);
+  const { env, target: targets } = options;
+  const { dev } = env;
+  const buildEnv = dev === true ? "dev" : "prod";
+  const [target] = targets;
+  const configPath = `./webpack.${buildEnv}.${target}.js`;
+  return require(configPath);
 };

@@ -1,11 +1,34 @@
 {
-    "extends": "../../tsconfig.json",
-    "compilerOptions": {
-      "outDir": "./dist/lib/", /* Redirect output structure to the directory. */
-      "declarationDir": "dist/types",
-      "resolveJsonModule": true,
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "./dist/lib/",
+    "declarationDir": "dist/types",
+    "resolveJsonModule": true,
+    "rootDir": "./src",
+    "tsBuildInfoFile": "../../.build-cache/cactus-test-plugin-ledger-connector-besu.tsbuildinfo"
+  },
+  "include": [
+    "./src"
+  ],
+  "references": [
+    {
+      "path": "../cactus-cmd-api-server/tsconfig.json"
     },
-    "include": [
-      "./src"
-    ]
-  }
+    {
+      "path": "../cactus-common/tsconfig.json"
+    },
+    {
+      "path": "../cactus-core/tsconfig.json"
+    },
+    {
+      "path": "../cactus-plugin-keychain-memory/tsconfig.json"
+    },
+    {
+      "path": "../cactus-plugin-ledger-connector-besu/tsconfig.json"
+    },
+    {
+      "path": "../cactus-test-tooling/tsconfig.json"
+    }
+  ]
+}

@@ -2,9 +2,6 @@
   "name": "@hyperledger/cactus-cmd-api-server",
   "version": "0.5.0",
   "description": "API server that combines and exposes all the functionality of a Cactus deployment through a unified REST API interface.",
-  "bin": {
-    "cactusapi": "./dist/lib/main/typescript/cmd/cactus-api.js"
-  },
   "files": [
     "dist/*"
   ],
@@ -104,7 +101,7 @@
     "http-status-codes": "2.1.4",
     "jose": "1.28.1",
     "node-forge": "0.10.0",
-    "npm": "7.8.0",
+    "npm": "7.19.1",
     "prom-client": "13.1.0",
     "rxjs": "7.1.0",
     "semver": "7.3.2",
@@ -126,7 +123,7 @@
     "@types/jsonwebtoken": "8.5.1",
     "@types/multer": "1.4.5",
     "@types/node-forge": "0.9.3",
-    "@types/npm": "2.0.31",
+    "@types/npm": "2.0.32",
     "@types/passport": "1.0.6",
     "@types/passport-oauth2": "1.4.10",
     "@types/passport-saml": "1.1.2",

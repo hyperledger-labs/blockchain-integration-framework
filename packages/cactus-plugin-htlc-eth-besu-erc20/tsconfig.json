@@ -1,11 +1,29 @@
 {
-    "extends": "../../tsconfig.json",
-    "compilerOptions": {
-      "outDir": "./dist/lib/", /* Redirect output structure to the directory. */
-      "declarationDir": "dist/types",
-      "resolveJsonModule": true,
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "./dist/lib/",
+    "declarationDir": "dist/types",
+    "resolveJsonModule": true,
+    "rootDir": "./src",
+    "tsBuildInfoFile": "../../.build-cache/cactus-plugin-htlc-eth-besu-erc20.tsbuildinfo"
+  },
+  "include": [
+    "./src",
+    "src/**/*.json",
+  ],
+  "references": [
+    {
+      "path": "../cactus-common/tsconfig.json"
     },
-    "include": [
-      "./src"
-    ]
+    {
+      "path": "../cactus-core/tsconfig.json"
+    },
+    {
+      "path": "../cactus-core-api/tsconfig.json"
+    },
+    {
+      "path": "../cactus-plugin-ledger-connector-besu/tsconfig.json"
+    }
+  ]
 }

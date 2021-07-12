@@ -66,6 +66,10 @@ export class PluginKeychainMemory {
     );
   }
 
+  public async kalap(): Promise<string> {
+    return "x";
+  }
+
   public getPrometheusExporter(): PrometheusExporter {
     return this.prometheusExporter;
   }

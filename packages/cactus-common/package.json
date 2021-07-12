@@ -83,7 +83,7 @@
   "dependencies": {
     "json-stable-stringify": "1.0.1",
     "key-encoder": "2.0.3",
-    "loglevel": "1.6.7",
+    "loglevel": "1.7.1",
     "loglevel-plugin-prefix": "0.8.4",
     "secp256k1": "4.0.2",
     "sha3": "2.1.3"
