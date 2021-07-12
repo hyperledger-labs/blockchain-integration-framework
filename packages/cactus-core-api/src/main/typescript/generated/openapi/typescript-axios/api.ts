@@ -293,6 +293,76 @@ export interface GetKeychainEntryResponse {
 /**
  * 
  * @export
+ * @interface GetObjectRequestV1
+ */
+export interface GetObjectRequestV1 {
+    /**
+     * The key for the entry to get from the object store.
+     * @type {string}
+     * @memberof GetObjectRequestV1
+     */
+    key: string;
+}
+/**
+ * 
+ * @export
+ * @interface GetObjectResponseV1
+ */
+export interface GetObjectResponseV1 {
+    /**
+     * The key that was used to retrieve the value from the object store.
+     * @type {string}
+     * @memberof GetObjectResponseV1
+     */
+    key: string;
+    /**
+     * The value associated with the requested key in the object store as a string.
+     * @type {string}
+     * @memberof GetObjectResponseV1
+     */
+    value: string;
+}
+/**
+ * 
+ * @export
+ * @interface HasObjectRequestV1
+ */
+export interface HasObjectRequestV1 {
+    /**
+     * The key to check for presence in the object store.
+     * @type {string}
+     * @memberof HasObjectRequestV1
+     */
+    key: string;
+}
+/**
+ * 
+ * @export
+ * @interface HasObjectResponseV1
+ */
+export interface HasObjectResponseV1 {
+    /**
+     * The key that was used to check the presence of the value in the object store.
+     * @type {string}
+     * @memberof HasObjectResponseV1
+     */
+    key: string;
+    /**
+     * Date and time encoded as JSON when the presence check was performed by the plugin backend.
+     * @type {string}
+     * @memberof HasObjectResponseV1
+     */
+    checkedAt: string;
+    /**
+     * The boolean true or false indicating the presence or absence of an object under \'key\'.
+     * @type {boolean}
+     * @memberof HasObjectResponseV1
+     */
+    isPresent: boolean;
+}
+/**
+ * 
+ * @export
  * @interface JWSGeneral
  */
 export interface JWSGeneral {
@@ -458,6 +528,38 @@ export interface SetKeychainEntryResponse {
      * The key that was used to set the value on the keychain.
      * @type {string}
      * @memberof SetKeychainEntryResponse
+     */
+    key: string;
+}
+/**
+ * 
+ * @export
+ * @interface SetObjectRequestV1
+ */
+export interface SetObjectRequestV1 {
+    /**
+     * The key for the entry to set in the object store.
+     * @type {string}
+     * @memberof SetObjectRequestV1
+     */
+    key: string;
+    /**
+     * The value that will be associated with the key in the object store.
+     * @type {string}
+     * @memberof SetObjectRequestV1
+     */
+    value: string;
+}
+/**
+ * 
+ * @export
+ * @interface SetObjectResponseV1
+ */
+export interface SetObjectResponseV1 {
+    /**
+     * The key that was used to set the value in the object store.
+     * @type {string}
+     * @memberof SetObjectResponseV1
      */
     key: string;
 }

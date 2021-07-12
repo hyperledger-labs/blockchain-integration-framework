@@ -29,3 +29,6 @@ export {
   IEndpointAuthzOptions,
   isIEndpointAuthzOptions,
 } from "./plugin/web-service/i-endpoint-authz-options";
+
+export { IPluginObjectStore } from "./plugin/object-store/i-plugin-object-store";
+export { isIPluginObjectStore } from "./plugin/object-store/is-i-plugin-object-store";

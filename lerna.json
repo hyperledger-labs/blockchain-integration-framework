@@ -2,7 +2,7 @@
   "packages": [
     "packages/cactus-*",
     "examples/cactus-*",
-    "examples/carbon-accounting/pkg/cactus-*"
+    "extensions/cactus-*"
   ],
   "version": "0.5.0",
   "command": {

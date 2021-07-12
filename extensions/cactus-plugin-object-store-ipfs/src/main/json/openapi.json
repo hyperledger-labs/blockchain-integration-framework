@@ -1,0 +1,105 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "Hyperledger Cactus Plugin - Object Store - IPFS ",
+        "description": "Contains/describes the Hyperledger Cactus Object Store IPFS plugin.",
+        "version": "0.2.0",
+        "license": {
+            "name": "Apache 2.0",
+            "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+        }
+    },
+    "servers": [
+        {
+            "url": "https://www.cactus.stream/{basePath}",
+            "description": "Public test instance",
+            "variables": {
+                "basePath": {
+                    "default": ""
+                }
+            }
+        },
+        {
+            "url": "http://localhost:4000/{basePath}",
+            "description": "Local test instance",
+            "variables": {
+                "basePath": {
+                    "default": ""
+                }
+            }
+        }
+    ],
+    "components": {
+        "schemas": {
+        },
+        "requestBodies": {
+        },
+        "responses": {
+        }
+    },
+    "paths": {
+        "/api/v1/plugins/@hyperledger/cactus-plugin-object-store-ipfs/get-object": {
+            "post": {
+                "x-hyperledger-cactus": {
+                    "http": {
+                        "verbLowerCase": "post",
+                        "path": "/api/v1/plugins/@hyperledger/cactus-plugin-object-store-ipfs/get-object"
+                    }
+                },
+                "operationId": "getObjectV1",
+                "summary": "Retrieves an object from the object store.",
+                "parameters": [],
+                "requestBody": {
+                    "$ref": "https://raw.githubusercontent.com/hyperledger/cactus/4bf8038ea4c0c341cef3a63b59f77c12cec65a46/packages/cactus-core-api/src/main/json/openapi.json#/components/requestBodies/object_store_get_object_v1_request_body"
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "https://raw.githubusercontent.com/hyperledger/cactus/4bf8038ea4c0c341cef3a63b59f77c12cec65a46/packages/cactus-core-api/src/main/json/openapi.json#/components/responses/object_store_get_object_v1_response_body"
+                    }
+                }
+            }
+        },
+        "/api/v1/plugins/@hyperledger/cactus-plugin-object-store-ipfs/set-object": {
+            "post": {
+                "x-hyperledger-cactus": {
+                    "http": {
+                        "verbLowerCase": "post",
+                        "path": "/api/v1/plugins/@hyperledger/cactus-plugin-object-store-ipfs/set-object"
+                    }
+                },
+                "operationId": "setObjectV1",
+                "summary": "Sets an object in the object store under the specified key.",
+                "parameters": [],
+                "requestBody": {
+                    "$ref": "https://raw.githubusercontent.com/hyperledger/cactus/4bf8038ea4c0c341cef3a63b59f77c12cec65a46/packages/cactus-core-api/src/main/json/openapi.json#/components/requestBodies/object_store_set_object_v1_request_body"
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "https://raw.githubusercontent.com/hyperledger/cactus/4bf8038ea4c0c341cef3a63b59f77c12cec65a46/packages/cactus-core-api/src/main/json/openapi.json#/components/responses/object_store_set_object_v1_response_body"
+                    }
+                }
+            }
+        },
+        "/api/v1/plugins/@hyperledger/cactus-plugin-object-store-ipfs/has-object": {
+            "post": {
+                "x-hyperledger-cactus": {
+                    "http": {
+                        "verbLowerCase": "post",
+                        "path": "/api/v1/plugins/@hyperledger/cactus-plugin-object-store-ipfs/has-object"
+                    }
+                },
+                "operationId": "hasObjectV1",
+                "summary": "Checks the presence of an object in the object store.",
+                "parameters": [],
+                "requestBody": {
+                    "$ref": "https://raw.githubusercontent.com/hyperledger/cactus/4bf8038ea4c0c341cef3a63b59f77c12cec65a46/packages/cactus-core-api/src/main/json/openapi.json#/components/requestBodies/object_store_has_object_v1_request_body"
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "https://raw.githubusercontent.com/hyperledger/cactus/4bf8038ea4c0c341cef3a63b59f77c12cec65a46/packages/cactus-core-api/src/main/json/openapi.json#/components/responses/object_store_has_object_v1_response_body"
+                    }
+                }
+            }
+        }
+    }
+}
