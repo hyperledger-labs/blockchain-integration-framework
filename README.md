@@ -57,6 +57,10 @@ Once the last command has finished executing, open link printed on the console w
   ![Build Script Decision Tree](./docs/images/build-script-decision-tree-2021-03-06.png)
 * [FAQ](./FAQ.md): A collection of frequently asked questions
 
+## Roadmap
+
+Can be found here: [ROADMAP.md](./ROADMAP.md)
+
 ## Contact
 * mailing list: [cactus@lists.hyperledger.org](mailto:cactus@lists.hyperledger.org)
 * rocketchat channel: [https://chat.hyperledger.org/channel/cactus](https://chat.hyperledger.org/channel/cactus).
