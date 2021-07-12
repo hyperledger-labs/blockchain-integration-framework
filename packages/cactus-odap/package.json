@@ -1,0 +1,87 @@
+{
+  "name": "@hyperledger/cactus-odap",
+  "version": "1.0.0",
+  "description": "proof of concept of odap",
+  "main": "dist/lib/main/typescript/index.js",
+  "type": "module",
+  "module": "dist/lib/main/typescript/index.js",
+  "types": "dist/types/main/typescript/index.d.ts",
+  "files": [
+    "dist/*"
+  ],
+  "scripts": {
+    "generate-sdk": "docker run --rm -v \"${PWD}:/local\" openapitools/openapi-generator-cli:v5.1.1 generate -i ./local/src/main/json/openapi.json -g typescript-axios -o ./local/src/main/typescript/generated/openapi/typescript-axios/ --reserved-words-mappings protected=protected",
+    "pretsc": "npm run generate-sdk",
+    "tsc": "tsc --project ./tsconfig.json",
+    "watch": "npm-watch",
+    "webpack": "npm-run-all webpack:dev webpack:prod",
+    "webpack:dev": "npm-run-all webpack:dev:node webpack:dev:web",
+    "webpack:dev:web": "webpack --env=dev --target=web --config ../../webpack.config.js",
+    "webpack:dev:node": "webpack --env=dev --target=node --config ../../webpack.config.js",
+    "webpack:prod": "npm-run-all webpack:prod:node webpack:prod:web",
+    "webpack:prod:web": "webpack --env=prod --target=web --config ../../webpack.config.js",
+    "webpack:prod:node": "webpack --env=prod --target=node --config ../../webpack.config.js"
+  },
+  "watch": {
+    "tsc": {
+      "patterns": [
+        "src/",
+        "src/*/json/**/openapi*"
+      ],
+      "ignore": [
+        "src/**/generated/*"
+      ],
+      "extensions": [
+        "ts",
+        "json"
+      ],
+      "quiet": true,
+      "verbose": false,
+      "runOnChangeOnly": true
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=10",
+    "npm": ">=6"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hyperledger/cactus.git"
+  },
+  "keywords": [
+    "Hyperledger",
+    "Cactus",
+    "Integration",
+    "Blockchain",
+    "Distributed Ledger Technology"
+  ],
+  "author": "Tzu-Shen, Wang",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/express": "4.17.8",
+    "@types/tape": "^4.13.0",
+    "typescript": "^4.3.2"
+  },
+  "dependencies": {
+    "@hyperledger/cactus-cmd-api-server": "0.5.0",
+    "@hyperledger/cactus-common": "0.5.0",
+    "@hyperledger/cactus-core": "0.5.0",
+    "@hyperledger/cactus-core-api": "0.5.0",
+    "@hyperledger/cactus-example-supply-chain-business-logic-plugin": "0.5.0",
+    "axios": "0.21.1",
+    "express": "4.17.1",
+    "joi": "14.3.1",
+    "openapi-types": "7.0.1",
+    "prom-client": "13.1.0",
+    "rxjs": "6.6.7",
+    "socket.io-client": "4.0.1",
+    "tape": "^5.2.2",
+    "ts-node": "8.9.1",
+    "typescript-optional": "2.0.1",
+    "web3": "1.2.7",
+    "web3-utils": "1.2.7"
+  }
+}
