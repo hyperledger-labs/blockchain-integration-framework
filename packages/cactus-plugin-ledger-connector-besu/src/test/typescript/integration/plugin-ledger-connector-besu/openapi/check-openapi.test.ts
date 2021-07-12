@@ -15,7 +15,10 @@ import {
   SignTransactionRequest,
 } from "../../../../../main/typescript/public-api";
 import { PluginKeychainMemory } from "@hyperledger/cactus-plugin-keychain-memory";
-import { BesuTestLedger } from "@hyperledger/cactus-test-tooling";
+import {
+  BesuTestLedger,
+  pruneDockerAllIfGithubAction,
+} from "@hyperledger/cactus-test-tooling";
 import KeyEncoder from "key-encoder";
 import {
   IListenOptions,
@@ -33,8 +36,14 @@ import { AddressInfo } from "net";
 import { BesuApiClientOptions } from "../../../../../main/typescript/api-client/besu-api-client";
 
 const logLevel: LogLevelDesc = "TRACE";
-
 const testCase = "Besu API";
+
+test("BEFORE " + testCase, async (t: Test) => {
+  const pruning = pruneDockerAllIfGithubAction({ logLevel });
+  await t.doesNotReject(pruning, "Pruning did not throw OK");
+  t.end();
+});
+
 test(testCase, async (t: Test) => {
   const keyEncoder: KeyEncoder = new KeyEncoder("secp256k1");
   const keychainIdForSigned = uuidv4();
@@ -551,5 +560,11 @@ test(testCase, async (t: Test) => {
     t2.end();
   });
 
+  t.end();
+});
+
+test("AFTER " + testCase, async (t: Test) => {
+  const pruning = pruneDockerAllIfGithubAction({ logLevel });
+  await t.doesNotReject(pruning, "Pruning did not throw OK");
   t.end();
 });

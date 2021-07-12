@@ -15,6 +15,7 @@ import {
   QuorumTestLedger,
   IQuorumGenesisOptions,
   IAccount,
+  pruneDockerAllIfGithubAction,
 } from "@hyperledger/cactus-test-tooling";
 import {
   LogLevelDesc,
@@ -30,6 +31,13 @@ import { Configuration } from "@hyperledger/cactus-core-api";
 
 const logLevel: LogLevelDesc = "INFO";
 const testCase = "Quorum API";
+
+test("BEFORE " + testCase, async (t: Test) => {
+  const pruning = pruneDockerAllIfGithubAction({ logLevel });
+  await t.doesNotReject(pruning, "Pruning did not throw OK");
+  t.end();
+});
+
 test(testCase, async (t: Test) => {
   // create the test quorumTestLedger
   const containerImageVersion = "2021-01-08-7a055c3"; // Quorum v2.3.0, Tessera v0.10.0
@@ -388,5 +396,11 @@ test(testCase, async (t: Test) => {
     t2.end();
   });
 
+  t.end();
+});
+
+test("AFTER " + testCase, async (t: Test) => {
+  const pruning = pruneDockerAllIfGithubAction({ logLevel });
+  await t.doesNotReject(pruning, "Pruning did not throw OK");
   t.end();
 });
