@@ -74,5 +74,6 @@ module.exports = {
     npm: "npm",
     "fabric-client": "fabric-client",
     "fabric-ca-client": "fabric-ca-client",
+    "@azure/identity": "@azure/identity",
   },
 };
