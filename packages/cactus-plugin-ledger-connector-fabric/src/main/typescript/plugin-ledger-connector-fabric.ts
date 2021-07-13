@@ -17,10 +17,10 @@ import {
   DefaultEventHandlerStrategies,
   Gateway,
   GatewayOptions,
-  Identity,
-  InMemoryWallet,
-  X509WalletMixin,
+  Wallets,
+  X509Identity,
   TransientMap,
+  Wallet,
 } from "fabric-network";
 
 import { Optional } from "typescript-optional";
@@ -820,7 +820,7 @@ export class PluginLedgerConnectorFabric
     } = req;
 
     const gateway = new Gateway();
-    const wallet = new InMemoryWallet(new X509WalletMixin());
+    const wallet = await Wallets.newInMemoryWallet();
     const keychain = this.opts.pluginRegistry.findOneByKeychainId(
       signingCredential.keychainId,
     );
@@ -839,11 +839,12 @@ export class PluginLedgerConnectorFabric
     const identity = JSON.parse(fabricX509IdentityJson);
 
     try {
-      await wallet.import(signingCredential.keychainRef, identity);
+      await wallet.put(signingCredential.keychainRef, identity);
       this.log.debug("transact() imported identity to in-memory wallet OK");
 
       const eventHandlerOptions: DefaultEventHandlerOptions = {
         commitTimeout: this.opts.eventHandlerOptions?.commitTimeout || 300,
+        endorseTimeout: 300,
       };
       if (eho?.strategy) {
         eventHandlerOptions.strategy =
@@ -866,6 +867,8 @@ export class PluginLedgerConnectorFabric
       this.log.debug("transact() gateway connection established OK");
 
       const network = await gateway.getNetwork(channelName);
+      // const channel = network.getChannel();
+      // const endorsers = channel.getEndorsers();
       const contract = network.getContract(contractName);
 
       let out: Buffer;
@@ -967,23 +970,30 @@ export class PluginLedgerConnectorFabric
     mspId: string,
     enrollmentID: string,
     enrollmentSecret: string,
-  ): Promise<[Identity, InMemoryWallet]> {
+  ): Promise<[X509Identity, Wallet]> {
     const fnTag = `${this.className}#enrollAdmin()`;
     try {
       const ca = await this.createCaClient(caId);
-      const wallet = new InMemoryWallet(new X509WalletMixin());
+      const wallet = await Wallets.newInMemoryWallet();
 
       // Enroll the admin user, and import the new identity into the wallet.
       const request = { enrollmentID, enrollmentSecret };
       const enrollment = await ca.enroll(request);
 
-      const { certificate: cert, key } = enrollment;
+      const { certificate, key } = enrollment;
       const keyBytes = key.toBytes();
 
-      const identity = X509WalletMixin.createIdentity(mspId, cert, keyBytes);
-      await wallet.import(identityId, identity);
+      const x509Identity: X509Identity = {
+        credentials: {
+          certificate,
+          privateKey: keyBytes,
+        },
+        mspId,
+        type: "X.509",
+      };
+      await wallet.put(identityId, x509Identity);
 
-      return [identity, wallet];
+      return [x509Identity, wallet];
     } catch (ex) {
       this.log.error(`enrollAdmin() Failure:`, ex);
       throw new Error(`${fnTag} Exception: ${ex?.message}`);
