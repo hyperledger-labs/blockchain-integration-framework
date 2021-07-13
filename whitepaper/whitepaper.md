@@ -46,7 +46,7 @@ Photo by Pontus Wellgraf on Unsplash
 - [3. Example Use Cases](#3-example-use-cases)
   - [3.1 Car Trade](#31-car-trade)
   - [3.2 Electricity Trade](#32-electricity-trade)
-  - [3.3 Supply Chain](#33-supply-chain)
+  - [3.3 Supply chain](#33-supply-chain)
   - [3.4 Ethereum to Quorum Asset Transfer](#34-ethereum-to-quorum-asset-transfer)
   - [3.5 Escrowed Sale of Data for Coins](#35-escrowed-sale-of-data-for-coins)
   - [3.6 Money Exchanges](#36-money-exchanges)
@@ -139,6 +139,7 @@ Photo by Pontus Wellgraf on Unsplash
 - [7. Terminology](#7-terminology)
 - [8. Related Work](#8-related-work)
 - [9. References](#9-references)
+- [10. Recommended Reference](#10-recommended-reference)
 
 <div style="page-break-after: always; visibility: hidden"><!-- \pagebreak --></div>
 
@@ -1761,3 +1762,15 @@ The blockchain migrator feature paves the way for building a solution that perfo
 4: H.M.N. Dilum Bandara, Xiwei Xu, and Ingo Weber. 2020. [Patterns for blockchain data migration](https://arxiv.org/abs/1906.00239). European Conf. on Pattern Languages of Programs 2020 (EuroPLoP 2020).
 
 5: Belchior,  A.  Vasconcelos,  S.  Guerreiro,  and  M.  Correia,  “A  Surveyon Blockchain Interoperability: Past, Present, and Future Trends,”arXiv,2020. [Online]. Available: http://arxiv.org/abs/2005.14282
+
+<div style="page-break-after: always; visibility: hidden"><!-- \pagebreak --></div>
+
+# 10. Recommended Reference
+Please use the following BibTex entry to cite this whitepaper:
+
+@article{hyperledgercactus,
+  title={Hyperledger Cactus Whitepaper v0.1},
+  author={Montgomery, Hart and Borne-Pons, Hugo and Hamilton, Jonathan and Bowman, Mic and Somogyvari, Peter and Fujimoto, Shingo and Takeuchi, Takuma and Kuhrt, Tracy and Belchior, Rafael},
+  journal={URL: https://github. com/hyperledger/cactus/blob/main/whitepaper/whitepaper. md},
+  year={2020}
+}
