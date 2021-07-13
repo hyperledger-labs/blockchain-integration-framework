@@ -5,6 +5,8 @@ services:
     container_name: indy_pool
     image: indy_pool
     build:
+      # context: ./indy_pool
+      # dockerfile: indy_pool.dockerfile
       context: ${INDY_SDK_ROOT}
       dockerfile: indy-pool.dockerfile
       args:
@@ -13,18 +15,18 @@ services:
       - HTTPS_PROXY=$HTTP_PROXY
       - https_proxy=$HTTP_PROXY
       - FTP_PROXY=$HTTP_PROXY
-      - ftp_proxy=$HTTP_proxy
+      - ftp_proxy=$HTTP_PROXY
       - NO_PROXY=$NO_PROXY
-      - no_proxy=$no_proxy
+      - no_proxy=$NO_PROXY
     environment:
     - HTTP_PROXY=$HTTP_PROXY
     - http_proxy=$HTTP_PROXY
     - HTTPS_PROXY=$HTTP_PROXY
     - https_proxy=$HTTP_PROXY
     - FTP_PROXY=$HTTP_PROXY
-    - ftp_proxy=$HTTP_proxy
+    - ftp_proxy=$HTTP_PROXY
     - NO_PROXY=$NO_PROXY
-    - no_proxy=$no_proxy
+    - no_proxy=$NO_PROXY
     ports: 
     - "9701:9701"
     - "9702:9702"
@@ -42,10 +44,14 @@ services:
 
   nginx:
     container_name: nginx
-    build:
-      context: ./nginx
-      dockerfile: custom-nginx.dockerfile
-    image: sfuji822/nginx
+    # build:
+    #   context: ./nginx
+    #   dockerfile: custom-nginx.dockerfile
+    image: nginx:stable-alpine
+    volumes:
+      - type: bind
+        source: "./nginx/nginx.conf"
+        target: "/etc/nginx/nginx.conf"
     ports: 
       - "10080:80"
     networks:
@@ -55,16 +61,43 @@ services:
   validator:
     container_name: validator
     build:
-      context: ./validator
-      dockerfile: valipy.dockerfile
+      context: ../../../packages-python/cactus_validator_socketio/
+      dockerfile: build/valipy.dockerfile
+      args:
+      - pool_ip=172.16.0.2
+      - HTTP_PROXY=$HTTP_PROXY
+      - http_proxy=$HTTP_PROXY
+      - HTTPS_PROXY=$HTTP_PROXY
+      - https_proxy=$HTTP_PROXY
+      - FTP_PROXY=$HTTP_PROXY
+      - ftp_proxy=$HTTP_proxy
+      - NO_PROXY=$NO_PROXY
+      - no_proxy=$no_proxy
+    environment:
+    - HTTP_PROXY=$HTTP_PROXY
+    - http_proxy=$HTTP_PROXY
+    - HTTPS_PROXY=$HTTP_PROXY
+    - https_proxy=$HTTP_PROXY
+    - FTP_PROXY=$HTTP_PROXY
+    - ftp_proxy=$HTTP_proxy
+    - NO_PROXY=$NO_PROXY
+    - no_proxy=$no_proxy
     image: valipy
     ports:
-      - "80:80"
+      - "8000:8000"
     networks:
       indy_net:
         ipv4_address: 172.16.0.4
-
-
+    volumes:
+      - type: bind
+        source: "../../../packages-python/cactus_validator_socketio/validator-python/"
+        target: "/root/validator"
+      - type: bind
+        source: "../../../packages-python/cactus_validator_socketio/etc/cactus/"
+        target: "/etc/cactus"
+      - type: bind
+        source: "../../../../indy-sdk/"
+        target: "/root/indy-sdk"
 networks:
   indy_net:
     name: indy_net
