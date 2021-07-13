@@ -428,15 +428,15 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getSingleStatus: async (id: string, web3SigningCredential: Web3SigningCredential, connectorId: string, keychainId: string, options: any = {}): Promise<RequestArgs> => {
+        getSingleStatusV1: async (id: string, web3SigningCredential: Web3SigningCredential, connectorId: string, keychainId: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
-            assertParamExists('getSingleStatus', 'id', id)
+            assertParamExists('getSingleStatusV1', 'id', id)
             // verify required parameter 'web3SigningCredential' is not null or undefined
-            assertParamExists('getSingleStatus', 'web3SigningCredential', web3SigningCredential)
+            assertParamExists('getSingleStatusV1', 'web3SigningCredential', web3SigningCredential)
             // verify required parameter 'connectorId' is not null or undefined
-            assertParamExists('getSingleStatus', 'connectorId', connectorId)
+            assertParamExists('getSingleStatusV1', 'connectorId', connectorId)
             // verify required parameter 'keychainId' is not null or undefined
-            assertParamExists('getSingleStatus', 'keychainId', keychainId)
+            assertParamExists('getSingleStatusV1', 'keychainId', keychainId)
             const localVarPath = `/api/v1/plugins/@hyperledger/cactus-plugin-htlc-eth-besu-erc20/get-single-status`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -486,15 +486,15 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getStatus: async (ids: Array<string>, web3SigningCredential: Web3SigningCredential, connectorId: string, keychainId: string, options: any = {}): Promise<RequestArgs> => {
+        getStatusV1: async (ids: Array<string>, web3SigningCredential: Web3SigningCredential, connectorId: string, keychainId: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'ids' is not null or undefined
-            assertParamExists('getStatus', 'ids', ids)
+            assertParamExists('getStatusV1', 'ids', ids)
             // verify required parameter 'web3SigningCredential' is not null or undefined
-            assertParamExists('getStatus', 'web3SigningCredential', web3SigningCredential)
+            assertParamExists('getStatusV1', 'web3SigningCredential', web3SigningCredential)
             // verify required parameter 'connectorId' is not null or undefined
-            assertParamExists('getStatus', 'connectorId', connectorId)
+            assertParamExists('getStatusV1', 'connectorId', connectorId)
             // verify required parameter 'keychainId' is not null or undefined
-            assertParamExists('getStatus', 'keychainId', keychainId)
+            assertParamExists('getStatusV1', 'keychainId', keychainId)
             const localVarPath = `/api/v1/plugins/@hyperledger/cactus-plugin-htlc-eth-besu-erc20/get-status`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -541,7 +541,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        initialize: async (initializeRequest?: InitializeRequest, options: any = {}): Promise<RequestArgs> => {
+        initializeV1: async (initializeRequest?: InitializeRequest, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/v1/plugins/@hyperledger/cactus-plugin-htlc-eth-besu-erc20/initialize`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -575,7 +575,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        newContract: async (newContractRequest?: NewContractRequest, options: any = {}): Promise<RequestArgs> => {
+        newContractV1: async (newContractRequest?: NewContractRequest, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/v1/plugins/@hyperledger/cactus-plugin-htlc-eth-besu-erc20/new-contract`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -609,7 +609,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        refund: async (refundRequest?: RefundRequest, options: any = {}): Promise<RequestArgs> => {
+        refundV1: async (refundRequest?: RefundRequest, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/v1/plugins/@hyperledger/cactus-plugin-htlc-eth-besu-erc20/refund`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -643,7 +643,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        withdraw: async (withdrawRequest?: WithdrawRequest, options: any = {}): Promise<RequestArgs> => {
+        withdrawV1: async (withdrawRequest?: WithdrawRequest, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/v1/plugins/@hyperledger/cactus-plugin-htlc-eth-besu-erc20/withdraw`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -690,8 +690,8 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getSingleStatus(id: string, web3SigningCredential: Web3SigningCredential, connectorId: string, keychainId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<number>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getSingleStatus(id, web3SigningCredential, connectorId, keychainId, options);
+        async getSingleStatusV1(id: string, web3SigningCredential: Web3SigningCredential, connectorId: string, keychainId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<number>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getSingleStatusV1(id, web3SigningCredential, connectorId, keychainId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -704,8 +704,8 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getStatus(ids: Array<string>, web3SigningCredential: Web3SigningCredential, connectorId: string, keychainId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<number>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getStatus(ids, web3SigningCredential, connectorId, keychainId, options);
+        async getStatusV1(ids: Array<string>, web3SigningCredential: Web3SigningCredential, connectorId: string, keychainId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<number>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getStatusV1(ids, web3SigningCredential, connectorId, keychainId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -715,8 +715,8 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async initialize(initializeRequest?: InitializeRequest, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RunTransactionResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.initialize(initializeRequest, options);
+        async initializeV1(initializeRequest?: InitializeRequest, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RunTransactionResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.initializeV1(initializeRequest, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -726,8 +726,8 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async newContract(newContractRequest?: NewContractRequest, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InvokeContractV1Response>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.newContract(newContractRequest, options);
+        async newContractV1(newContractRequest?: NewContractRequest, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InvokeContractV1Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.newContractV1(newContractRequest, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -737,8 +737,8 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async refund(refundRequest?: RefundRequest, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InvokeContractV1Response>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.refund(refundRequest, options);
+        async refundV1(refundRequest?: RefundRequest, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InvokeContractV1Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.refundV1(refundRequest, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -748,8 +748,8 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async withdraw(withdrawRequest?: WithdrawRequest, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InvokeContractV1Response>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.withdraw(withdrawRequest, options);
+        async withdrawV1(withdrawRequest?: WithdrawRequest, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InvokeContractV1Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.withdrawV1(withdrawRequest, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -772,8 +772,8 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getSingleStatus(id: string, web3SigningCredential: Web3SigningCredential, connectorId: string, keychainId: string, options?: any): AxiosPromise<number> {
-            return localVarFp.getSingleStatus(id, web3SigningCredential, connectorId, keychainId, options).then((request) => request(axios, basePath));
+        getSingleStatusV1(id: string, web3SigningCredential: Web3SigningCredential, connectorId: string, keychainId: string, options?: any): AxiosPromise<number> {
+            return localVarFp.getSingleStatusV1(id, web3SigningCredential, connectorId, keychainId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -785,8 +785,8 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getStatus(ids: Array<string>, web3SigningCredential: Web3SigningCredential, connectorId: string, keychainId: string, options?: any): AxiosPromise<Array<number>> {
-            return localVarFp.getStatus(ids, web3SigningCredential, connectorId, keychainId, options).then((request) => request(axios, basePath));
+        getStatusV1(ids: Array<string>, web3SigningCredential: Web3SigningCredential, connectorId: string, keychainId: string, options?: any): AxiosPromise<Array<number>> {
+            return localVarFp.getStatusV1(ids, web3SigningCredential, connectorId, keychainId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -795,8 +795,8 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        initialize(initializeRequest?: InitializeRequest, options?: any): AxiosPromise<RunTransactionResponse> {
-            return localVarFp.initialize(initializeRequest, options).then((request) => request(axios, basePath));
+        initializeV1(initializeRequest?: InitializeRequest, options?: any): AxiosPromise<RunTransactionResponse> {
+            return localVarFp.initializeV1(initializeRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -805,8 +805,8 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        newContract(newContractRequest?: NewContractRequest, options?: any): AxiosPromise<InvokeContractV1Response> {
-            return localVarFp.newContract(newContractRequest, options).then((request) => request(axios, basePath));
+        newContractV1(newContractRequest?: NewContractRequest, options?: any): AxiosPromise<InvokeContractV1Response> {
+            return localVarFp.newContractV1(newContractRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -815,8 +815,8 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        refund(refundRequest?: RefundRequest, options?: any): AxiosPromise<InvokeContractV1Response> {
-            return localVarFp.refund(refundRequest, options).then((request) => request(axios, basePath));
+        refundV1(refundRequest?: RefundRequest, options?: any): AxiosPromise<InvokeContractV1Response> {
+            return localVarFp.refundV1(refundRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -825,8 +825,8 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        withdraw(withdrawRequest?: WithdrawRequest, options?: any): AxiosPromise<InvokeContractV1Response> {
-            return localVarFp.withdraw(withdrawRequest, options).then((request) => request(axios, basePath));
+        withdrawV1(withdrawRequest?: WithdrawRequest, options?: any): AxiosPromise<InvokeContractV1Response> {
+            return localVarFp.withdrawV1(withdrawRequest, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -849,8 +849,8 @@ export class DefaultApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public getSingleStatus(id: string, web3SigningCredential: Web3SigningCredential, connectorId: string, keychainId: string, options?: any) {
-        return DefaultApiFp(this.configuration).getSingleStatus(id, web3SigningCredential, connectorId, keychainId, options).then((request) => request(this.axios, this.basePath));
+    public getSingleStatusV1(id: string, web3SigningCredential: Web3SigningCredential, connectorId: string, keychainId: string, options?: any) {
+        return DefaultApiFp(this.configuration).getSingleStatusV1(id, web3SigningCredential, connectorId, keychainId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -864,8 +864,8 @@ export class DefaultApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public getStatus(ids: Array<string>, web3SigningCredential: Web3SigningCredential, connectorId: string, keychainId: string, options?: any) {
-        return DefaultApiFp(this.configuration).getStatus(ids, web3SigningCredential, connectorId, keychainId, options).then((request) => request(this.axios, this.basePath));
+    public getStatusV1(ids: Array<string>, web3SigningCredential: Web3SigningCredential, connectorId: string, keychainId: string, options?: any) {
+        return DefaultApiFp(this.configuration).getStatusV1(ids, web3SigningCredential, connectorId, keychainId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -876,8 +876,8 @@ export class DefaultApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public initialize(initializeRequest?: InitializeRequest, options?: any) {
-        return DefaultApiFp(this.configuration).initialize(initializeRequest, options).then((request) => request(this.axios, this.basePath));
+    public initializeV1(initializeRequest?: InitializeRequest, options?: any) {
+        return DefaultApiFp(this.configuration).initializeV1(initializeRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -888,8 +888,8 @@ export class DefaultApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public newContract(newContractRequest?: NewContractRequest, options?: any) {
-        return DefaultApiFp(this.configuration).newContract(newContractRequest, options).then((request) => request(this.axios, this.basePath));
+    public newContractV1(newContractRequest?: NewContractRequest, options?: any) {
+        return DefaultApiFp(this.configuration).newContractV1(newContractRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -900,8 +900,8 @@ export class DefaultApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public refund(refundRequest?: RefundRequest, options?: any) {
-        return DefaultApiFp(this.configuration).refund(refundRequest, options).then((request) => request(this.axios, this.basePath));
+    public refundV1(refundRequest?: RefundRequest, options?: any) {
+        return DefaultApiFp(this.configuration).refundV1(refundRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -912,8 +912,8 @@ export class DefaultApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public withdraw(withdrawRequest?: WithdrawRequest, options?: any) {
-        return DefaultApiFp(this.configuration).withdraw(withdrawRequest, options).then((request) => request(this.axios, this.basePath));
+    public withdrawV1(withdrawRequest?: WithdrawRequest, options?: any) {
+        return DefaultApiFp(this.configuration).withdrawV1(withdrawRequest, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

@@ -17,9 +17,7 @@
       },
       "HasKeychainEntryRequestV1": {
         "type": "object",
-        "required": [
-          "key"
-        ],
+        "required": ["key"],
         "properties": {
           "key": {
             "type": "string",
@@ -32,11 +30,7 @@
       },
       "HasKeychainEntryResponseV1": {
         "type": "object",
-        "required": [
-          "key",
-          "isPresent",
-          "checkedAt"
-        ],
+        "required": ["key", "isPresent", "checkedAt"],
         "properties": {
           "key": {
             "type": "string",
@@ -59,9 +53,7 @@
       },
       "DeleteKeychainEntryRequestV1": {
         "type": "object",
-        "required": [
-          "key"
-        ],
+        "required": ["key"],
         "properties": {
           "key": {
             "type": "string",
@@ -74,9 +66,7 @@
       },
       "DeleteKeychainEntryResponseV1": {
         "type": "object",
-        "required": [
-          "key"
-        ],
+        "required": ["key"],
         "properties": {
           "key": {
             "type": "string",
@@ -229,7 +219,7 @@
             "path": "/api/v1/plugins/@hyperledger/cactus-plugin-keychain-vault/get-prometheus-exporter-metrics"
           }
         },
-        "operationId": "getPrometheusExporterMetricsV1",
+        "operationId": "getPrometheusMetricsV1",
         "summary": "Get the Prometheus Metrics",
         "parameters": [],
         "responses": {

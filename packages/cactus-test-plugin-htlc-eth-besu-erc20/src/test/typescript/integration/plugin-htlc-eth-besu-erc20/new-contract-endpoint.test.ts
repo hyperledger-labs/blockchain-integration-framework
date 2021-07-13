@@ -222,7 +222,7 @@ test(testCase, async (t: Test) => {
     web3SigningCredential,
     gas: estimatedGas,
   };
-  const res = await api.newContract(request);
+  const res = await api.newContractV1(request);
   t.equal(res.status, 200, "response status is 200 OK");
   t.end();
 });
@@ -391,7 +391,7 @@ test("Test new invalid contract with 0 inputAmount token for HTLC", async (t: Te
       web3SigningCredential,
       gas: estimatedGas,
     };
-    const res = await api.newContract(request);
+    const res = await api.newContractV1(request);
     t.equal(res.status, 400, "response status is 400");
   } catch (error) {
     t.equal(error.response.status, 400, "response status is 400");

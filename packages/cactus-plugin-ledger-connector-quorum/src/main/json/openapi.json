@@ -592,7 +592,7 @@
                         "path": "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-quorum/deploy-contract-solidity-bytecode"
                     }
                 },
-                "operationId": "apiV1QuorumDeployContractSolidityBytecode",
+                "operationId": "deployContractSolBytecodeV1",
                 "summary": "Deploys the bytecode of a Solidity contract.",
                 "parameters": [],
                 "requestBody": {
@@ -626,7 +626,7 @@
                         "path": "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-quorum/run-transaction"
                     }
                 },
-                "operationId": "apiV1QuorumRunTransaction",
+                "operationId": "runTransactionV1",
                 "summary": "Executes a transaction on a quorum ledger",
                 "parameters": [],
                 "requestBody": {
@@ -660,7 +660,7 @@
                         "path": "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-quorum/invoke-contract"
                     }
                 },
-                "operationId": "apiV1QuorumInvokeContract",
+                "operationId": "invokeContractV1",
                 "summary": "Invokes a contract on a besu ledger",
                 "parameters": [],
                 "requestBody": {
@@ -694,7 +694,7 @@
                         "path": "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-quorum/get-prometheus-exporter-metrics"
                     }
                 },
-                "operationId": "getPrometheusExporterMetricsV1",
+                "operationId": "getPrometheusMetricsV1",
                 "summary": "Get the Prometheus Metrics",
                 "parameters": [],
                 "responses": {

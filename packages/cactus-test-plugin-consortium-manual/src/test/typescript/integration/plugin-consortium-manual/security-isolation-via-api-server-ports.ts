@@ -162,7 +162,7 @@ tap.test(
     });
     const api2 = new DefaultApiPlugin(configuration2);
 
-    const response: AxiosResponse = await api2.getNodeJws();
+    const response: AxiosResponse = await api2.getNodeJwsV1();
     assert.ok(response, "response object is truthy");
     assert.ok(response.status === 200, "HTTP status code to equal 200");
 

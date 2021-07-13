@@ -107,7 +107,7 @@ test("Start API server, and run Artillery benchmark test.", async (t: Test) => {
 
   const apiClient = new ApiServerApi(clientConfig);
 
-  const res = await apiClient.getPrometheusExporterMetricsV1();
+  const res = await apiClient.getPrometheusMetricsV1();
 
   t.equal(res.status, 200);
 

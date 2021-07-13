@@ -253,7 +253,7 @@ test(testCase, async (t: Test) => {
     const apiClient1 = await mainApiClient.ofLedger(ledger1.id, QuorumApi);
 
     // send money to the test account on ledger 1
-    const res = await apiClient1.apiV1QuorumRunTransaction({
+    const res = await apiClient1.runTransactionV1({
       transactionConfig: {
         from: initialFundsAccount1,
         to: testAccount1.address,
@@ -277,7 +277,7 @@ test(testCase, async (t: Test) => {
     const apiClient2 = await mainApiClient.ofLedger(ledger2.id, QuorumApi);
 
     // send money to the test account on ledger 1
-    const res = await apiClient2.apiV1QuorumRunTransaction({
+    const res = await apiClient2.runTransactionV1({
       transactionConfig: {
         from: initialFundsAccount2,
         to: testAccount2.address,

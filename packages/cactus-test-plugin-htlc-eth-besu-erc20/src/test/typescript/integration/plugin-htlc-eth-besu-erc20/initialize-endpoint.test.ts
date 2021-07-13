@@ -132,7 +132,7 @@ test(testCase, async (t: Test) => {
     gas: estimatedGas,
   };
 
-  const res = await api.initialize(request);
+  const res = await api.initializeV1(request);
   t.equal(res.status, 200, "response status is 200 OK");
 
   t.ok(res.data, "pluginHtlc.initialize() output is truthy OK");
@@ -228,7 +228,7 @@ test("Test initialize function with invalid params", async (t: Test) => {
     gas: estimatedGas,
   };
   try {
-    const res = await api.initialize(request);
+    const res = await api.initializeV1(request);
     t.equal(res.status, 400, "response status is 400");
   } catch (error) {
     t.equal(error.response.status, 400, "response status is 400");

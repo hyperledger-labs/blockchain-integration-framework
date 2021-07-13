@@ -225,12 +225,12 @@ test(testCase, async (t: Test) => {
     web3SigningCredential,
     gas: estimatedGas,
   };
-  const resNewContract = await api.newContract(request);
+  const resNewContract = await api.newContractV1(request);
   t.equal(resNewContract.status, 200, "response status is OK");
   t.comment("Get status with invalid id");
 
   const fakeId = "0x66616b654964";
-  const res = await api.getSingleStatus(
+  const res = await api.getSingleStatusV1(
     fakeId,
     web3SigningCredential,
     connectorId,

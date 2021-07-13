@@ -251,7 +251,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1InsertBambooHarvest: async (insertBambooHarvestRequest?: InsertBambooHarvestRequest, options: any = {}): Promise<RequestArgs> => {
+        insertBambooHarvestV1: async (insertBambooHarvestRequest?: InsertBambooHarvestRequest, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/v1/plugins/@hyperledger/cactus-example-supply-chain-backend/insert-bamboo-harvest`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -285,7 +285,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1InsertBookshelf: async (insertBookshelfRequest?: InsertBookshelfRequest, options: any = {}): Promise<RequestArgs> => {
+        insertBookshelfV1: async (insertBookshelfRequest?: InsertBookshelfRequest, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/v1/plugins/@hyperledger/cactus-example-supply-chain-backend/insert-bookshelf`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -319,7 +319,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1InsertShipment: async (insertShipmentRequest?: InsertShipmentRequest, options: any = {}): Promise<RequestArgs> => {
+        insertShipmentV1: async (insertShipmentRequest?: InsertShipmentRequest, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/v1/plugins/@hyperledger/cactus-example-supply-chain-backend/insert-shipment`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -352,7 +352,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1ListBambooHarvest: async (options: any = {}): Promise<RequestArgs> => {
+        listBambooHarvestV1: async (options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/v1/plugins/@hyperledger/cactus-example-supply-chain-backend/list-bamboo-harvest`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -382,7 +382,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1ListBookshelf: async (options: any = {}): Promise<RequestArgs> => {
+        listBookshelfV1: async (options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/v1/plugins/@hyperledger/cactus-example-supply-chain-backend/list-bookshelf`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -412,7 +412,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1ListShipment: async (options: any = {}): Promise<RequestArgs> => {
+        listShipmentV1: async (options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/v1/plugins/@hyperledger/cactus-example-supply-chain-backend/list-shipment`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -453,8 +453,8 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiV1InsertBambooHarvest(insertBambooHarvestRequest?: InsertBambooHarvestRequest, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InsertBambooHarvestResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1InsertBambooHarvest(insertBambooHarvestRequest, options);
+        async insertBambooHarvestV1(insertBambooHarvestRequest?: InsertBambooHarvestRequest, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InsertBambooHarvestResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.insertBambooHarvestV1(insertBambooHarvestRequest, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -464,8 +464,8 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiV1InsertBookshelf(insertBookshelfRequest?: InsertBookshelfRequest, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InsertBookshelfResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1InsertBookshelf(insertBookshelfRequest, options);
+        async insertBookshelfV1(insertBookshelfRequest?: InsertBookshelfRequest, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InsertBookshelfResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.insertBookshelfV1(insertBookshelfRequest, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -475,8 +475,8 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiV1InsertShipment(insertShipmentRequest?: InsertShipmentRequest, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InsertShipmentResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1InsertShipment(insertShipmentRequest, options);
+        async insertShipmentV1(insertShipmentRequest?: InsertShipmentRequest, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InsertShipmentResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.insertShipmentV1(insertShipmentRequest, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -485,8 +485,8 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiV1ListBambooHarvest(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListBambooHarvestResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1ListBambooHarvest(options);
+        async listBambooHarvestV1(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListBambooHarvestResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listBambooHarvestV1(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -495,8 +495,8 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiV1ListBookshelf(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListBookshelfResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1ListBookshelf(options);
+        async listBookshelfV1(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListBookshelfResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listBookshelfV1(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -505,8 +505,8 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiV1ListShipment(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListShipmentResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1ListShipment(options);
+        async listShipmentV1(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListShipmentResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listShipmentV1(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -526,8 +526,8 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1InsertBambooHarvest(insertBambooHarvestRequest?: InsertBambooHarvestRequest, options?: any): AxiosPromise<InsertBambooHarvestResponse> {
-            return localVarFp.apiV1InsertBambooHarvest(insertBambooHarvestRequest, options).then((request) => request(axios, basePath));
+        insertBambooHarvestV1(insertBambooHarvestRequest?: InsertBambooHarvestRequest, options?: any): AxiosPromise<InsertBambooHarvestResponse> {
+            return localVarFp.insertBambooHarvestV1(insertBambooHarvestRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -536,8 +536,8 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1InsertBookshelf(insertBookshelfRequest?: InsertBookshelfRequest, options?: any): AxiosPromise<InsertBookshelfResponse> {
-            return localVarFp.apiV1InsertBookshelf(insertBookshelfRequest, options).then((request) => request(axios, basePath));
+        insertBookshelfV1(insertBookshelfRequest?: InsertBookshelfRequest, options?: any): AxiosPromise<InsertBookshelfResponse> {
+            return localVarFp.insertBookshelfV1(insertBookshelfRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -546,8 +546,8 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1InsertShipment(insertShipmentRequest?: InsertShipmentRequest, options?: any): AxiosPromise<InsertShipmentResponse> {
-            return localVarFp.apiV1InsertShipment(insertShipmentRequest, options).then((request) => request(axios, basePath));
+        insertShipmentV1(insertShipmentRequest?: InsertShipmentRequest, options?: any): AxiosPromise<InsertShipmentResponse> {
+            return localVarFp.insertShipmentV1(insertShipmentRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -555,8 +555,8 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1ListBambooHarvest(options?: any): AxiosPromise<ListBambooHarvestResponse> {
-            return localVarFp.apiV1ListBambooHarvest(options).then((request) => request(axios, basePath));
+        listBambooHarvestV1(options?: any): AxiosPromise<ListBambooHarvestResponse> {
+            return localVarFp.listBambooHarvestV1(options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -564,8 +564,8 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1ListBookshelf(options?: any): AxiosPromise<ListBookshelfResponse> {
-            return localVarFp.apiV1ListBookshelf(options).then((request) => request(axios, basePath));
+        listBookshelfV1(options?: any): AxiosPromise<ListBookshelfResponse> {
+            return localVarFp.listBookshelfV1(options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -573,8 +573,8 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1ListShipment(options?: any): AxiosPromise<ListShipmentResponse> {
-            return localVarFp.apiV1ListShipment(options).then((request) => request(axios, basePath));
+        listShipmentV1(options?: any): AxiosPromise<ListShipmentResponse> {
+            return localVarFp.listShipmentV1(options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -594,8 +594,8 @@ export class DefaultApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public apiV1InsertBambooHarvest(insertBambooHarvestRequest?: InsertBambooHarvestRequest, options?: any) {
-        return DefaultApiFp(this.configuration).apiV1InsertBambooHarvest(insertBambooHarvestRequest, options).then((request) => request(this.axios, this.basePath));
+    public insertBambooHarvestV1(insertBambooHarvestRequest?: InsertBambooHarvestRequest, options?: any) {
+        return DefaultApiFp(this.configuration).insertBambooHarvestV1(insertBambooHarvestRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -606,8 +606,8 @@ export class DefaultApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public apiV1InsertBookshelf(insertBookshelfRequest?: InsertBookshelfRequest, options?: any) {
-        return DefaultApiFp(this.configuration).apiV1InsertBookshelf(insertBookshelfRequest, options).then((request) => request(this.axios, this.basePath));
+    public insertBookshelfV1(insertBookshelfRequest?: InsertBookshelfRequest, options?: any) {
+        return DefaultApiFp(this.configuration).insertBookshelfV1(insertBookshelfRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -618,8 +618,8 @@ export class DefaultApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public apiV1InsertShipment(insertShipmentRequest?: InsertShipmentRequest, options?: any) {
-        return DefaultApiFp(this.configuration).apiV1InsertShipment(insertShipmentRequest, options).then((request) => request(this.axios, this.basePath));
+    public insertShipmentV1(insertShipmentRequest?: InsertShipmentRequest, options?: any) {
+        return DefaultApiFp(this.configuration).insertShipmentV1(insertShipmentRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -629,8 +629,8 @@ export class DefaultApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public apiV1ListBambooHarvest(options?: any) {
-        return DefaultApiFp(this.configuration).apiV1ListBambooHarvest(options).then((request) => request(this.axios, this.basePath));
+    public listBambooHarvestV1(options?: any) {
+        return DefaultApiFp(this.configuration).listBambooHarvestV1(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -640,8 +640,8 @@ export class DefaultApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public apiV1ListBookshelf(options?: any) {
-        return DefaultApiFp(this.configuration).apiV1ListBookshelf(options).then((request) => request(this.axios, this.basePath));
+    public listBookshelfV1(options?: any) {
+        return DefaultApiFp(this.configuration).listBookshelfV1(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -651,8 +651,8 @@ export class DefaultApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public apiV1ListShipment(options?: any) {
-        return DefaultApiFp(this.configuration).apiV1ListShipment(options).then((request) => request(this.axios, this.basePath));
+    public listShipmentV1(options?: any) {
+        return DefaultApiFp(this.configuration).listShipmentV1(options).then((request) => request(this.axios, this.basePath));
     }
 }
 

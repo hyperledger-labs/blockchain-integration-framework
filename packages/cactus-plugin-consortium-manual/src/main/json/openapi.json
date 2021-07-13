@@ -83,7 +83,7 @@
                         "path": "/api/v1/plugins/@hyperledger/cactus-plugin-consortium-manual/consortium/jws"
                     }
                 },
-                "operationId": "getConsortiumJws",
+                "operationId": "getConsortiumJwsV1",
                 "summary": "Retrieves a consortium JWS",
                 "description": "The JWS asserting the consortium metadata (pub keys and hosts of nodes)",
                 "parameters": [],
@@ -118,7 +118,7 @@
                         "path": "/api/v1/plugins/@hyperledger/cactus-plugin-consortium-manual/node/jws"
                     }
                 },
-                "operationId": "getNodeJws",
+                "operationId": "getNodeJwsV1",
                 "summary": "Retrieves the JWT of a Cactus Node",
                 "parameters": [],
                 "requestBody": {
@@ -152,7 +152,7 @@
                         "path": "/api/v1/plugins/@hyperledger/cactus-plugin-consortium-manual/get-prometheus-exporter-metrics"
                     }
                 },
-                "operationId": "getPrometheusExporterMetricsV1",
+                "operationId": "getPrometheusMetricsV1",
                 "summary": "Get the Prometheus Metrics",
                 "parameters": [],
                 "responses": {

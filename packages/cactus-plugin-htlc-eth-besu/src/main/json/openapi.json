@@ -260,7 +260,7 @@
             "path": "/api/v1/plugins/@hyperledger/cactus-plugin-htlc-eth-besu/new-contract"
           }
         },
-        "operationId": "newContract",
+        "operationId": "newContractV1",
         "requestBody": {
           "content": {
             "application/json": {
@@ -292,7 +292,7 @@
             "path": "/api/v1/plugins/@hyperledger/cactus-plugin-htlc-eth-besu/withdraw"
           }
         },
-        "operationId": "withdraw",
+        "operationId": "withdrawV1",
         "requestBody": {
           "content": {
             "application/json": {
@@ -324,7 +324,7 @@
             "path": "/api/v1/plugins/@hyperledger/cactus-plugin-htlc-eth-besu/refund"
           }
         },
-        "operationId": "refund",
+        "operationId": "refundV1",
         "parameters": [],
         "requestBody": {
           "content": {
@@ -357,7 +357,7 @@
             "path": "/api/v1/plugins/@hyperledger/cactus-plugin-htlc-eth-besu/get-status"
           }
         },
-        "operationId": "getStatus",
+        "operationId": "getStatusV1",
         "parameters": [
           {
             "name": "ids",
@@ -412,7 +412,7 @@
             "path": "/api/v1/plugins/@hyperledger/cactus-plugin-htlc-eth-besu/get-single-status"
           }
         },
-        "operationId": "getSingleStatus",
+        "operationId": "getSingleStatusV1",
         "parameters": [
           {
             "name": "id",
@@ -464,7 +464,7 @@
             "path": "/api/v1/plugins/@hyperledger/cactus-plugin-htlc-eth-besu/initialize"
           }
         },
-        "operationId": "initialize",
+        "operationId": "initializeV1",
         "requestBody": {
           "content": {
             "application/json": {

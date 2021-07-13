@@ -922,7 +922,7 @@
                         "path": "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-corda/get-prometheus-exporter-metrics"
                     }
                 },
-                "operationId": "getPrometheusExporterMetricsV1",
+                "operationId": "getPrometheusMetricsV1",
                 "summary": "Get the Prometheus Metrics",
                 "parameters": [],
                 "responses": {

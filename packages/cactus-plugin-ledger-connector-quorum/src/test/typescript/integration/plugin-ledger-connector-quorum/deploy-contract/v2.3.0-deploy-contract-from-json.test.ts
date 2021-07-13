@@ -450,7 +450,7 @@ test(testCase, async (t: Test) => {
   });
 
   test("get prometheus exporter metrics", async (t2: Test) => {
-    const res = await apiClient.getPrometheusExporterMetricsV1();
+    const res = await apiClient.getPrometheusMetricsV1();
     const promMetricsOutput =
       "# HELP " +
       K_CACTUS_QUORUM_TOTAL_TX_COUNT +

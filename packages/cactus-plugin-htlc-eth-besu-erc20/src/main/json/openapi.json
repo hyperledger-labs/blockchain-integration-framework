@@ -280,7 +280,7 @@
             "path": "/api/v1/plugins/@hyperledger/cactus-plugin-htlc-eth-besu-erc20/initialize"
           }
         },
-        "operationId": "initialize",
+        "operationId": "initializeV1",
         "summary": "Initialize contract",
         "parameters": [],
         "requestBody": {
@@ -314,7 +314,7 @@
             "path": "/api/v1/plugins/@hyperledger/cactus-plugin-htlc-eth-besu-erc20/withdraw"
           }
         },
-        "operationId": "withdraw",
+        "operationId": "withdrawV1",
         "summary": "Withdraw a hashtimelock contract",
         "parameters": [],
         "requestBody": {
@@ -348,7 +348,7 @@
             "path": "/api/v1/plugins/@hyperledger/cactus-plugin-htlc-eth-besu-erc20/get-status"
           }
         },
-        "operationId": "getStatus",
+        "operationId": "getStatusV1",
         "summary": "Get array of status of a hashtimelock contract, the status are ( 0 - Invalid, 1 - Active, 2 - Refunded, 3 - Withdrawn, 4 - Expired)",
         "parameters": [
           {
@@ -404,7 +404,7 @@
             "path": "/api/v1/plugins/@hyperledger/cactus-plugin-htlc-eth-besu-erc20/get-single-status"
           }
         },
-        "operationId": "getSingleStatus",
+        "operationId": "getSingleStatusV1",
         "summary": "Get a status of a hashtimelock contract, the status are ( 0 - Invalid, 1 - Active, 2 - Refunded, 3 - Withdrawn, 4 - Expired)",
         "parameters": [
           {
@@ -457,7 +457,7 @@
             "path": "/api/v1/plugins/@hyperledger/cactus-plugin-htlc-eth-besu-erc20/refund"
           }
         },
-        "operationId": "refund",
+        "operationId": "refundV1",
         "summary": "Refund a hashtimelock contract",
         "parameters": [],
         "requestBody": {
@@ -491,7 +491,7 @@
             "path": "/api/v1/plugins/@hyperledger/cactus-plugin-htlc-eth-besu-erc20/new-contract"
           }
         },
-        "operationId": "newContract",
+        "operationId": "newContractV1",
         "summary": "Create a new hashtimelock contract",
         "parameters": [],
         "requestBody": {

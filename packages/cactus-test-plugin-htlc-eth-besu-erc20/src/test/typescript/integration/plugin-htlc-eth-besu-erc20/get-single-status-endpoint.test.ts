@@ -245,7 +245,7 @@ test(testCase, async (t: Test) => {
     web3SigningCredential,
     gas: estimatedGas,
   };
-  const resNewContract = await api.newContract(request);
+  const resNewContract = await api.newContractV1(request);
   t.equal(resNewContract.status, 200, "response status is OK");
 
   t.comment("Get single status of HTLC");
@@ -265,7 +265,7 @@ test(testCase, async (t: Test) => {
     ],
   });
 
-  const res = await api.getSingleStatus(
+  const res = await api.getSingleStatusV1(
     callOutput as string,
     web3SigningCredential,
     connectorId,

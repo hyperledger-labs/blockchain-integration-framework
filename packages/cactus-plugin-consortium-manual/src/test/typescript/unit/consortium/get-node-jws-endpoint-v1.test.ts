@@ -105,7 +105,7 @@ test("Can provide JWS", async (t: Test) => {
     // The first check shall observe the cactus_consortium_manual_total_node_count metrics
     // to be valued at zero, as the ConsortiumRepo object is initialized with an empty array of
     // Cactus nodes.
-    const res = await apiClient.getPrometheusExporterMetricsV1();
+    const res = await apiClient.getPrometheusMetricsV1();
     const promMetricsOutput =
       "# HELP " +
       K_CACTUS_CONSORTIUM_MANUAL_TOTAL_NODE_COUNT +
@@ -142,12 +142,12 @@ test("Can provide JWS", async (t: Test) => {
   // The invocation of the node JWS endpoint internally triggers the update
   // of the metrics so after it has executed we can expect the metrics to
   // show the new values for our assertions below
-  await apiClient.getNodeJws();
+  await apiClient.getNodeJwsV1();
 
   {
     // The second check shall observe the cactus_consortium_manual_total_node_count metrics
     // to be valued at One, as the Cactus node array is pushed with a dummy cactus node.
-    const res = await apiClient.getPrometheusExporterMetricsV1();
+    const res = await apiClient.getPrometheusMetricsV1();
     const promMetricsOutput =
       "# HELP " +
       K_CACTUS_CONSORTIUM_MANUAL_TOTAL_NODE_COUNT +

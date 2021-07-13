@@ -164,7 +164,7 @@ test(testCase, async (t: Test) => {
   const api = new BesuApiClient(configuration);
 
   // Test for 200 valid response test case
-  const res = await api.getbalanceV1(request);
+  const res = await api.getBalanceV1(request);
   t.ok(res, "API response object is truthy");
   t.true(typeof res.data.balance === "string", "Response is String ok");
 });

@@ -183,7 +183,7 @@ test(testCase, async (t: Test) => {
       keychainId: "",
       gas: DataTest.estimated_gas,
     };
-    const resp = await api.newContract(bodyObj);
+    const resp = await api.newContractV1(bodyObj);
     t.ok(resp, "response newContract is OK");
     t.equal(resp.status, 200, "response status newContract is OK");
   } catch (error) {

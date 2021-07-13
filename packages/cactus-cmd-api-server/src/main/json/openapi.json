@@ -108,7 +108,7 @@
                         "path": "/api/v1/api-server/healthcheck"
                     }
                 },
-                "operationId": "getHealthCheck",
+                "operationId": "getHealthCheckV1",
                 "parameters": [],
                 "responses": {
                     "200": {
@@ -132,7 +132,7 @@
                         "path": "/api/v1/api-server/get-prometheus-exporter-metrics"
                     }
                 },
-                "operationId": "getPrometheusExporterMetricsV1",
+                "operationId": "getPrometheusMetricsV1",
                 "summary": "Get the Prometheus Metrics",
                 "parameters": [],
                 "responses": {

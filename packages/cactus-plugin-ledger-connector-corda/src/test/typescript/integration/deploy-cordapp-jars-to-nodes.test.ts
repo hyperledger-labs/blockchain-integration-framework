@@ -351,7 +351,7 @@ test("Tests are passing on the JVM side", async (t: Test) => {
 
   {
     plugin.transact();
-    const promRes = await apiClient1.getPrometheusExporterMetricsV1();
+    const promRes = await apiClient1.getPrometheusMetricsV1();
     const promMetricsOutput =
       "# HELP " +
       K_CACTUS_CORDA_TOTAL_TX_COUNT +
@@ -374,7 +374,7 @@ test("Tests are passing on the JVM side", async (t: Test) => {
     // Executing transaction to increment the Total transaction count metrics
     plugin.transact();
 
-    const promRes1 = await apiClient1.getPrometheusExporterMetricsV1();
+    const promRes1 = await apiClient1.getPrometheusMetricsV1();
     const promMetricsOutput1 =
       "# HELP " +
       K_CACTUS_CORDA_TOTAL_TX_COUNT +

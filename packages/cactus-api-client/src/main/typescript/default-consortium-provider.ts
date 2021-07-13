@@ -61,7 +61,7 @@ export class DefaultConsortiumProvider
 
   public async get(): Promise<ConsortiumDatabase> {
     try {
-      const res = await this.options.apiClient.getConsortiumJws();
+      const res = await this.options.apiClient.getConsortiumJwsV1();
       return this.parseConsortiumJws(res.data);
     } catch (ex) {
       const innerException = (ex.toJSON && ex.toJSON()) || ex;

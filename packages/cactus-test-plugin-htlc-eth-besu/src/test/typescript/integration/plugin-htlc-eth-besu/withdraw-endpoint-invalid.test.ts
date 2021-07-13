@@ -183,7 +183,7 @@ test(testCase, async (t: Test) => {
     keychainId,
     gas: DataTest.estimated_gas,
   };
-  const resp = await api.newContract(bodyObj);
+  const resp = await api.newContractV1(bodyObj);
   t.ok(resp, "response newContract is OK");
   t.equal(resp.status, 200, "response status newContract is OK");
 
@@ -212,7 +212,7 @@ test(testCase, async (t: Test) => {
       connectorId,
       keychainId: "",
     };
-    const res = await api.withdraw(bodyWithdraw);
+    const res = await api.withdrawV1(bodyWithdraw);
 
     t.equal(res.status, 200, "response status is 200 OK");
   } catch (error) {

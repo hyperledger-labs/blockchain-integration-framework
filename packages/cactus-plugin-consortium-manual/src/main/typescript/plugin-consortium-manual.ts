@@ -250,7 +250,7 @@ export class PluginConsortiumManual
       .map((cnm) => cnm.nodeApiHost)
       .map((host) => new Configuration({ basePath: host }))
       .map((configuration) => new DefaultApi(configuration))
-      .map((apiClient) => apiClient.getNodeJws());
+      .map((apiClient) => apiClient.getNodeJwsV1());
 
     const responses = await Promise.all(requests);
 

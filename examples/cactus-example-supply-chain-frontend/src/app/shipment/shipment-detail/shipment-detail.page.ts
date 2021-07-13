@@ -69,7 +69,7 @@ export class ShipmentDetailPage implements OnInit {
   }
 
   private async loadData(): Promise<void> {
-    const { data } = await this.supplyChainApi.apiV1ListBookshelf();
+    const { data } = await this.supplyChainApi.listBookshelfV1();
     const { data: bookshelves } = data;
     this.bookshelves = bookshelves;
     this.log.debug(`Fetched BambooHarvest data: %o`, bookshelves);

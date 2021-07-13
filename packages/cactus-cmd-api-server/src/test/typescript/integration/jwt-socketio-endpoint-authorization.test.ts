@@ -138,7 +138,7 @@ test(testCase, async (t: Test) => {
         "SocketIO connection rejected when JWT is invalid OK",
       );
 
-      const resHc = await apiClientGood.getHealthCheck();
+      const resHc = await apiClientGood.getHealthCheckV1();
       t.ok(resHc, "healthcheck response truthy OK");
       t.equal(resHc.status, 200, "healthcheck response status === 200 OK");
       t.equal(typeof resHc.data, "object", "typeof resHc.data is 'object' OK");
@@ -169,7 +169,7 @@ test(testCase, async (t: Test) => {
       const all = await healthchecks.toPromise();
       t.comment("all=" + JSON.stringify(all));
 
-      const resHc = await apiClientFixable.getHealthCheck();
+      const resHc = await apiClientFixable.getHealthCheckV1();
       t.ok(resHc, "healthcheck response truthy OK");
       t.equal(resHc.status, 200, "healthcheck response status === 200 OK");
       t.equal(typeof resHc.data, "object", "typeof resHc.data is 'object' OK");

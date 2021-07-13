@@ -193,7 +193,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        daoTokenGetAllowance: async (daoTokenGetAllowanceRequest?: DaoTokenGetAllowanceRequest, options: any = {}): Promise<RequestArgs> => {
+        daoTokenGetAllowanceV1: async (daoTokenGetAllowanceRequest?: DaoTokenGetAllowanceRequest, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/v1/plugins/@hyperledger/cactus-example-carbon-accounting-backend/dao-token/get-allowance`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -271,8 +271,8 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async daoTokenGetAllowance(daoTokenGetAllowanceRequest?: DaoTokenGetAllowanceRequest, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DaoTokenGetAllowanceResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.daoTokenGetAllowance(daoTokenGetAllowanceRequest, options);
+        async daoTokenGetAllowanceV1(daoTokenGetAllowanceRequest?: DaoTokenGetAllowanceRequest, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DaoTokenGetAllowanceResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.daoTokenGetAllowanceV1(daoTokenGetAllowanceRequest, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -303,8 +303,8 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        daoTokenGetAllowance(daoTokenGetAllowanceRequest?: DaoTokenGetAllowanceRequest, options?: any): AxiosPromise<DaoTokenGetAllowanceResponse> {
-            return localVarFp.daoTokenGetAllowance(daoTokenGetAllowanceRequest, options).then((request) => request(axios, basePath));
+        daoTokenGetAllowanceV1(daoTokenGetAllowanceRequest?: DaoTokenGetAllowanceRequest, options?: any): AxiosPromise<DaoTokenGetAllowanceResponse> {
+            return localVarFp.daoTokenGetAllowanceV1(daoTokenGetAllowanceRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -334,8 +334,8 @@ export class DefaultApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public daoTokenGetAllowance(daoTokenGetAllowanceRequest?: DaoTokenGetAllowanceRequest, options?: any) {
-        return DefaultApiFp(this.configuration).daoTokenGetAllowance(daoTokenGetAllowanceRequest, options).then((request) => request(this.axios, this.basePath));
+    public daoTokenGetAllowanceV1(daoTokenGetAllowanceRequest?: DaoTokenGetAllowanceRequest, options?: any) {
+        return DefaultApiFp(this.configuration).daoTokenGetAllowanceV1(daoTokenGetAllowanceRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

@@ -76,17 +76,17 @@ test("Supply chain backend API calls can be executed", async (t: Test) => {
 
   const { besuApiClient, fabricApiClient, quorumApiClient } = startResult;
 
-  const metricsResB = await besuApiClient.getPrometheusExporterMetricsV1();
+  const metricsResB = await besuApiClient.getPrometheusMetricsV1();
   t.ok(metricsResB, "besu metrics res truthy OK");
   t.true(metricsResB.status > 199, "metricsResB.status > 199 true OK");
   t.true(metricsResB.status < 300, "metricsResB.status < 300 true OK");
 
-  const metricsResF = await fabricApiClient.getPrometheusExporterMetricsV1();
+  const metricsResF = await fabricApiClient.getPrometheusMetricsV1();
   t.ok(metricsResF, "fabric metrics res truthy OK");
   t.true(metricsResF.status > 199, "metricsResF.status > 199 true OK");
   t.true(metricsResF.status < 300, "metricsResF.status < 300 true OK");
 
-  const metricsResQ = await quorumApiClient.getPrometheusExporterMetricsV1();
+  const metricsResQ = await quorumApiClient.getPrometheusMetricsV1();
   t.ok(metricsResQ, "quorum metrics res truthy OK");
   t.true(metricsResQ.status > 199, "metricsResQ.status > 199 true OK");
   t.true(metricsResQ.status < 300, "metricsResQ.status < 300 true OK");
@@ -97,7 +97,7 @@ test("Supply chain backend API calls can be executed", async (t: Test) => {
     supplyChainApiClientC,
   } = startResult;
 
-  const listBambooHarvestRes = await supplyChainApiClientA.apiV1ListBambooHarvest();
+  const listBambooHarvestRes = await supplyChainApiClientA.listBambooHarvestV1();
   t.ok(listBambooHarvestRes, "listBambooHarvestRes truthy OK");
   t.true(
     listBambooHarvestRes.status > 199,
@@ -108,7 +108,7 @@ test("Supply chain backend API calls can be executed", async (t: Test) => {
     "listBambooHarvestRes status < 300 truthy OK",
   );
 
-  const listBookshelfRes = await supplyChainApiClientB.apiV1ListBookshelf();
+  const listBookshelfRes = await supplyChainApiClientB.listBookshelfV1();
   t.ok(listBookshelfRes, "listBookshelfRes truthy OK");
   t.true(
     listBookshelfRes.status > 199,
@@ -119,7 +119,7 @@ test("Supply chain backend API calls can be executed", async (t: Test) => {
     "listBookshelfRes status < 300 truthy OK",
   );
 
-  const listShipmentRes = await supplyChainApiClientC.apiV1ListShipment();
+  const listShipmentRes = await supplyChainApiClientC.listShipmentV1();
   t.ok(listShipmentRes, "listShipmentRes truthy OK");
   t.true(
     listShipmentRes.status > 199,

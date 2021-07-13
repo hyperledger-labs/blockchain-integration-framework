@@ -4,5 +4,5 @@ export class ListBambooHarvestEndpoint {
 
   public static readonly HTTP_VERB_LOWER_CASE = "get";
 
-  public static readonly OPENAPI_OPERATION_ID = "apiV1ListBambooHarvest";
+  public static readonly OPENAPI_OPERATION_ID = "listBambooHarvestV1";
 }

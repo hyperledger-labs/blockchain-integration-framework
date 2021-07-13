@@ -105,7 +105,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getConsortiumJws: async (body?: object, options: any = {}): Promise<RequestArgs> => {
+        getConsortiumJwsV1: async (body?: object, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/v1/plugins/@hyperledger/cactus-plugin-consortium-manual/consortium/jws`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -139,7 +139,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getNodeJws: async (body?: object, options: any = {}): Promise<RequestArgs> => {
+        getNodeJwsV1: async (body?: object, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/v1/plugins/@hyperledger/cactus-plugin-consortium-manual/node/jws`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -172,7 +172,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPrometheusExporterMetricsV1: async (options: any = {}): Promise<RequestArgs> => {
+        getPrometheusMetricsV1: async (options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/v1/plugins/@hyperledger/cactus-plugin-consortium-manual/get-prometheus-exporter-metrics`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -213,8 +213,8 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getConsortiumJws(body?: object, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetConsortiumJwsResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getConsortiumJws(body, options);
+        async getConsortiumJwsV1(body?: object, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetConsortiumJwsResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getConsortiumJwsV1(body, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -224,8 +224,8 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getNodeJws(body?: object, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetNodeJwsResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getNodeJws(body, options);
+        async getNodeJwsV1(body?: object, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetNodeJwsResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getNodeJwsV1(body, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -234,8 +234,8 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getPrometheusExporterMetricsV1(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getPrometheusExporterMetricsV1(options);
+        async getPrometheusMetricsV1(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getPrometheusMetricsV1(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -255,8 +255,8 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getConsortiumJws(body?: object, options?: any): AxiosPromise<GetConsortiumJwsResponse> {
-            return localVarFp.getConsortiumJws(body, options).then((request) => request(axios, basePath));
+        getConsortiumJwsV1(body?: object, options?: any): AxiosPromise<GetConsortiumJwsResponse> {
+            return localVarFp.getConsortiumJwsV1(body, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -265,8 +265,8 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getNodeJws(body?: object, options?: any): AxiosPromise<GetNodeJwsResponse> {
-            return localVarFp.getNodeJws(body, options).then((request) => request(axios, basePath));
+        getNodeJwsV1(body?: object, options?: any): AxiosPromise<GetNodeJwsResponse> {
+            return localVarFp.getNodeJwsV1(body, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -274,8 +274,8 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPrometheusExporterMetricsV1(options?: any): AxiosPromise<string> {
-            return localVarFp.getPrometheusExporterMetricsV1(options).then((request) => request(axios, basePath));
+        getPrometheusMetricsV1(options?: any): AxiosPromise<string> {
+            return localVarFp.getPrometheusMetricsV1(options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -295,8 +295,8 @@ export class DefaultApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public getConsortiumJws(body?: object, options?: any) {
-        return DefaultApiFp(this.configuration).getConsortiumJws(body, options).then((request) => request(this.axios, this.basePath));
+    public getConsortiumJwsV1(body?: object, options?: any) {
+        return DefaultApiFp(this.configuration).getConsortiumJwsV1(body, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -307,8 +307,8 @@ export class DefaultApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public getNodeJws(body?: object, options?: any) {
-        return DefaultApiFp(this.configuration).getNodeJws(body, options).then((request) => request(this.axios, this.basePath));
+    public getNodeJwsV1(body?: object, options?: any) {
+        return DefaultApiFp(this.configuration).getNodeJwsV1(body, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -318,8 +318,8 @@ export class DefaultApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof DefaultApi
      */
-    public getPrometheusExporterMetricsV1(options?: any) {
-        return DefaultApiFp(this.configuration).getPrometheusExporterMetricsV1(options).then((request) => request(this.axios, this.basePath));
+    public getPrometheusMetricsV1(options?: any) {
+        return DefaultApiFp(this.configuration).getPrometheusMetricsV1(options).then((request) => request(this.axios, this.basePath));
     }
 }
 

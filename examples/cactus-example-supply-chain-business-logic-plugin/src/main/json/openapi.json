@@ -141,7 +141,7 @@
                         "nullable": false,
                         "default": [],
                         "items": {
-                            "$ref": "#/components/schema/BambooHarvest",
+                            "$ref": "#/components/schemas/BambooHarvest",
                             "minItems": 0,
                             "maxItems": 65535
                         }
@@ -184,7 +184,7 @@
                         "nullable": false,
                         "default": [],
                         "items": {
-                            "$ref": "#/components/schema/Bookshelf",
+                            "$ref": "#/components/schemas/Bookshelf",
                             "minItems": 0,
                             "maxItems": 65535
                         }
@@ -227,7 +227,7 @@
                         "nullable": false,
                         "default": [],
                         "items": {
-                            "$ref": "#/components/schema/Shipment",
+                            "$ref": "#/components/schemas/Shipment",
                             "minItems": 0,
                             "maxItems": 65535
                         }
@@ -239,7 +239,7 @@
     "paths": {
         "/api/v1/plugins/@hyperledger/cactus-example-supply-chain-backend/insert-bookshelf": {
             "post": {
-                "operationId": "apiV1InsertBookshelf",
+                "operationId": "insertBookshelfV1",
                 "summary": "Inserts the provided Bookshelf entity to the ledger.",
                 "parameters": [],
                 "requestBody": {
@@ -267,7 +267,7 @@
         },
         "/api/v1/plugins/@hyperledger/cactus-example-supply-chain-backend/list-bookshelf": {
             "get": {
-                "operationId": "apiV1ListBookshelf",
+                "operationId": "listBookshelfV1",
                 "summary": "Lists all the Bookshelf entities stored on the ledger.",
                 "parameters": [],
                 "responses": {
@@ -292,7 +292,7 @@
                         "path": "/api/v1/plugins/@hyperledger/cactus-example-supply-chain-backend/insert-shipment"
                     }
                 },
-                "operationId": "apiV1InsertShipment",
+                "operationId": "insertShipmentV1",
                 "summary": "Inserts the provided Shipment entity to the ledger.",
                 "parameters": [],
                 "requestBody": {
@@ -326,7 +326,7 @@
                         "path": "/api/v1/plugins/@hyperledger/cactus-example-supply-chain-backend/list-shipment"
                     }
                 },
-                "operationId": "apiV1ListShipment",
+                "operationId": "listShipmentV1",
                 "summary": "Lists all the Shipments entities stored on the ledger.",
                 "parameters": [],
                 "responses": {
@@ -345,7 +345,7 @@
         },
         "/api/v1/plugins/@hyperledger/cactus-example-supply-chain-backend/insert-bamboo-harvest": {
             "post": {
-                "operationId": "apiV1InsertBambooHarvest",
+                "operationId": "insertBambooHarvestV1",
                 "summary": "Inserts the provided BambooHarvest entity to the ledger.",
                 "parameters": [],
                 "requestBody": {
@@ -373,7 +373,7 @@
         },
         "/api/v1/plugins/@hyperledger/cactus-example-supply-chain-backend/list-bamboo-harvest": {
             "get": {
-                "operationId": "apiV1ListBambooHarvest",
+                "operationId": "listBambooHarvestV1",
                 "summary": "Lists all the BambooHarvest entities stored on the ledger.",
                 "parameters": [],
                 "responses": {

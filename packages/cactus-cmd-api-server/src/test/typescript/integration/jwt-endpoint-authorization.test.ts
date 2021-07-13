@@ -115,7 +115,7 @@ test(testCase, async (t: Test) => {
     const baseOptions = { headers: { Authorization: `Bearer ${tokenGood}` } };
     const conf = new Configuration({ basePath: apiHost, baseOptions });
     const apiClient = new ApiServerApi(conf);
-    const resHc = await apiClient.getHealthCheck();
+    const resHc = await apiClient.getHealthCheckV1();
     t.ok(resHc, "healthcheck response truthy OK");
     t.equal(resHc.status, 200, "healthcheck response status === 200 OK");
     t.equal(typeof resHc.data, "object", "typeof resHc.data is 'object' OK");

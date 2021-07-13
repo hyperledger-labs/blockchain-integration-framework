@@ -93,7 +93,7 @@ export class ListBookshelfEndpoint implements IWebServiceEndpoint {
     try {
       this.log.debug(`${tag}`);
 
-      const { data } = await this.opts.besuApi.apiV1BesuInvokeContract({
+      const { data } = await this.opts.besuApi.invokeContractV1({
         contractName: this.opts.contractName,
         invocationType: EthContractInvocationType.Call,
         methodName: "getAllRecords",

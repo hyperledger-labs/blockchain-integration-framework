@@ -974,7 +974,7 @@
                         "path": "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/deploy-contract-solidity-bytecode"
                     }
                 },
-                "operationId": "apiV1BesuDeployContractSolidityBytecode",
+                "operationId": "deployContractSolBytecodeV1",
                 "summary": "Deploys the bytecode of a Solidity contract.",
                 "parameters": [],
                 "requestBody": {
@@ -1008,7 +1008,7 @@
                         "path": "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-balance"
                     }
                 },
-                "operationId": "getbalanceV1",
+                "operationId": "getBalanceV1",
                 "summary": "Return balance of an address of a given block",
                 "parameters": [],
                 "requestBody": {
@@ -1076,7 +1076,7 @@
                         "path": "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/run-transaction"
                     }
                 },
-                "operationId": "apiV1BesuRunTransaction",
+                "operationId": "runTransactionV1",
                 "summary": "Executes a transaction on a besu ledger",
                 "parameters": [],
                 "requestBody": {
@@ -1110,7 +1110,7 @@
                         "path": "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-transaction"
                     }
                 },
-                "operationId": "getTransaction",
+                "operationId": "getTransactionV1",
                 "summary": "Executes a transaction on a besu ledger",
                 "parameters": [],
                 "requestBody": {
@@ -1179,7 +1179,7 @@
                         "path": "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/invoke-contract"
                     }
                 },
-                "operationId": "apiV1BesuInvokeContract",
+                "operationId": "invokeContractV1",
                 "summary": "Invokes a contract on a besu ledger",
                 "parameters": [],
                 "requestBody": {
@@ -1252,7 +1252,7 @@
                         "path": "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-prometheus-exporter-metrics"
                     }
                 },
-                "operationId": "getPrometheusExporterMetricsV1",
+                "operationId": "getPrometheusMetricsV1",
                 "summary": "Get the Prometheus Metrics",
                 "parameters": [],
                 "responses": {

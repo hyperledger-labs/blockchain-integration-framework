@@ -210,7 +210,7 @@ test(testCase, async (t: Test) => {
   }
 
   {
-    const res = await apiClient.getPrometheusExporterMetricsV1();
+    const res = await apiClient.getPrometheusMetricsV1();
     const promMetricsOutput =
       "# HELP " +
       K_CACTUS_FABRIC_TOTAL_TX_COUNT +

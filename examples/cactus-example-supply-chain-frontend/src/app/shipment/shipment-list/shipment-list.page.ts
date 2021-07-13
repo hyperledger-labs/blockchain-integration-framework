@@ -47,7 +47,7 @@ export class ShipmentListPage implements OnInit {
   }
 
   private async loadData(): Promise<void> {
-    const { data } = await this.supplyChainApi.apiV1ListShipment();
+    const { data } = await this.supplyChainApi.listShipmentV1();
     const { data: shipments } = data;
     this.shipments = shipments;
     this.log.debug(`Fetched Shipment data: %o`, shipments);
@@ -83,7 +83,7 @@ export class ShipmentListPage implements OnInit {
     const shipment = overlayEventDetail.data as Shipment;
     this.log.debug("clickAddNew() detail presented OK", shipment);
     if (shipment) {
-      const res = await this.supplyChainApi.apiV1InsertShipment({ shipment });
+      const res = await this.supplyChainApi.insertShipmentV1({ shipment });
       this.log.debug(`New Shipment inserted OK`, res);
       await this.loadData();
     }

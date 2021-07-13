@@ -191,7 +191,7 @@ test(testCase, async (t: Test) => {
     keychainId,
     gas: DataTest.estimated_gas,
   };
-  const resp = await api.newContract(bodyObj);
+  const resp = await api.newContractV1(bodyObj);
   t.ok(resp, "response newContract is OK");
   t.equal(resp.status, 200, "response status newContract is OK");
 
@@ -205,7 +205,7 @@ test(testCase, async (t: Test) => {
   );
   try {
     const fakeId = "0x66616b654964";
-    const res = await api.getSingleStatus(
+    const res = await api.getSingleStatusV1(
       fakeId,
       fakeWeb3SigningCredential,
       connectorId,

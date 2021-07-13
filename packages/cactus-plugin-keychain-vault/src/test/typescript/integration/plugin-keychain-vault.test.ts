@@ -111,7 +111,7 @@ test("get,set,has,delete alters state", async (t: Test) => {
   t.notok(valueAfterDelete1, "valueAfterDelete falsy OK");
 
   {
-    const res = await apiClient.getPrometheusExporterMetricsV1();
+    const res = await apiClient.getPrometheusMetricsV1();
     const promMetricsOutput =
       "# HELP " +
       K_CACTUS_KEYCHAIN_VAULT_MANAGED_KEY_COUNT +
@@ -149,7 +149,7 @@ test("get,set,has,delete alters state", async (t: Test) => {
   t.equal(valueAfter2, value2, "valueAfter2 === value OK");
 
   {
-    const res = await apiClient.getPrometheusExporterMetricsV1();
+    const res = await apiClient.getPrometheusMetricsV1();
     const promMetricsOutput =
       "# HELP " +
       K_CACTUS_KEYCHAIN_VAULT_MANAGED_KEY_COUNT +
@@ -258,7 +258,7 @@ test("API client get,set,has,delete alters state", async (t: Test) => {
   );
 
   {
-    const res = await apiClient.getPrometheusExporterMetricsV1();
+    const res = await apiClient.getPrometheusMetricsV1();
     const promMetricsOutput =
       "# HELP " +
       K_CACTUS_KEYCHAIN_VAULT_MANAGED_KEY_COUNT +
@@ -296,7 +296,7 @@ test("API client get,set,has,delete alters state", async (t: Test) => {
   t.equal(valueAfter2.data.value, value2, "valueAfter2.data.value EQ value OK");
 
   {
-    const res = await apiClient.getPrometheusExporterMetricsV1();
+    const res = await apiClient.getPrometheusMetricsV1();
     const promMetricsOutput =
       "# HELP " +
       K_CACTUS_KEYCHAIN_VAULT_MANAGED_KEY_COUNT +

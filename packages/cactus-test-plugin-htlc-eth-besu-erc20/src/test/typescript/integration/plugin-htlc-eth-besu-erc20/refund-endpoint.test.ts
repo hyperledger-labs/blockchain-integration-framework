@@ -267,7 +267,7 @@ test(testCase, async (t: Test) => {
     web3SigningCredential,
     gas: estimatedGas,
   };
-  const res = await api.newContract(request);
+  const res = await api.newContractV1(request);
   t.equal(res.status, 200, "response status is 200 OK");
 
   t.comment("Get account balance");
@@ -308,7 +308,7 @@ test(testCase, async (t: Test) => {
     connectorId,
     keychainId,
   };
-  const resRefund = await api.refund(refundRequest);
+  const resRefund = await api.refundV1(refundRequest);
   t.equal(resRefund.status, 200, "response status is 200 OK");
 
   t.comment("Get account balance");
@@ -326,7 +326,7 @@ test(testCase, async (t: Test) => {
     "balance of account is 100 OK",
   );
   t.comment("Get status of HTLC");
-  const resStatus = await api.getSingleStatus(
+  const resStatus = await api.getSingleStatusV1(
     id,
     web3SigningCredential,
     connectorId,
@@ -538,7 +538,7 @@ test("Test invalid refund with invalid time", async (t: Test) => {
     web3SigningCredential,
     gas: estimatedGas,
   };
-  const res = await api.newContract(request);
+  const res = await api.newContractV1(request);
   t.equal(res.status, 200, "response status is 200 OK");
 
   t.comment("Get HTLC Id from DemoHelper");
@@ -568,7 +568,7 @@ test("Test invalid refund with invalid time", async (t: Test) => {
       connectorId,
       keychainId,
     };
-    const resRefund = await api.refund(refundRequest);
+    const resRefund = await api.refundV1(refundRequest);
     t.equal(resRefund.status, 400, "response status is 400");
   } catch (error) {
     t.equal(error.response.status, 400, "response status is 400");

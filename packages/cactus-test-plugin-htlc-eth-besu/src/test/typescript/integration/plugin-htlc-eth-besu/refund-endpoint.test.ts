@@ -205,7 +205,7 @@ test(testCase, async (t: Test) => {
     keychainId,
     gas: DataTest.estimated_gas,
   };
-  const resp = await api.newContract(bodyObj);
+  const resp = await api.newContractV1(bodyObj);
   t.ok(resp, "response newContract is OK");
   t.equal(resp.status, 200, "response status newContract is OK");
 
@@ -234,7 +234,7 @@ test(testCase, async (t: Test) => {
     connectorId,
     keychainId,
   };
-  const refundResponse = await api.refund(refundRequest);
+  const refundResponse = await api.refundV1(refundRequest);
   t.equal(refundResponse.status, 200);
 
   t.comment("Get single status of HTLC");
@@ -246,7 +246,7 @@ test(testCase, async (t: Test) => {
   );
   const balance2 = await web3.eth.getBalance(firstHighNetWorthAccount);
   t.equal(balance1, balance2, "Retrieved balance of test account OK");
-  const res = await api.getSingleStatus(
+  const res = await api.getSingleStatusV1(
     id,
     web3SigningCredential,
     connectorId,

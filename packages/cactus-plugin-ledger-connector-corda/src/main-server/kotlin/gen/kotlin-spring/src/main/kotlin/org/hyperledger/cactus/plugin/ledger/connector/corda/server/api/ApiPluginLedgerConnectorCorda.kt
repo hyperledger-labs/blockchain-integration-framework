@@ -63,8 +63,8 @@ class ApiPluginLedgerConnectorCordaController(@Autowired(required = true) val se
         value = ["/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-corda/get-prometheus-exporter-metrics"],
         produces = ["text/plain"]
     )
-    fun getPrometheusExporterMetricsV1(): ResponseEntity<kotlin.String> {
-        return ResponseEntity(service.getPrometheusExporterMetricsV1(), HttpStatus.valueOf(200))
+    fun getPrometheusMetricsV1(): ResponseEntity<kotlin.String> {
+        return ResponseEntity(service.getPrometheusMetricsV1(), HttpStatus.valueOf(200))
     }
 
 

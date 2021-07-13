@@ -244,7 +244,7 @@ test(testCase, async (t: Test) => {
     web3SigningCredential,
     gas: estimatedGas,
   };
-  const responseNewContract = await api.newContract(request);
+  const responseNewContract = await api.newContractV1(request);
   t.equal(responseNewContract.status, 200, "response status is 200 OK");
 
   t.comment("Get status of HTLC");
@@ -264,7 +264,7 @@ test(testCase, async (t: Test) => {
     ],
   });
   const ids = [responseTxId.callOutput as string];
-  const res = await api.getStatus(
+  const res = await api.getStatusV1(
     ids,
     web3SigningCredential,
     connectorId,
@@ -438,12 +438,12 @@ test("Test get invalid id status", async (t: Test) => {
     web3SigningCredential,
     gas: estimatedGas,
   };
-  const responseNewContract = await api.newContract(request);
+  const responseNewContract = await api.newContractV1(request);
   t.equal(responseNewContract.status, 200, "response status is 200 OK");
 
   t.comment("Get invalid status of HTLC");
   const fakeId = "0x66616b654964";
-  const res = await api.getStatus(
+  const res = await api.getStatusV1(
     [fakeId],
     web3SigningCredential,
     connectorId,

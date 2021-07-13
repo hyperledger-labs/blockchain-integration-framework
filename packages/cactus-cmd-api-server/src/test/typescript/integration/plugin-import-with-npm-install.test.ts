@@ -88,7 +88,7 @@ test("can instal plugins at runtime based on imports", async (t: Test) => {
   const apiClient = new ApiServerApi(apiConfig);
 
   {
-    const res = await apiClient.getPrometheusExporterMetricsV1();
+    const res = await apiClient.getPrometheusMetricsV1();
     const promMetricsOutput =
       "# HELP " +
       K_CACTUS_API_SERVER_TOTAL_PLUGIN_IMPORTS +
@@ -117,7 +117,7 @@ test("can instal plugins at runtime based on imports", async (t: Test) => {
   pluginRegistry.plugins.push({} as ICactusPlugin);
 
   {
-    const res = await apiClient.getPrometheusExporterMetricsV1();
+    const res = await apiClient.getPrometheusMetricsV1();
     const promMetricsOutput =
       "# HELP " +
       K_CACTUS_API_SERVER_TOTAL_PLUGIN_IMPORTS +

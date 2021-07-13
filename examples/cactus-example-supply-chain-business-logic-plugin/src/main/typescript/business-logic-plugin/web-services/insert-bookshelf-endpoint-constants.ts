@@ -4,5 +4,5 @@ export class InsertBookshelfEndpoint {
 
   public static readonly HTTP_VERB_LOWER_CASE: string = "post";
 
-  public static readonly OPENAPI_OPERATION_ID: string = "apiV1InsertBookshelf";
+  public static readonly OPENAPI_OPERATION_ID: string = "insertBookshelfV1";
 }

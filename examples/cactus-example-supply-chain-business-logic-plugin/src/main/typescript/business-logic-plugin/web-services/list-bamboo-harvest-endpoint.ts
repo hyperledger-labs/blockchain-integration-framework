@@ -95,7 +95,7 @@ export class ListBambooHarvestEndpoint implements IWebServiceEndpoint {
     try {
       this.log.debug(`${tag}`);
 
-      const { data } = await this.opts.apiClient.apiV1QuorumInvokeContract({
+      const { data } = await this.opts.apiClient.invokeContractV1({
         contractName: this.opts.contractName,
         invocationType: EthContractInvocationType.Call,
         methodName: "getAllRecords",
