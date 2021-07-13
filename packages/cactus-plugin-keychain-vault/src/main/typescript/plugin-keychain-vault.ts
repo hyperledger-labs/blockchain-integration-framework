@@ -1,10 +1,14 @@
 import type { Server } from "http";
 import type { Server as SecureServer } from "https";
 
-import type { Express } from "express";
+import type { Express, NextFunction, Request, Response } from "express";
 import { Optional } from "typescript-optional";
 import Vault from "node-vault";
 import HttpStatus from "http-status-codes";
+
+import OAS from "../json/openapi.json";
+import * as OpenApiValidator from "express-openapi-validator";
+import { OpenAPIV3 } from "express-openapi-validator/dist/framework/types";
 
 import {
   Logger,
@@ -132,6 +136,40 @@ export class PluginKeychainVault implements IPluginWebService, IPluginKeychain {
 
   async registerWebServices(app: Express): Promise<IWebServiceEndpoint[]> {
     const webServices = await this.getOrCreateWebServices();
+    const apiSpec = this.getOpenApiSpecs();
+    const openApiMiddleware = OpenApiValidator.middleware({
+      apiSpec,
+      validateApiSpec: false,
+      $refParser: {
+        mode: "dereference",
+      },
+    });
+    app.use(openApiMiddleware);
+    app.use(
+      (
+        err: {
+          status?: number;
+          errors: [
+            {
+              path: string;
+              message: string;
+              errorCode: string;
+            },
+          ];
+        },
+        req: Request,
+        res: Response,
+        next: NextFunction,
+      ) => {
+        if (err) {
+          res.status(err.status || 500);
+          res.send(err.errors);
+        } else {
+          next();
+        }
+      },
+    );
+
     await Promise.all(webServices.map((ws) => ws.registerExpress(app)));
     return webServices;
   }
@@ -185,6 +223,10 @@ export class PluginKeychainVault implements IPluginWebService, IPluginKeychain {
 
   public getHttpServer(): Optional<Server | SecureServer> {
     return Optional.empty();
+  }
+
+  getOpenApiSpecs(): OpenAPIV3.Document {
+    return (OAS as unknown) as OpenAPIV3.Document;
   }
 
   public async shutdown(): Promise<void> {

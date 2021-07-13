@@ -20,6 +20,7 @@
         "required": [
           "key"
         ],
+        "additionalProperties": false,
         "properties": {
           "key": {
             "type": "string",
@@ -77,6 +78,7 @@
         "required": [
           "key"
         ],
+        "additionalProperties": false,
         "properties": {
           "key": {
             "type": "string",
@@ -102,23 +104,23 @@
         "summary": "Retrieves the contents of a keychain entry from the backend.",
         "parameters": [],
         "requestBody": {
-          "$ref": "https://raw.githubusercontent.com/hyperledger/cactus/v0.5.0/packages/cactus-core-api/src/main/json/openapi.json#/components/requestBodies/keychain_get_entry_request_body"
+          "$ref": "https://raw.githubusercontent.com/hyperledger/cactus/2021-07-12-hotfix-847/packages/cactus-core-api/src/main/json/openapi.json#/components/requestBodies/keychain_get_entry_request_body"
         },
         "responses": {
           "200": {
-            "$ref": "https://raw.githubusercontent.com/hyperledger/cactus/v0.5.0/packages/cactus-core-api/src/main/json/openapi.json#/components/responses/keychain_get_entry_200"
+            "$ref": "https://raw.githubusercontent.com/hyperledger/cactus/2021-07-12-hotfix-847/packages/cactus-core-api/src/main/json/openapi.json#/components/responses/keychain_get_entry_200"
           },
           "400": {
-            "$ref": "https://raw.githubusercontent.com/hyperledger/cactus/v0.5.0/packages/cactus-core-api/src/main/json/openapi.json#/components/responses/keychain_get_entry_400"
+            "$ref": "https://raw.githubusercontent.com/hyperledger/cactus/2021-07-12-hotfix-847/packages/cactus-core-api/src/main/json/openapi.json#/components/responses/keychain_get_entry_400"
           },
           "401": {
-            "$ref": "https://raw.githubusercontent.com/hyperledger/cactus/v0.5.0/packages/cactus-core-api/src/main/json/openapi.json#/components/responses/keychain_get_entry_401"
+            "$ref": "https://raw.githubusercontent.com/hyperledger/cactus/2021-07-12-hotfix-847/packages/cactus-core-api/src/main/json/openapi.json#/components/responses/keychain_get_entry_401"
           },
           "404": {
-            "$ref": "https://raw.githubusercontent.com/hyperledger/cactus/v0.5.0/packages/cactus-core-api/src/main/json/openapi.json#/components/responses/keychain_get_entry_404"
+            "$ref": "https://raw.githubusercontent.com/hyperledger/cactus/2021-07-12-hotfix-847/packages/cactus-core-api/src/main/json/openapi.json#/components/responses/keychain_get_entry_404"
           },
           "500": {
-            "$ref": "https://raw.githubusercontent.com/hyperledger/cactus/v0.5.0/packages/cactus-core-api/src/main/json/openapi.json#/components/responses/keychain_get_entry_500"
+            "$ref": "https://raw.githubusercontent.com/hyperledger/cactus/2021-07-12-hotfix-847/packages/cactus-core-api/src/main/json/openapi.json#/components/responses/keychain_get_entry_500"
           }
         }
       }
@@ -203,20 +205,20 @@
         "summary": "Sets a value under a key on the keychain backend.",
         "parameters": [],
         "requestBody": {
-          "$ref": "https://raw.githubusercontent.com/hyperledger/cactus/v0.5.0/packages/cactus-core-api/src/main/json/openapi.json#/components/requestBodies/keychain_set_entry_request_body"
+          "$ref": "https://raw.githubusercontent.com/hyperledger/cactus/2021-07-12-hotfix-847/packages/cactus-core-api/src/main/json/openapi.json#/components/requestBodies/keychain_set_entry_request_body"
         },
         "responses": {
           "200": {
-            "$ref": "https://raw.githubusercontent.com/hyperledger/cactus/v0.5.0/packages/cactus-core-api/src/main/json/openapi.json#/components/responses/keychain_set_entry_200"
+            "$ref": "https://raw.githubusercontent.com/hyperledger/cactus/2021-07-12-hotfix-847/packages/cactus-core-api/src/main/json/openapi.json#/components/responses/keychain_set_entry_200"
           },
           "400": {
-            "$ref": "https://raw.githubusercontent.com/hyperledger/cactus/v0.5.0/packages/cactus-core-api/src/main/json/openapi.json#/components/responses/keychain_set_entry_400"
+            "$ref": "https://raw.githubusercontent.com/hyperledger/cactus/2021-07-12-hotfix-847/packages/cactus-core-api/src/main/json/openapi.json#/components/responses/keychain_set_entry_400"
           },
           "401": {
-            "$ref": "https://raw.githubusercontent.com/hyperledger/cactus/v0.5.0/packages/cactus-core-api/src/main/json/openapi.json#/components/responses/keychain_set_entry_401"
+            "$ref": "https://raw.githubusercontent.com/hyperledger/cactus/2021-07-12-hotfix-847/packages/cactus-core-api/src/main/json/openapi.json#/components/responses/keychain_set_entry_401"
           },
           "500": {
-            "$ref": "https://raw.githubusercontent.com/hyperledger/cactus/v0.5.0/packages/cactus-core-api/src/main/json/openapi.json#/components/responses/keychain_set_entry_500"
+            "$ref": "https://raw.githubusercontent.com/hyperledger/cactus/2021-07-12-hotfix-847/packages/cactus-core-api/src/main/json/openapi.json#/components/responses/keychain_set_entry_500"
           }
         }
       }
