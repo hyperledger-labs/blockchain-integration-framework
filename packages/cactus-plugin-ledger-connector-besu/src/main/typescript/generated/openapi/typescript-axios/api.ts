@@ -465,6 +465,56 @@ export interface GetBalanceV1Response {
 /**
  * 
  * @export
+ * @interface GetBesuRecordV1Request
+ */
+export interface GetBesuRecordV1Request {
+    /**
+     * 
+     * @type {InvokeContractV1Request}
+     * @memberof GetBesuRecordV1Request
+     */
+    invokeCall?: InvokeContractV1Request;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetBesuRecordV1Request
+     */
+    transactionHash?: string;
+}
+/**
+ * 
+ * @export
+ * @interface GetBesuRecordV1Response
+ */
+export interface GetBesuRecordV1Response {
+    /**
+     * 
+     * @type {string}
+     * @memberof GetBesuRecordV1Response
+     */
+    ledgerId?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GetBesuRecordV1Response
+     */
+    stateContract?: string;
+    /**
+     * 
+     * @type {any}
+     * @memberof GetBesuRecordV1Response
+     */
+    transactionInputData?: any | null;
+    /**
+     * 
+     * @type {any}
+     * @memberof GetBesuRecordV1Response
+     */
+    callOutput?: any | null;
+}
+/**
+ * 
+ * @export
  * @interface GetBlockV1Request
  */
 export interface GetBlockV1Request {
@@ -1199,6 +1249,40 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Retrieves an arbitrary record (any piece of information) from the ledger. Ledger records can be call outputs, transaction input, etc.
+         * @param {GetBesuRecordV1Request} [getBesuRecordV1Request] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getBesuRecordV1: async (getBesuRecordV1Request?: GetBesuRecordV1Request, options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-besu-record`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(getBesuRecordV1Request, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Returns a block matching the block
          * @param {GetBlockV1Request} [getBlockV1Request] 
          * @param {*} [options] Override http request option.
@@ -1444,6 +1528,17 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Retrieves an arbitrary record (any piece of information) from the ledger. Ledger records can be call outputs, transaction input, etc.
+         * @param {GetBesuRecordV1Request} [getBesuRecordV1Request] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getBesuRecordV1(getBesuRecordV1Request?: GetBesuRecordV1Request, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetBesuRecordV1Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getBesuRecordV1(getBesuRecordV1Request, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Returns a block matching the block
          * @param {GetBlockV1Request} [getBlockV1Request] 
          * @param {*} [options] Override http request option.
@@ -1549,6 +1644,16 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Retrieves an arbitrary record (any piece of information) from the ledger. Ledger records can be call outputs, transaction input, etc.
+         * @param {GetBesuRecordV1Request} [getBesuRecordV1Request] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getBesuRecordV1(getBesuRecordV1Request?: GetBesuRecordV1Request, options?: any): AxiosPromise<GetBesuRecordV1Response> {
+            return localVarFp.getBesuRecordV1(getBesuRecordV1Request, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Returns a block matching the block
          * @param {GetBlockV1Request} [getBlockV1Request] 
          * @param {*} [options] Override http request option.
@@ -1650,6 +1755,18 @@ export class DefaultApi extends BaseAPI {
      */
     public apiV1BesuRunTransaction(runTransactionRequest?: RunTransactionRequest, options?: any) {
         return DefaultApiFp(this.configuration).apiV1BesuRunTransaction(runTransactionRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Retrieves an arbitrary record (any piece of information) from the ledger. Ledger records can be call outputs, transaction input, etc.
+     * @param {GetBesuRecordV1Request} [getBesuRecordV1Request] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public getBesuRecordV1(getBesuRecordV1Request?: GetBesuRecordV1Request, options?: any) {
+        return DefaultApiFp(this.configuration).getBesuRecordV1(getBesuRecordV1Request, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

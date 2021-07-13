@@ -962,6 +962,33 @@
             "PrometheusExporterMetricsResponse": {
                 "type": "string",
                 "nullable": false
+            },
+            "GetBesuRecordV1Request":{
+                "type": "object",
+                "properties": {
+                    "invokeCall": {
+                        "$ref": "#/components/schemas/InvokeContractV1Request"
+                    },
+                    "transactionHash": {
+                        "type": "string",
+                        "minLength": 64,
+                        "maxLength": 64,
+                        "pattern": "/^0x([A-Fa-f0-9]{64})$/"
+                    }
+                }
+            },
+            "GetBesuRecordV1Response":{
+                "type": "object",
+                "properties": {
+                    "ledgerId":{
+                        "type":"string"
+                    },
+                    "stateContract":{
+                        "type":"string"
+                    },
+                    "transactionInputData":{},
+                    "callOutput":{}
+                }
             }
         }
     },
@@ -1262,6 +1289,40 @@
                             "text/plain": {
                                 "schema": {
                                     "$ref": "#/components/schemas/PrometheusExporterMetricsResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-besu-record": {
+            "post": {
+                "x-hyperledger-cactus": {
+                    "http": {
+                        "verbLowerCase": "post",
+                        "path": "/api/v1/plugins/@hyperledger/cactus-plugin-ledger-connector-besu/get-besu-record"
+                    }
+                },
+                "operationId": "getBesuRecordV1",
+                "summary": "Retrieves an arbitrary record (any piece of information) from the ledger. Ledger records can be call outputs, transaction input, etc.",
+                "parameters": [],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/GetBesuRecordV1Request"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GetBesuRecordV1Response"
                                 }
                             }
                         }
