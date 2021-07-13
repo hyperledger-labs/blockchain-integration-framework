@@ -544,6 +544,7 @@
                 "required": [
                     "key"
                 ],
+                "additionalProperties": false,
                 "properties": {
                     "key": {
                         "type": "string",
@@ -583,6 +584,7 @@
                     "key",
                     "value"
                 ],
+                "additionalProperties": false,
                 "properties": {
                     "key": {
                         "type": "string",
