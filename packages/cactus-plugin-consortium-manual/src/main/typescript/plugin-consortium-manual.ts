@@ -202,7 +202,6 @@ export class PluginConsortiumManual
         next: NextFunction,
       ) => {
         if (err) {
-          console.log(err);
           res.status(err.status || 500);
           res.send(err.errors);
         } else {
