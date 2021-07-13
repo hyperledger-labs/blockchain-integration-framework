@@ -3,7 +3,7 @@ import { createServer } from "http";
 import { AddressInfo } from "net";
 
 import test, { Test } from "tape";
-import { JWK, JWS } from "jose";
+import { JWK } from "jose";
 import { v4 as uuidV4 } from "uuid";
 
 import {
